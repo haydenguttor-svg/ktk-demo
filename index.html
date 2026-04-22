@@ -1,0 +1,1581 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Kolbotn Tennisklubb</title>
+
+<!-- PWA / Add to Home Screen -->
+<meta name="theme-color" content="#0B3D91" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="KTK" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
+<link rel="manifest" href="manifest.json" />
+<style>
+  :root {
+    --primary: #0B3D91;
+    --primary-dark: #06275E;
+    --primary-light: #2E5FBA;
+    --accent: #F4B400;
+    --white: #ffffff;
+    --bg: #F5F7FB;
+    --card: #ffffff;
+    --border: #E2E8F0;
+    --text: #0E1A2B;
+    --muted: #5B6B80;
+    --success: #1B8A3A;
+    --danger: #D14343;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, #0B3D91 0%, #2E5FBA 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 12px 48px;
+    color: var(--text);
+  }
+
+  .site-title { color: #fff; text-align: center; margin: 0 0 4px; font-weight: 800; letter-spacing: .3px; }
+  .site-sub   { color: #c7d6ef; text-align: center; margin: 0 0 24px; font-size: 14px; }
+
+  .phone {
+    width: 380px; max-width: 100%; height: 780px; max-height: calc(100vh - 140px);
+    background: var(--bg); border-radius: 42px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.35), inset 0 0 0 10px #111;
+    position: relative; overflow: hidden; display: flex; flex-direction: column;
+  }
+  .notch {
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 22px; background: #111; border-radius: 0 0 18px 18px; z-index: 20;
+  }
+  .status-bar {
+    height: 42px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 22px; font-size: 12px; font-weight: 700; color: var(--white);
+    background: var(--primary); z-index: 2; padding-top: 6px;
+  }
+  .header {
+    background: var(--primary); color: var(--white); padding: 8px 16px 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .header h1 { font-size: 18px; margin: 0; font-weight: 800; }
+
+  .scroll { flex: 1; overflow-y: auto; padding: 16px 14px 86px; background: var(--bg); }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .tabs {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    display: flex; background: var(--white); border-top: 1px solid var(--border);
+    padding: 6px 6px calc(env(safe-area-inset-bottom) + 10px); z-index: 10;
+  }
+  .tab {
+    flex: 1; background: transparent; border: 0; padding: 8px 4px; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    color: var(--muted); font-size: 11px; font-weight: 700;
+  }
+  .tab.active { color: var(--primary); }
+  .tab svg { width: 22px; height: 22px; }
+
+  .logo {
+    width: 140px; height: 140px; display: flex; align-items: center; justify-content: center;
+    filter: drop-shadow(0 4px 10px rgba(11,61,145,.25));
+  }
+  .logo svg { width: 100%; height: 100%; }
+  .hero { display: flex; flex-direction: column; align-items: center; margin: 8px 0 16px; }
+  .hero .welcome { color: var(--muted); font-size: 13px; margin-top: 8px; }
+  .hero .title   { color: var(--primary); font-size: 24px; font-weight: 800; }
+  .hero .tagline { color: var(--muted); font-size: 13px; text-align: center; margin-top: 4px; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 14px; margin-bottom: 12px;
+  }
+  .card h3 { margin: 0 0 8px; font-size: 16px; color: var(--text); }
+  .card p  { margin: 0; font-size: 14px; color: var(--text); line-height: 1.5; }
+  .muted   { color: var(--muted); }
+  .caption { color: var(--muted); text-transform: uppercase; font-size: 11px; letter-spacing: .6px; font-weight: 700; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+  .tile {
+    display: flex; align-items: center; gap: 10px; padding: 14px 12px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    cursor: pointer; user-select: none; transition: transform .08s;
+  }
+  .tile:active { transform: scale(.98); }
+  .tile .ic {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--primary);
+    display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0;
+  }
+  .tile .lbl { font-weight: 700; font-size: 14px; color: var(--text); }
+
+  .section-title { font-size: 17px; font-weight: 800; margin: 16px 0 8px; color: var(--text); }
+  .section-caption { font-size: 12px; color: var(--muted); margin: -2px 0 8px; }
+
+  .chips { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 8px; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex-shrink: 0; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border);
+    background: var(--white); cursor: pointer; font-size: 13px; font-weight: 700; color: var(--text);
+    white-space: nowrap;
+  }
+  .chip.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
+
+  .field { margin-bottom: 10px; }
+  .field label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: .4px; }
+  .field input {
+    width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); font-size: 14px; outline: none;
+  }
+  .field input:focus { border-color: var(--primary); }
+  .switch-row { display: flex; align-items: center; justify-content: space-between; margin: 6px 0; }
+  .switch { position: relative; width: 44px; height: 24px; background: #ccc; border-radius: 999px; cursor: pointer; transition: background .15s; }
+  .switch::after {
+    content: ""; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%;
+    background: #fff; transition: transform .15s;
+  }
+  .switch.on { background: var(--primary); }
+  .switch.on::after { transform: translateX(20px); }
+
+  .btn {
+    display: block; width: 100%; text-align: center; padding: 12px 16px;
+    border-radius: 10px; border: 1px solid var(--primary); background: var(--primary);
+    color: #fff; font-weight: 800; font-size: 15px; cursor: pointer; margin-top: 6px;
+  }
+  .btn.secondary { background: var(--white); color: var(--primary); }
+  .btn.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+  .btn:active { transform: scale(.99); }
+
+  /* Strøtime-tabell */
+  .pt { display: grid; grid-template-columns: 2fr 1fr 1fr; row-gap: 6px; }
+  .pt .hd { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .4px; padding-bottom: 4px; }
+  .pt .lbl { font-size: 13px; color: var(--text); padding: 8px 0; border-top: 1px solid var(--border); }
+  .pt .mem { font-size: 14px; color: var(--primary); font-weight: 700; padding: 8px 0; border-top: 1px solid var(--border); text-align: right; }
+  .pt .nom { font-size: 14px; color: var(--muted); font-weight: 600; padding: 8px 0; border-top: 1px solid var(--border); text-align: right; }
+
+  .slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+  .slot {
+    border-radius: 10px; padding: 10px 8px; text-align: center; border: 1px solid var(--border);
+    background: var(--white); cursor: pointer;
+  }
+  .slot .t { font-weight: 800; font-size: 14px; color: var(--text); }
+  .slot .p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .slot.booked { background: var(--danger); border-color: var(--danger); cursor: not-allowed; }
+  .slot.booked .t, .slot.booked .p { color: #fff; }
+  .slot:not(.booked):hover { border-color: var(--primary); }
+
+  .row-item {
+    display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    margin-bottom: 8px; cursor: pointer;
+  }
+  .row-item .ic {
+    width: 32px; height: 32px; border-radius: 50%; background: var(--primary);
+    display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0;
+  }
+  .row-item .lbl { flex: 1; font-weight: 700; color: var(--text); font-size: 14px; }
+  .row-item .chev { color: var(--muted); }
+
+  .tier-line { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .tier-line + .tier-line { border-top: 1px solid var(--border); }
+  .tier-line .hrs { color: var(--text); font-size: 14px; }
+  .tier-line .prc { color: var(--primary); font-weight: 800; font-size: 15px; }
+
+  .memb-card { position: relative; }
+  .memb-card .row-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .memb-card .name { font-weight: 800; color: var(--text); font-size: 15px; }
+  .memb-card .info { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .memb-card .price { color: var(--primary); font-weight: 800; font-size: 18px; }
+  .memb-card .unit  { color: var(--muted); font-size: 11px; display: block; text-align: right; }
+  .memb-card .fee   { color: var(--muted); font-size: 11px; display: block; text-align: right; margin-top: 2px; }
+  .memb-card.selected { border-color: var(--primary); border-width: 2px; }
+
+  ul.bullets { margin: 0; padding: 0; list-style: none; }
+  ul.bullets li { display: flex; gap: 8px; margin-bottom: 8px; font-size: 14px; color: var(--text); line-height: 1.4; }
+  ul.bullets li::before { content: "•"; color: var(--primary); font-weight: 900; }
+
+  .level { display: flex; align-items: center; gap: 10px; padding: 2px 0; }
+  .level .dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .level .n { flex: 1; font-weight: 700; color: var(--text); font-size: 14px; }
+  .level .age { font-size: 12px; color: var(--muted); }
+
+  .course-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .course-header .dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .course-header .ct { font-weight: 800; color: var(--text); font-size: 15px; }
+  .course-header .ca { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .back-btn {
+    background: transparent; border: 0; color: var(--white); display: flex; align-items: center;
+    gap: 4px; padding: 4px 0; cursor: pointer; font-size: 14px; font-weight: 600;
+  }
+
+  .lang-switch { display: flex; gap: 8px; margin-bottom: 10px; }
+  .lang-btn {
+    flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--bg); cursor: pointer; font-weight: 700; color: var(--text);
+  }
+  .lang-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .price-row { display: flex; justify-content: space-between; align-items: flex-start; }
+  .price-row .l { font-weight: 700; color: var(--text); font-size: 14px; flex: 1; }
+  .price-row .v { text-align: right; }
+  .price-row .v .big { color: var(--primary); font-size: 18px; font-weight: 800; }
+  .price-row .v .sm { color: var(--muted); font-size: 12px; display: block; }
+
+  .toast {
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: 40px;
+    background: var(--text); color: #fff; padding: 10px 16px; border-radius: 999px;
+    font-size: 14px; font-weight: 600; z-index: 999; opacity: 0; pointer-events: none;
+    transition: opacity .2s;
+  }
+  .toast.show { opacity: 1; }
+
+  .modal-backdrop {
+    position: absolute; inset: 0; background: rgba(0,0,0,.5); display: none;
+    align-items: center; justify-content: center; z-index: 30; padding: 20px;
+  }
+  .modal-backdrop.show { display: flex; }
+  .modal {
+    background: var(--white); border-radius: 18px; padding: 18px; width: 100%; max-width: 320px;
+  }
+  .modal h3 { margin: 0 0 6px; }
+  .modal p  { margin: 0 0 14px; font-size: 14px; color: var(--text); }
+  .modal .row { display: flex; gap: 8px; }
+
+  /* ===== Betalings-modal ===== */
+  .pay-modal { width: 100%; max-width: 360px; }
+  .pay-summary {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px; margin-bottom: 14px;
+  }
+  .pay-summary .ln { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
+  .pay-summary .ln.total { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 8px; font-size: 16px; font-weight: 800; color: var(--primary); }
+  .pay-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .pay-opt {
+    display: flex; align-items: center; gap: 12px; padding: 12px;
+    background: var(--card); border: 2px solid var(--border); border-radius: 12px;
+    cursor: pointer; transition: all .1s;
+  }
+  .pay-opt:hover { border-color: var(--primary-light); }
+  .pay-opt.selected { border-color: var(--primary); background: #F0F5FF; }
+  .pay-opt .logo-box {
+    width: 48px; height: 32px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0;
+  }
+  .pay-opt .logo-vipps { background: #ff5b24; }
+  .pay-opt .logo-card { background: linear-gradient(135deg, #1a1f71 0%, #f7b500 130%); }
+  .pay-opt .logo-invoice { background: #5B6B80; }
+  .pay-opt .logo-klubb { background: var(--primary); }
+  .pay-opt .label { flex: 1; }
+  .pay-opt .label .t { font-size: 14px; font-weight: 700; color: var(--text); }
+  .pay-opt .label .s { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .pay-opt .radio {
+    width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pay-opt.selected .radio { border-color: var(--primary); }
+  .pay-opt.selected .radio::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); }
+  .pay-btn {
+    width: 100%; padding: 14px; border-radius: 12px; border: 0;
+    background: var(--primary); color: #fff; font-weight: 800; font-size: 15px;
+    cursor: pointer;
+  }
+  .pay-btn:disabled { opacity: .5; cursor: not-allowed; }
+  .pay-cancel {
+    display: block; width: 100%; padding: 10px; margin-top: 8px;
+    border: 0; background: transparent; color: var(--muted);
+    font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  .pay-processing {
+    text-align: center; padding: 30px 20px;
+  }
+  .pay-processing .spinner {
+    width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--primary);
+    border-radius: 50%; margin: 0 auto 16px; animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Døråpnings-kode */
+  .door-code-box {
+    background: linear-gradient(135deg, #0B3D91 0%, #2E5FBA 100%);
+    border-radius: 14px; padding: 14px 16px; color: #fff;
+    box-shadow: 0 6px 18px rgba(11,61,145,.25);
+  }
+  .door-code-label {
+    text-transform: uppercase; font-size: 10px; letter-spacing: 1.4px;
+    opacity: .85; font-weight: 700;
+  }
+  .door-code-value {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 32px; font-weight: 800; letter-spacing: 6px;
+    margin: 4px 0 6px;
+  }
+  .door-code-hint { font-size: 11px; opacity: .8; }
+  .door-code-mini {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--primary); color: #fff; padding: 6px 10px;
+    border-radius: 8px; font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 14px; font-weight: 800; letter-spacing: 2px;
+  }
+  .door-code-mini::before {
+    content: ""; display: inline-block; width: 14px; height: 14px;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5'><rect x='3' y='11' width='18' height='11' rx='2'/><path d='M7 11V7a5 5 0 0 1 10 0v4'/></svg>") no-repeat center / contain;
+  }
+
+  .footer-note { color: var(--muted); font-size: 12px; font-style: italic; margin: 8px 0 24px; }
+
+  .link { color: var(--primary); text-decoration: none; font-weight: 600; }
+
+  /* ===== MOBIL: dropp telefon-rammen, full-skjerm som en ekte app ===== */
+  @media (max-width: 768px) {
+    body {
+      padding: 0;
+      background: var(--bg);
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+    .site-title, .site-sub { display: none; }
+    .phone {
+      width: 100%;
+      max-width: none;
+      height: 100vh;
+      height: 100dvh;
+      max-height: none;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .notch { display: none; }
+    .status-bar { display: none; }
+    .header { padding-top: calc(env(safe-area-inset-top, 0px) + 14px); }
+    .scroll { padding: 16px 14px calc(env(safe-area-inset-bottom, 0px) + 96px); }
+    .tabs { padding: 6px 6px calc(env(safe-area-inset-bottom, 0px) + 10px); }
+  }
+</style>
+</head>
+<body>
+
+<h2 class="site-title">Kolbotn Tennisklubb – App-forhåndsvisning</h2>
+<p class="site-sub">Ekte priser fra kolbotntennis.net. Bookinger lagres lokalt i nettleseren din.</p>
+
+<div class="phone">
+  <div class="notch"></div>
+
+  <div class="status-bar">
+    <span>09:41</span>
+    <span id="header-title-small"></span>
+    <span>●●●●● 100%</span>
+  </div>
+
+  <div class="header" id="header">
+    <button class="back-btn" id="back-btn" style="display:none">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <h1 id="header-title">Kolbotn Tennisklubb</h1>
+  </div>
+
+  <div class="modal-backdrop" id="modal">
+    <div class="modal">
+      <h3 id="modal-title"></h3>
+      <p  id="modal-body"></p>
+      <div class="row">
+        <button class="btn secondary" id="modal-cancel"></button>
+        <button class="btn"           id="modal-confirm"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Betalings-modal -->
+  <div class="modal-backdrop" id="pay-modal">
+    <div class="modal pay-modal">
+      <div id="pay-step-select">
+        <h3 data-i18n="pay.title">Velg betalingsmetode</h3>
+        <div class="pay-summary">
+          <div class="ln"><span data-i18n="pay.court">Bane</span><span id="pay-court"></span></div>
+          <div class="ln"><span data-i18n="pay.when">Tidspunkt</span><span id="pay-when"></span></div>
+          <div class="ln"><span data-i18n="pay.name">Navn</span><span id="pay-name"></span></div>
+          <div class="ln total"><span data-i18n="pay.total">Totalt</span><span id="pay-total"></span></div>
+        </div>
+        <div class="pay-list" id="pay-list">
+          <!-- fylles inn av JS -->
+        </div>
+        <button class="pay-btn" id="pay-btn"><span data-i18n="pay.payNow">Betal nå</span></button>
+        <button class="pay-cancel" id="pay-cancel" data-i18n="common.cancel">Avbryt</button>
+      </div>
+
+      <div id="pay-step-processing" style="display:none">
+        <div class="pay-processing">
+          <div class="spinner"></div>
+          <p style="margin:0;font-weight:700" id="pay-processing-text">Behandler betaling...</p>
+          <p class="muted" style="margin-top:6px;font-size:12px" id="pay-processing-sub">Åpner Vipps...</p>
+        </div>
+      </div>
+
+      <div id="pay-step-success" style="display:none">
+        <div class="pay-processing">
+          <div style="width:60px;height:60px;border-radius:50%;background:var(--success);margin:0 auto 14px;display:flex;align-items:center;justify-content:center">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <h3 style="margin:0 0 4px" data-i18n="pay.successTitle">Betaling fullført!</h3>
+          <p class="muted" style="margin:0 0 16px;font-size:13px" id="pay-success-sub"></p>
+
+          <!-- Døråpnings-kode -->
+          <div class="door-code-box">
+            <div class="door-code-label" data-i18n="pay.doorCodeLabel">Døråpnings-kode</div>
+            <div class="door-code-value" id="pay-door-code">—</div>
+            <div class="door-code-hint" data-i18n="pay.doorCodeHint">Tast inn på keypad ved hovedinngang</div>
+          </div>
+
+          <button class="pay-btn" style="margin-top:18px" id="pay-done"><span data-i18n="pay.done">Ferdig</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll" id="scroll">
+
+    <!-- HJEM -->
+    <div class="screen active" id="screen-home">
+      <div class="hero">
+        <div class="logo" aria-label="Kolbotn Tennisklubb">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Ytre blå ringbånd med tynn hvit outline -->
+            <circle cx="100" cy="100" r="99" fill="#ffffff"/>
+            <circle cx="100" cy="100" r="97" fill="#1B5AA6"/>
+            <circle cx="100" cy="100" r="78" fill="#ffffff"/>
+            <circle cx="100" cy="100" r="77" fill="none" stroke="#1B5AA6" stroke-width="1"/>
+
+            <!-- Kurvet tekst på ringbåndet.
+                 Top-bue mindre (radius 80) så tekst vender UTOVER men holder seg inne i båndet.
+                 Bunn-bue større (radius 94) så tekst vender INNOVER og holder seg inne i båndet. -->
+            <defs>
+              <path id="topArc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none"/>
+              <path id="botArc" d="M 6 100 A 94 94 0 0 0 194 100" fill="none"/>
+            </defs>
+            <text font-family="Helvetica, Arial, sans-serif"
+                  font-weight="700" font-size="18" fill="#ffffff" letter-spacing="6">
+              <textPath href="#topArc" startOffset="50%" text-anchor="middle">KOLBOTN</textPath>
+            </text>
+            <text font-family="Helvetica, Arial, sans-serif"
+                  font-weight="700" font-size="18" fill="#ffffff" letter-spacing="6">
+              <textPath href="#botArc" startOffset="50%" text-anchor="middle">TENNIS · KLUBB</textPath>
+            </text>
+
+            <!-- Prikker på siden av ringbåndet (kl. 9 og kl. 3) -->
+            <circle cx="14"  cy="100" r="2.6" fill="#ffffff"/>
+            <circle cx="186" cy="100" r="2.6" fill="#ffffff"/>
+
+            <!-- Tennisball-søm (S-form, topp-høyre til bunn-venstre) -->
+            <path d="M 130 30 C 95 65, 105 135, 70 170"
+                  fill="none" stroke="#1B5AA6" stroke-width="3.5" stroke-linecap="round"/>
+
+            <!-- KTK monogram i outline-serif -->
+            <text x="100" y="128"
+                  font-family="'Times New Roman', Times, serif"
+                  font-weight="700" font-size="78"
+                  fill="#ffffff" stroke="#1B5AA6" stroke-width="2.2"
+                  paint-order="stroke fill"
+                  text-anchor="middle" letter-spacing="-6">KTK</text>
+          </svg>
+        </div>
+        <div class="welcome" data-i18n="home.welcome">Velkommen til</div>
+        <div class="title"   data-i18n="common.appName">Kolbotn Tennisklubb</div>
+        <div class="tagline" data-i18n="home.tagline">Book bane, meld deg på kurs, og hold deg oppdatert.</div>
+      </div>
+
+      <div class="grid">
+        <div class="tile" onclick="go('booking')">
+          <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+          <div class="lbl" data-i18n="home.quickBook">Bestill bane</div>
+        </div>
+        <div class="tile" onclick="go('prices')">
+          <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1"/><circle cx="16" cy="12" r="2"/></svg></div>
+          <div class="lbl" data-i18n="home.seePrices">Se priser</div>
+        </div>
+        <div class="tile" onclick="go('membership')">
+          <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+          <div class="lbl" data-i18n="home.becomeMember">Bli medlem</div>
+        </div>
+        <div class="tile" onclick="go('tennisSchool')">
+          <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+          <div class="lbl" data-i18n="home.tennisSchool">Tennisskolen</div>
+        </div>
+        <div class="tile" onclick="go('sfo')">
+          <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><path d="M12 8v5M9 13l-2 7M15 13l2 7M9 14l-3-1M15 14l3-1"/></svg></div>
+          <div class="lbl" data-i18n="home.sfoTennis">SFO-tennis</div>
+        </div>
+        <div class="tile" onclick="go('private')">
+          <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg></div>
+          <div class="lbl" data-i18n="home.privateLessons">Privattimer</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 data-i18n="home.openingHoursTitle">Åpningstider</h3>
+        <div class="caption" data-i18n="home.indoor">Innendørs (Coop Øst Arena)</div>
+        <p data-i18n="home.indoorHours">Mandag – søndag: 07:00 – 23:00 · åpen hele året</p>
+        <div style="height:8px"></div>
+        <div class="caption" data-i18n="home.outdoor">Grusbaner (Ingierkollen)</div>
+        <p data-i18n="home.outdoorHours">Utesesong ca. 15. april – 1. oktober</p>
+      </div>
+
+      <div class="card">
+        <h3 data-i18n="home.contact">Kontakt klubben</h3>
+
+        <div class="caption" style="margin-top:6px" data-i18n="contact.generalQuestions">Generelle spørsmål, betalinger, nettside</div>
+        <p><a href="mailto:kolbotntennisweb@gmail.com" class="link">kolbotntennisweb@gmail.com</a></p>
+
+        <div style="height:10px"></div>
+        <div class="caption" data-i18n="contact.chair">Styreleder</div>
+        <p style="font-weight:700">Stig Kjønstad</p>
+        <p><a href="tel:+4748012565" class="link">+47 480 12 565</a> · <a href="mailto:skjonsta@gmail.com" class="link">skjonsta@gmail.com</a></p>
+
+        <div style="height:10px"></div>
+        <div class="caption" data-i18n="contact.headCoach">Hovedtrener (tennisskole, privattimer, SFO)</div>
+        <p style="font-weight:700">Trond Moldvær</p>
+        <p><a href="tel:+4741249802" class="link">+47 412 49 802</a> · <a href="mailto:trond.moldvar@gmail.com" class="link">trond.moldvar@gmail.com</a></p>
+
+        <div style="height:10px"></div>
+        <div class="caption" data-i18n="contact.addresses">Adresser</div>
+        <p class="muted" data-i18n="contact.postal">Postadresse: PB 15, 1411 Kolbotn</p>
+        <p class="muted" data-i18n="contact.outdoorAddr">Utebaner og klubbhus: Ingierveien 17, 1410 Kolbotn</p>
+        <p class="muted" data-i18n="contact.indoorAddr">Coop Øst Arena: Kongeveien 72, 1412 Sofiemyr</p>
+
+        <div style="height:10px"></div>
+        <div class="caption" data-i18n="contact.payment">Betaling (medlemsavgift, tennisskole m.m.)</div>
+        <p><span class="muted" data-i18n="contact.account">Kontonr:</span> <strong>6235 06 04435</strong></p>
+        <p><span class="muted">VIPPS:</span> <strong>101 299</strong></p>
+
+        <div style="height:10px"></div>
+        <p class="caption" style="opacity:.7"><span data-i18n="contact.orgNr">Org.nr:</span> 871 257 922</p>
+      </div>
+    </div>
+
+    <!-- BOOKING -->
+    <div class="screen" id="screen-booking">
+      <div class="caption" data-i18n="booking.chooseCourt">Velg bane</div>
+      <div class="chips" id="court-chips"></div>
+
+      <div style="height:4px"></div>
+      <div class="caption" data-i18n="booking.chooseDate">Velg dato</div>
+      <div class="chips" id="date-chips"></div>
+
+      <div class="card">
+        <div class="field">
+          <label data-i18n="booking.guestName">Navn</label>
+          <input id="name-input" type="text" placeholder="Hayden" />
+        </div>
+        <div class="switch-row">
+          <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px" data-i18n="common.member">Medlem</label>
+          <div class="switch" id="member-switch"></div>
+        </div>
+        <div class="field" id="member-number-field" style="display:none">
+          <label data-i18n="booking.memberNumber">Medlemsnummer</label>
+          <input id="member-number-input" type="text" placeholder="12345" />
+        </div>
+      </div>
+
+      <div class="section-title" data-i18n="booking.chooseTime">Velg tidspunkt</div>
+      <div class="slots" id="slots-grid"></div>
+
+      <button class="btn secondary" onclick="go('mybookings')" data-i18n="booking.yourBookings">Dine bookinger</button>
+    </div>
+
+    <!-- PRISER -->
+    <div class="screen" id="screen-prices">
+      <div class="caption" data-i18n="prices.title">Priser</div>
+
+      <div class="section-title" data-i18n="prices.strotimeTitle">Strøtimer i Coop Øst Arena</div>
+      <p class="section-caption" data-i18n="prices.strotimeNote">Baneleie per time. Priser varierer med tidspunkt.</p>
+      <div class="card"><div class="pt" id="pt-strotime"></div></div>
+
+      <div class="section-title" data-i18n="prices.fixedHourTitle">Faste timer i Coop Øst Arena</div>
+      <div class="card">
+        <p data-i18n="prices.fixedHourText">…</p>
+        <div style="height:8px"></div>
+        <p style="font-weight:700" data-i18n="prices.fixedHourContact">Kontakt: Svein Kolden</p>
+        <p><a href="mailto:svein@kolden.com" class="link">svein@kolden.com</a></p>
+      </div>
+
+      <div class="section-title" data-i18n="prices.tennisSchoolTitle">Tennisskolen (per semester)</div>
+      <div id="pt-school"></div>
+
+      <div class="section-title" data-i18n="prices.sfoTitle">SFO-tennis</div>
+      <div class="card">
+        <div class="price-row">
+          <div class="l"><span id="sfo-hours">1</span> <span data-i18n="common.hoursPerWeek">timer/uke</span></div>
+          <div class="v"><span class="big" id="sfo-price">2900 kr</span><span class="sm" data-i18n="common.perSemester">pr semester</span></div>
+        </div>
+      </div>
+
+      <div class="section-title" data-i18n="prices.privateTitle">Privattimer</div>
+      <div class="card">
+        <div class="price-row">
+          <div class="l" data-i18n="common.member">Medlem</div>
+          <div class="v"><span class="big" id="priv-member">500 kr</span><span class="sm" data-i18n="common.perHour">pr time</span></div>
+        </div>
+        <div style="height:8px;border-top:1px solid var(--border);margin-top:8px"></div>
+        <div class="price-row">
+          <div class="l" data-i18n="common.nonMember">Ikke-medlem</div>
+          <div class="v"><span class="big" style="color:var(--muted)" id="priv-nonmember">600 kr</span><span class="sm" data-i18n="common.perHour">pr time</span></div>
+        </div>
+        <p class="muted" style="font-size:12px;margin-top:8px" data-i18n="prices.privateNote">…</p>
+      </div>
+
+      <div class="footer-note" data-i18n="prices.note">Priser hentet fra kolbotntennis.net.</div>
+    </div>
+
+    <!-- MEDLEMSKAP -->
+    <div class="screen" id="screen-membership">
+      <div class="section-title" data-i18n="membership.about">Om medlemskap</div>
+      <div class="card"><p id="memb-about"></p></div>
+
+      <div class="section-title" data-i18n="membership.benefitsTitle">Fordeler</div>
+      <div class="card"><ul class="bullets" id="memb-bullets"></ul></div>
+
+      <div class="section-title" data-i18n="membership.categoriesTitle">Medlemskategorier</div>
+      <div id="memb-tiers"></div>
+
+      <div class="section-title" data-i18n="membership.whyTitle">Hvorfor kontingent?</div>
+      <div class="card"><p id="memb-why"></p></div>
+
+      <div class="section-title" data-i18n="membership.signup">Meld deg inn</div>
+      <p class="caption" data-i18n="membership.signupIntro">Fyll inn opplysninger så kontakter vi deg.</p>
+      <div class="card">
+        <div class="field"><label data-i18n="membership.firstName">Fornavn</label><input id="m-first" /></div>
+        <div class="field"><label data-i18n="membership.lastName">Etternavn</label><input id="m-last" /></div>
+        <div class="field"><label data-i18n="membership.birthYear">Fødselsår</label><input id="m-year" inputmode="numeric" /></div>
+        <div class="field"><label data-i18n="membership.email">E-post</label><input id="m-email" type="email" /></div>
+        <div class="field"><label data-i18n="membership.phone">Telefon</label><input id="m-phone" inputmode="tel" /></div>
+        <div class="price-row" style="margin:6px 0 10px">
+          <div class="l muted" data-i18n="membership.category">Medlemskapstype:</div>
+          <div class="v" style="color:var(--primary);font-weight:800" id="m-selected"></div>
+        </div>
+        <button class="btn" onclick="submitMembership()" data-i18n="membership.submit">Send søknad</button>
+      </div>
+    </div>
+
+    <!-- TENNISSKOLEN -->
+    <div class="screen" id="screen-tennisSchool">
+      <div class="card"><p data-i18n="tennisSchool.intro">…</p></div>
+
+      <div class="section-title" data-i18n="tennisSchool.levelsTitle">Grupper og nivåer</div>
+      <div class="card"><p data-i18n="tennisSchool.levelsText">…</p></div>
+
+      <div id="school-courses"></div>
+
+      <button class="btn" onclick="toast(tr('membership.thanks'))" data-i18n="tennisSchool.enrollChild">Påmelding barn/ungdom</button>
+    </div>
+
+    <!-- SFO -->
+    <div class="screen" id="screen-sfo">
+      <div class="card">
+        <p data-i18n="sfo.intro">…</p>
+        <div style="height:8px"></div>
+        <p data-i18n="sfo.includes">Inkluderer trener, utstyr og baller.</p>
+      </div>
+
+      <div class="section-title" data-i18n="prices.title">Priser</div>
+      <div class="card">
+        <div class="price-row">
+          <div class="l"><span id="sfo-hours-2">1</span> <span data-i18n="common.hoursPerWeek">timer/uke</span></div>
+          <div class="v"><span class="big" id="sfo-price-2">2900 kr</span></div>
+        </div>
+        <div class="caption" style="margin-top:8px"><span data-i18n="sfo.perSemester">per semester</span> · <span data-i18n="sfo.followsSchoolYear">SFO-tennis følger skolekalenderen.</span></div>
+      </div>
+      <button class="btn" onclick="toast(tr('membership.thanks'))" data-i18n="tennisSchool.enrollChild">Påmelding barn/ungdom</button>
+    </div>
+
+    <!-- PRIVATTIMER -->
+    <div class="screen" id="screen-private">
+      <div class="card"><p data-i18n="private.intro">…</p></div>
+
+      <div class="section-title" data-i18n="prices.privateTitle">Privattimer</div>
+      <div class="card">
+        <div class="price-row">
+          <div class="l" data-i18n="common.member">Medlem</div>
+          <div class="v"><span class="big" id="priv-member-2">500 kr</span></div>
+        </div>
+        <div style="height:8px;border-top:1px solid var(--border);margin-top:8px"></div>
+        <div class="price-row">
+          <div class="l" data-i18n="common.nonMember">Ikke-medlem</div>
+          <div class="v"><span class="big" style="color:var(--muted)" id="priv-nonmember-2">600 kr</span></div>
+        </div>
+        <p class="muted" style="font-size:12px;margin-top:8px;font-style:italic" data-i18n="private.note">…</p>
+      </div>
+
+      <div class="section-title" data-i18n="private.contact">Hovedtrener</div>
+      <div class="card">
+        <p><a href="tel:+4741249802" class="link">+47 412 49 802</a></p>
+        <p><a href="mailto:trond@kolbotntennis.net" class="link">trond@kolbotntennis.net</a></p>
+      </div>
+      <button class="btn" onclick="toast(tr('membership.thanks'))" data-i18n="private.booking">Bestill privattime</button>
+    </div>
+
+    <!-- MER -->
+    <div class="screen" id="screen-more">
+      <div class="row-item" onclick="go('membership')">
+        <div class="ic">♥</div><div class="lbl" data-i18n="membership.title">Medlemskap</div><div class="chev">›</div>
+      </div>
+      <div class="row-item" onclick="go('tennisSchool')">
+        <div class="ic">🎾</div><div class="lbl" data-i18n="tennisSchool.title">Tennisskolen</div><div class="chev">›</div>
+      </div>
+      <div class="row-item" onclick="go('sfo')">
+        <div class="ic">🏫</div><div class="lbl" data-i18n="sfo.title">SFO-tennis</div><div class="chev">›</div>
+      </div>
+      <div class="row-item" onclick="go('private')">
+        <div class="ic">👤</div><div class="lbl" data-i18n="private.title">Privattimer</div><div class="chev">›</div>
+      </div>
+      <div class="row-item" onclick="go('mybookings')">
+        <div class="ic">📋</div><div class="lbl" data-i18n="booking.yourBookings">Dine bookinger</div><div class="chev">›</div>
+      </div>
+      <div class="row-item" onclick="go('settings')">
+        <div class="ic">⚙</div><div class="lbl" data-i18n="settings.title">Innstillinger</div><div class="chev">›</div>
+      </div>
+    </div>
+
+    <!-- MINE BOOKINGER -->
+    <div class="screen" id="screen-mybookings">
+      <div id="my-bookings-list"></div>
+    </div>
+
+    <!-- INNSTILLINGER -->
+    <div class="screen" id="screen-settings">
+      <div class="caption" data-i18n="settings.language">Språk</div>
+      <div class="lang-switch">
+        <button class="lang-btn" id="lang-nb" onclick="setLang('nb')" data-i18n="settings.norwegian">Norsk</button>
+        <button class="lang-btn" id="lang-en" onclick="setLang('en')" data-i18n="settings.english">English</button>
+      </div>
+
+      <div class="caption" data-i18n="settings.about">Om appen</div>
+      <div class="card">
+        <p style="font-weight:700" data-i18n="common.appName">Kolbotn Tennisklubb</p>
+        <p class="muted"><span data-i18n="settings.version">Versjon</span>: 0.1.0</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" id="tab-home"    onclick="go('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8v10a2 2 0 0 1-2 2h-3v-7h-8v7H5a2 2 0 0 1-2-2z"/></svg>
+      <span data-i18n="tabs.home">Hjem</span>
+    </button>
+    <button class="tab" id="tab-booking" onclick="go('booking')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <span data-i18n="tabs.booking">Booking</span>
+    </button>
+    <button class="tab" id="tab-prices"  onclick="go('prices')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1"/><circle cx="16" cy="12" r="2"/></svg>
+      <span data-i18n="tabs.prices">Priser</span>
+    </button>
+    <button class="tab" id="tab-more"    onclick="go('more')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+      <span data-i18n="tabs.more">Mer</span>
+    </button>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================== TRANSLATIONS (fra translations.ts) ================== */
+const T = {
+  nb: {
+    common: {
+      appName: "Kolbotn Tennisklubb", member: "Medlem", nonMember: "Ikke-medlem",
+      cancel: "Avbryt", confirm: "Bekreft", yes: "Ja", no: "Nei",
+      perYear: "pr år", perSemester: "pr semester", perHour: "pr time", hoursPerWeek: "timer/uke",
+    },
+    tabs: { home: "Hjem", booking: "Booking", prices: "Priser", more: "Mer" },
+    home: {
+      welcome: "Velkommen til",
+      tagline: "Book bane, meld deg på kurs, og hold deg oppdatert.",
+      quickBook: "Bestill bane", seePrices: "Se priser", becomeMember: "Bli medlem",
+      tennisSchool: "Tennisskolen", sfoTennis: "SFO-tennis", privateLessons: "Privattimer",
+      openingHoursTitle: "Åpningstider",
+      indoor: "Innendørs (Coop Øst Arena)", outdoor: "Grusbaner (Ingierkollen)",
+      indoorHours: "Mandag – søndag: 07:00 – 23:00 · åpen hele året",
+      outdoorHours: "Utesesong ca. 15. april – 1. oktober",
+      contact: "Kontakt klubben",
+    },
+    pay: {
+      title: "Velg betalingsmetode",
+      court: "Bane",
+      when: "Tidspunkt",
+      name: "Navn",
+      total: "Totalt",
+      payNow: "Betal",
+      done: "Ferdig",
+      methodVipps: "Vipps",
+      methodVippsSub: "Rask betaling med mobil",
+      methodCard: "Visa / Mastercard",
+      methodCardSub: "Betalingskort",
+      methodInvoice: "Faktura",
+      methodInvoiceSub: "E-post, forfall 14 dager",
+      methodAccount: "Klubb-konto",
+      methodAccountSub: "Trekkes fra medlemskonto",
+      processingVipps: "Åpner Vipps...",
+      processingCard: "Sikker betaling...",
+      processingInvoice: "Sender faktura...",
+      processingAccount: "Trekker fra konto...",
+      successTitle: "Betaling fullført!",
+      successSubVipps: "Bookingen er bekreftet. Kvittering sendt til Vipps.",
+      successSubCard: "Bookingen er bekreftet. Kvittering på e-post.",
+      successSubInvoice: "Bookingen er bekreftet. Faktura sendt til din e-post.",
+      successSubAccount: "Bookingen er bekreftet. Beløp trukket fra konto.",
+      doorCodeLabel: "Døråpnings-kode",
+      doorCodeHint: "Tast inn på keypad ved hovedinngang. Gyldig 15 min før til 15 min etter starttid.",
+      doorCodeShort: "Kode:",
+    },
+    contact: {
+      generalQuestions: "Generelle spørsmål, betalinger, nettside",
+      chair: "Styreleder",
+      headCoach: "Hovedtrener (tennisskole, privattimer, SFO)",
+      addresses: "Adresser",
+      postal: "Postadresse: PB 15, 1411 Kolbotn",
+      outdoorAddr: "Utebaner og klubbhus: Ingierveien 17, 1410 Kolbotn",
+      indoorAddr: "Coop Øst Arena: Kongeveien 72, 1412 Sofiemyr",
+      payment: "Betaling (medlemsavgift, tennisskole m.m.)",
+      account: "Kontonr:",
+      orgNr: "Org.nr:",
+    },
+    booking: {
+      title: "Book bane", chooseCourt: "Velg bane", chooseDate: "Velg dato", chooseTime: "Velg tidspunkt",
+      booked: "Opptatt", yourBookings: "Dine bookinger", noBookings: "Ingen bookinger enda.",
+      confirmTitle: "Bekreft booking",
+      confirmText: "Vil du bestille {court} {date} kl. {time} for {price} kr?",
+      bookingConfirmed: "Bookingen er bekreftet!",
+      guestName: "Navn (for gjestebestilling)", memberNumber: "Medlemsnummer",
+    },
+    prices: {
+      title: "Priser",
+      strotimeTitle: "Strøtimer i Coop Øst Arena",
+      strotimeNote: "Baneleie per time. Priser varierer med tidspunkt.",
+      earlyBird:    "Ukedager 07–10 (Early bird)",
+      weekdayMid:   "Ukedager 10–15",
+      weekdayPrime: "Ukedager 15–22",
+      weekend:      "Lørdag/søndag 07–23",
+      nightOwl:     "Hverdager 22–23 (Night owl)",
+      fixedHourTitle: "Faste timer i Coop Øst Arena",
+      fixedHourText:
+        "Faste timer selges for perioden 1. sept – 31. mai. Medlemmer får først velge tider, deretter legges ledige timer ut for salg til ikke-medlemmer.",
+      fixedHourContact: "Kontakt: Svein Kolden",
+      tennisSchoolTitle: "Tennisskolen (per semester)",
+      sfoTitle: "SFO-tennis",
+      privateTitle: "Privattimer",
+      privateNote: "Pris er for selve instruksjonen. Banetid (strøtime) kommer i tillegg om du ikke allerede har bane.",
+      note: "Priser hentet fra kolbotntennis.net.",
+    },
+    school: {
+      parentChild: "Foreldre og barn",
+      parentChildNote: "Pris er for hele familien, per semester",
+      orange: "Junior Oransje", green: "Junior Grønn", senior: "Senior (voksenkurs)",
+      age3to6: "3–6 år", age6to9: "6–9 år", age10to18: "10–18 år", ageAdult: "Voksne",
+      followsSchoolYear: "Følger skolekalenderen",
+    },
+    membership: {
+      title: "Medlemskap",
+      about: "Om medlemskap i Kolbotn Tennisklubb",
+      aboutText:
+        "Kolbotn Tennisklubb har 4 hard court-baner på Sofiemyr (Coop Øst Arena) som er åpen hele året, og 4 grusbaner ved Ingierkollen i utesesongen (ca. 15. april – 1. oktober).",
+      benefitsTitle: "Medlemskapet gir blant annet:",
+      benefits: [
+        "Reduserte priser på strøtimer og faste timer i Coop Øst Arena",
+        "Først i køen for utdeling av faste timer (selges sensommeren)",
+        "Mulighet for leie av Coop Øst Arena til arrangementer",
+        "Fri tilgang til klubbens grusbaner i hele utesesongen",
+        "Vedlikehold og forvaltning av Coop Øst Arena, uteanlegg og klubbhus",
+        "Mulighet til å delta på Tennisskolen, for barn og voksne",
+        "Mulighet til å delta i klubbmesterskapet og klubbens stigespill",
+        "Tilgang til Spond-grupper for fellestrening og nye spillemakkere",
+        "Barn under 13 er forsikret gjennom NIF-medlemskap",
+      ],
+      categoriesTitle: "Medlemskapspriser",
+      senior: "Seniormedlem", junior: "Juniormedlem", family: "Familiemedlem",
+      pensioner: "Pensjonist", student: "Student", passive: "Passivt / støttemedlem",
+      age18to66: "18–66 år", age0to17: "0–17 år", age67plus: "67 år +",
+      familyInfo: "Gjelder for en familie bosatt på samme adresse, maks to voksne",
+      studentInfo: "18–25 år med studentbevis",
+      passiveInfo: "Støttemedlemskap og pauseordning",
+      signupFee: "innmeldingsavgift",
+      whyTitle: "Hvorfor har vi kontingent og innmeldingsavgift?",
+      whyText:
+        "Kolbotn Tennisklubb er et fellesskap, ikke en butikk – du er medlem, ikke kunde. Kontingenten er det viktigste årlige bidraget til driften av idrettslaget. Innmeldingsavgiften er ment å skape varige medlemmer; mange tilskuddsordninger er basert på antall medlemmer.",
+      signup: "Meld deg inn",
+      signupIntro: "Fyll inn opplysninger så kontakter vi deg.",
+      firstName: "Fornavn", lastName: "Etternavn", birthYear: "Fødselsår",
+      email: "E-post", phone: "Telefon", category: "Medlemskapstype",
+      submit: "Send søknad",
+      thanks: "Takk! Vi tar kontakt så snart som mulig.",
+    },
+    tennisSchool: {
+      title: "Tennisskolen",
+      intro:
+        "All trening i tennisskolen holdes i Coop Øst Arena (nytt hallanlegg åpnet 2024). Semesteret følger skoleåret.",
+      levelsTitle: "Grupper og nivåer",
+      levelsText:
+        "Vi bruker ROGY-systemet (rødt/oransje/grønt/gult) – baller og banestørrelse tilpasses barnets alder og ferdighet.",
+      perSemester: "per semester",
+      enrollChild: "Påmelding barn/ungdom",
+    },
+    sfo: {
+      title: "SFO-tennis",
+      intro: "SFO-tennis er et tilbud for elever på 1.–4. trinn. Vi henter på skolen og tar barna trygt til hallen. Etter økten blir barna fulgt tilbake til SFO.",
+      includes: "Inkluderer trener, utstyr og baller.",
+      followsSchoolYear: "SFO-tennis følger skolekalenderen.",
+      perSemester: "per semester",
+    },
+    private: {
+      title: "Privattimer",
+      intro: "Privattimer er tilrettelagt 1-til-1 trening (eller 1-til-2) med en av klubbens trenere. Egnet for alle nivåer – nybegynner til konkurranse. Samme pris inne som ute.",
+      note: "Pris er for selve instruksjonen. Banetid (strøtime) kommer i tillegg om du ikke allerede har bane.",
+      booking: "Bestill privattime",
+      contact: "Hovedtrener: Trond Moldvær",
+    },
+    settings: { title: "Innstillinger", language: "Språk", norwegian: "Norsk", english: "English", about: "Om appen", version: "Versjon" },
+  },
+  en: {
+    common: {
+      appName: "Kolbotn Tennis Club", member: "Member", nonMember: "Non-member",
+      cancel: "Cancel", confirm: "Confirm", yes: "Yes", no: "No",
+      perYear: "per year", perSemester: "per semester", perHour: "per hour", hoursPerWeek: "hours/week",
+    },
+    tabs: { home: "Home", booking: "Booking", prices: "Prices", more: "More" },
+    home: {
+      welcome: "Welcome to",
+      tagline: "Book a court, sign up for classes, and stay in the loop.",
+      quickBook: "Book a court", seePrices: "See prices", becomeMember: "Become a member",
+      tennisSchool: "Tennis school", sfoTennis: "After-school tennis", privateLessons: "Private lessons",
+      openingHoursTitle: "Opening hours",
+      indoor: "Indoor (Coop Øst Arena)", outdoor: "Clay courts (Ingierkollen)",
+      indoorHours: "Monday – Sunday: 07:00 – 23:00 · open year-round",
+      outdoorHours: "Outdoor season approx. April 15 – October 1",
+      contact: "Contact the club",
+    },
+    pay: {
+      title: "Choose payment method",
+      court: "Court",
+      when: "Time",
+      name: "Name",
+      total: "Total",
+      payNow: "Pay",
+      done: "Done",
+      methodVipps: "Vipps",
+      methodVippsSub: "Quick mobile payment",
+      methodCard: "Visa / Mastercard",
+      methodCardSub: "Credit or debit card",
+      methodInvoice: "Invoice",
+      methodInvoiceSub: "By email, due in 14 days",
+      methodAccount: "Club account",
+      methodAccountSub: "Charged to your member account",
+      processingVipps: "Opening Vipps...",
+      processingCard: "Secure payment...",
+      processingInvoice: "Sending invoice...",
+      processingAccount: "Charging account...",
+      successTitle: "Payment complete!",
+      successSubVipps: "Booking confirmed. Receipt sent to Vipps.",
+      successSubCard: "Booking confirmed. Receipt by email.",
+      successSubInvoice: "Booking confirmed. Invoice sent to your email.",
+      successSubAccount: "Booking confirmed. Amount charged to your account.",
+      doorCodeLabel: "Door access code",
+      doorCodeHint: "Enter at the keypad by the main entrance. Valid 15 min before to 15 min after start time.",
+      doorCodeShort: "Code:",
+    },
+    contact: {
+      generalQuestions: "General questions, payments, website",
+      chair: "Chair of the board",
+      headCoach: "Head coach (tennis school, private lessons, SFO)",
+      addresses: "Addresses",
+      postal: "Mailing address: PB 15, 1411 Kolbotn",
+      outdoorAddr: "Outdoor courts and clubhouse: Ingierveien 17, 1410 Kolbotn",
+      indoorAddr: "Coop Øst Arena: Kongeveien 72, 1412 Sofiemyr",
+      payment: "Payment (membership, tennis school, etc.)",
+      account: "Account no.:",
+      orgNr: "Org. no.:",
+    },
+    booking: {
+      title: "Book a court", chooseCourt: "Choose court", chooseDate: "Choose date", chooseTime: "Choose time",
+      booked: "Booked", yourBookings: "Your bookings", noBookings: "No bookings yet.",
+      confirmTitle: "Confirm booking",
+      confirmText: "Book {court} on {date} at {time} for {price} NOK?",
+      bookingConfirmed: "Booking confirmed!",
+      guestName: "Name (for guest booking)", memberNumber: "Member number",
+    },
+    prices: {
+      title: "Prices",
+      strotimeTitle: "Drop-in court hours at Coop Øst Arena",
+      strotimeNote: "Court rental per hour. Price varies by time of day.",
+      earlyBird:    "Weekdays 07–10 (Early bird)",
+      weekdayMid:   "Weekdays 10–15",
+      weekdayPrime: "Weekdays 15–22",
+      weekend:      "Sat/Sun 07–23",
+      nightOwl:     "Weekdays 22–23 (Night owl)",
+      fixedHourTitle: "Fixed weekly slots at Coop Øst Arena",
+      fixedHourText:
+        "Fixed weekly slots are sold for September 1 – May 31. Members get first pick, then remaining hours are offered to non-members.",
+      fixedHourContact: "Contact: Svein Kolden",
+      tennisSchoolTitle: "Tennis school (per semester)",
+      sfoTitle: "After-school tennis",
+      privateTitle: "Private lessons",
+      privateNote: "Instruction fee only. Court rental is separate if you do not already have a court.",
+      note: "Prices taken from kolbotntennis.net.",
+    },
+    school: {
+      parentChild: "Parent & child",
+      parentChildNote: "Price is per semester, for the whole family",
+      orange: "Junior Orange", green: "Junior Green", senior: "Senior (adult class)",
+      age3to6: "Ages 3–6", age6to9: "Ages 6–9", age10to18: "Ages 10–18", ageAdult: "Adults",
+      followsSchoolYear: "Follows the school calendar",
+    },
+    membership: {
+      title: "Membership",
+      about: "About membership at Kolbotn Tennis Club",
+      aboutText:
+        "Kolbotn Tennis Club has 4 hard courts indoors at Sofiemyr (Coop Øst Arena), open year-round, and 4 clay courts at Ingierkollen in the outdoor season (approx. April 15 – October 1).",
+      benefitsTitle: "What membership gives you:",
+      benefits: [
+        "Discounted drop-in and fixed slots at Coop Øst Arena",
+        "Priority when fixed weekly slots are allocated (sold late summer)",
+        "Option to rent Coop Øst Arena for events",
+        "Free access to the club's clay courts throughout the outdoor season",
+        "Supports upkeep and management of Coop Øst Arena, outdoor facilities and clubhouse",
+        "Access to the tennis school, for children and adults",
+        "Participate in the club championship and ladder",
+        "Access to Spond groups for training sessions and new hitting partners",
+        "Children under 13 are insured through NIF membership",
+      ],
+      categoriesTitle: "Membership prices",
+      senior: "Senior", junior: "Junior", family: "Family",
+      pensioner: "Pensioner", student: "Student", passive: "Supporting member",
+      age18to66: "Ages 18–66", age0to17: "Ages 0–17", age67plus: "Age 67+",
+      familyInfo: "For one family at the same address, max two adults",
+      studentInfo: "18–25 with student ID",
+      passiveInfo: "Supporting member and pause option",
+      signupFee: "sign-up fee",
+      whyTitle: "Why do we have an annual fee and sign-up fee?",
+      whyText:
+        "Kolbotn Tennis Club is a community, not a shop – you are a member, not a customer. The annual fee is the most important yearly contribution to running the club. The sign-up fee exists to build lasting membership; many grants are based on member counts.",
+      signup: "Sign up",
+      signupIntro: "Fill in your details and we will get in touch.",
+      firstName: "First name", lastName: "Last name", birthYear: "Year of birth",
+      email: "Email", phone: "Phone", category: "Membership type",
+      submit: "Submit",
+      thanks: "Thank you! We will be in touch shortly.",
+    },
+    tennisSchool: {
+      title: "Tennis school",
+      intro: "All classes are held at Coop Øst Arena (our new indoor hall from 2024). The semester follows the school year.",
+      levelsTitle: "Groups and levels",
+      levelsText:
+        "We use the ROGY system (red/orange/green/yellow) – ball and court size are matched to the child's age and ability.",
+      perSemester: "per semester",
+      enrollChild: "Sign up a child",
+    },
+    sfo: {
+      title: "After-school tennis",
+      intro: "For pupils in grades 1–4. We pick up children at school and bring them safely to the hall. After the session they are brought back to after-school care.",
+      includes: "Includes coach, equipment and balls.",
+      followsSchoolYear: "Follows the school calendar.",
+      perSemester: "per semester",
+    },
+    private: {
+      title: "Private lessons",
+      intro: "1-to-1 training (or 1-to-2) with one of the club coaches. Suitable for all levels – beginner to competition. Same price indoors and outdoors.",
+      note: "Price is for instruction only. Court rental (drop-in) is extra if you do not already have a court.",
+      booking: "Book a private lesson",
+      contact: "Head coach: Trond Moldvær",
+    },
+    settings: { title: "Settings", language: "Language", norwegian: "Norsk", english: "English", about: "About the app", version: "Version" },
+  },
+};
+
+/* ================== DATA (ekte priser) ================== */
+
+const COURTS = [
+  { id: "arena-1", nameKey: { nb: "Coop Mega (innendørs)", en: "Coop Mega (indoor)" } },
+  { id: "arena-2", nameKey: { nb: "EXTRA (innendørs)",     en: "EXTRA (indoor)" } },
+  { id: "arena-3", nameKey: { nb: "Obs Bygg (innendørs)",  en: "Obs Bygg (indoor)" } },
+  { id: "arena-4", nameKey: { nb: "Obs (innendørs)",       en: "Obs (indoor)" } },
+  { id: "grus-1",  nameKey: { nb: "Grusbane 1 (Ingierkollen)", en: "Clay 1 (Ingierkollen)" } },
+  { id: "grus-2",  nameKey: { nb: "Grusbane 2 (Ingierkollen)", en: "Clay 2 (Ingierkollen)" } },
+  { id: "grus-3",  nameKey: { nb: "Grusbane 3 (Ingierkollen)", en: "Clay 3 (Ingierkollen)" } },
+  { id: "grus-4",  nameKey: { nb: "Grusbane 4 (Ingierkollen)", en: "Clay 4 (Ingierkollen)" } },
+];
+
+// Strøtimer – 5 tidsvinduer
+const STROTIMER = [
+  { key: "earlyBird",    member: 200, nonMember: 300 },
+  { key: "weekdayMid",   member: 250, nonMember: 350 },
+  { key: "weekdayPrime", member: 325, nonMember: 425 },
+  { key: "weekend",      member: 275, nonMember: 375 },
+  { key: "nightOwl",     member: 200, nonMember: 300 },
+];
+
+// Prisberegning time-for-time (samme logikk som RN-appen)
+function courtPrice(date, hour, mem) {
+  const d = date.getDay(); // 0 = søn, 6 = lør
+  const weekend = d === 0 || d === 6;
+  if (weekend) return mem ? 275 : 375;
+  if (hour >= 7  && hour < 10) return mem ? 200 : 300; // early bird
+  if (hour >= 10 && hour < 15) return mem ? 250 : 350; // mid
+  if (hour >= 15 && hour < 22) return mem ? 325 : 425; // prime
+  if (hour >= 22 && hour < 23) return mem ? 200 : 300; // night owl
+  return mem ? 200 : 300;
+}
+
+// Tennisskolen – 4 nivåer, med timer/uke-tiers
+const SCHOOL_COURSES = [
+  { id: "parent-child", titleKey: "school.parentChild", ageKey: "school.age3to6",
+    color: "#D14343",
+    tiers: [{ hours: 1, price: 2000 }],
+    noteKey: "school.parentChildNote" },
+  { id: "orange", titleKey: "school.orange", ageKey: "school.age6to9",
+    color: "#E07A1F",
+    tiers: [{ hours: 1, price: 3700 }, { hours: 2, price: 5600 }, { hours: 3, price: 7300 }] },
+  { id: "green", titleKey: "school.green", ageKey: "school.age10to18",
+    color: "#1B8A3A",
+    tiers: [{ hours: 1, price: 4000 }, { hours: 2, price: 5900 }, { hours: 3, price: 7700 }] },
+  { id: "senior", titleKey: "school.senior", ageKey: "school.ageAdult",
+    color: "#0B3D91",
+    tiers: [{ hours: 1, price: 4700 }, { hours: 2, price: 8000 }] },
+];
+
+const SFO_PRICE = { price: 2900, hoursPerWeek: 1 };
+const PRIVATE_PRICES = { member: 500, nonMember: 600 };
+
+const MEMBERSHIP_TIERS = [
+  { id: "senior",    key: "membership.senior",    price: 2880, signupFee: 750, infoKey: "membership.age18to66" },
+  { id: "junior",    key: "membership.junior",    price:  740, signupFee:   0, infoKey: "membership.age0to17" },
+  { id: "family",    key: "membership.family",    price: 5250, signupFee: 750, infoKey: "membership.familyInfo" },
+  { id: "pensioner", key: "membership.pensioner", price: 2360, signupFee:   0, infoKey: "membership.age67plus" },
+  { id: "student",   key: "membership.student",   price: 1680, signupFee:   0, infoKey: "membership.studentInfo" },
+  { id: "passive",   key: "membership.passive",   price:  750, signupFee:   0, infoKey: "membership.passiveInfo" },
+];
+
+/* ================== STATE ================== */
+let lang = localStorage.getItem("ktk.lang") || "nb";
+let selectedCourt = COURTS[0].id;
+let selectedDateOffset = 0;
+let isMember = false;
+let bookings = JSON.parse(localStorage.getItem("ktk.bookings") || "[]");
+let currentScreen = "home";
+let selectedMembership = MEMBERSHIP_TIERS[0].id;
+const screensWithTabs = ["home", "booking", "prices", "more"];
+
+/* ================== UTIL ================== */
+function tr(path) {
+  const segs = path.split(".");
+  let cur = T[lang];
+  for (const s of segs) { if (cur && typeof cur === "object" && s in cur) cur = cur[s]; else return path; }
+  return cur;
+}
+function applyI18n() {
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const v = tr(el.dataset.i18n);
+    if (typeof v === "string") el.textContent = v;
+  });
+  // Bullets
+  const ul = document.getElementById("memb-bullets");
+  if (ul) {
+    ul.innerHTML = "";
+    T[lang].membership.benefits.forEach(b => {
+      const li = document.createElement("li");
+      li.textContent = b;
+      ul.appendChild(li);
+    });
+  }
+  const about = document.getElementById("memb-about");
+  if (about) about.textContent = T[lang].membership.aboutText;
+  const why = document.getElementById("memb-why");
+  if (why) why.textContent = T[lang].membership.whyText;
+}
+function setLang(l) {
+  lang = l; localStorage.setItem("ktk.lang", l);
+  applyI18n(); render();
+}
+
+function toast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg; el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 1800);
+}
+
+function go(screen) {
+  currentScreen = screen;
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("screen-" + screen)?.classList.add("active");
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  const tabMap = { home: "tab-home", booking: "tab-booking", prices: "tab-prices", more: "tab-more" };
+  if (tabMap[screen]) document.getElementById(tabMap[screen]).classList.add("active");
+  document.querySelector(".tabs").style.display = screensWithTabs.includes(screen) ? "" : "none";
+  document.getElementById("back-btn").style.display = screensWithTabs.includes(screen) ? "none" : "";
+  document.getElementById("scroll").scrollTop = 0;
+  render();
+}
+
+function toISO(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+function formatDate(d) {
+  return d.toLocaleDateString(lang === "nb" ? "nb-NO" : "en-GB", { weekday: "short", day: "2-digit", month: "short" });
+}
+
+/* ================== BOOKING ================== */
+function renderCourts() {
+  const host = document.getElementById("court-chips");
+  host.innerHTML = "";
+  COURTS.forEach(c => {
+    const el = document.createElement("button");
+    el.className = "chip" + (c.id === selectedCourt ? " active" : "");
+    el.textContent = c.nameKey[lang];
+    el.onclick = () => { selectedCourt = c.id; renderCourts(); renderSlots(); };
+    host.appendChild(el);
+  });
+}
+function renderDates() {
+  const host = document.getElementById("date-chips");
+  host.innerHTML = "";
+  for (let i = 0; i < 14; i++) {
+    const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() + i);
+    const el = document.createElement("button");
+    el.className = "chip" + (i === selectedDateOffset ? " active" : "");
+    el.textContent = formatDate(d);
+    el.onclick = () => { selectedDateOffset = i; renderDates(); renderSlots(); };
+    host.appendChild(el);
+  }
+}
+function renderSlots() {
+  const host = document.getElementById("slots-grid");
+  host.innerHTML = "";
+  const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() + selectedDateOffset);
+  const iso = toISO(d);
+  for (let h = 7; h <= 22; h++) {
+    const booked = bookings.some(b => b.courtId === selectedCourt && b.dateISO === iso && b.hour === h);
+    const price = courtPrice(d, h, isMember);
+    const el = document.createElement("div");
+    el.className = "slot" + (booked ? " booked" : "");
+    el.innerHTML = `<div class="t">${String(h).padStart(2,"0")}:00</div>
+                    <div class="p">${booked ? tr("booking.booked") : price + " kr"}</div>`;
+    if (!booked) el.onclick = () => bookSlot(h, d, iso, price);
+    host.appendChild(el);
+  }
+}
+
+function bookSlot(hour, date, iso, price) {
+  const name = document.getElementById("name-input").value.trim();
+  if (!name) { toast(lang === "nb" ? "Fyll inn navn først." : "Please enter your name first."); return; }
+  const court = COURTS.find(c => c.id === selectedCourt).nameKey[lang];
+  openPaymentModal({
+    court, hour, date, iso, price, name,
+  });
+}
+
+/* ================== BETALING ================== */
+let paymentSelection = "vipps";
+let pendingBooking = null;
+
+const PAYMENT_METHODS = [
+  { id: "vipps",   logoClass: "logo-vipps",   logoText: "vipps",  titleKey: "pay.methodVipps",   subKey: "pay.methodVippsSub",   processingKey: "pay.processingVipps",   successKey: "pay.successSubVipps" },
+  { id: "card",    logoClass: "logo-card",    logoText: "VISA",   titleKey: "pay.methodCard",    subKey: "pay.methodCardSub",    processingKey: "pay.processingCard",    successKey: "pay.successSubCard" },
+  { id: "invoice", logoClass: "logo-invoice", logoText: "FAKT",   titleKey: "pay.methodInvoice", subKey: "pay.methodInvoiceSub", processingKey: "pay.processingInvoice", successKey: "pay.successSubInvoice" },
+  { id: "account", logoClass: "logo-klubb",   logoText: "KTK",    titleKey: "pay.methodAccount", subKey: "pay.methodAccountSub", processingKey: "pay.processingAccount", successKey: "pay.successSubAccount" },
+];
+
+function openPaymentModal({ court, hour, date, iso, price, name }) {
+  pendingBooking = { court, hour, date, iso, price, name };
+  paymentSelection = isMember ? "account" : "vipps";
+
+  document.getElementById("pay-court").textContent = court;
+  document.getElementById("pay-when").textContent = formatDate(date) + " · " + String(hour).padStart(2,"0") + ":00";
+  document.getElementById("pay-name").textContent = name;
+  document.getElementById("pay-total").textContent = price + " kr";
+
+  // Bygg metodeliste
+  const list = document.getElementById("pay-list");
+  list.innerHTML = "";
+  PAYMENT_METHODS.forEach(m => {
+    const el = document.createElement("div");
+    el.className = "pay-opt" + (paymentSelection === m.id ? " selected" : "");
+    el.dataset.method = m.id;
+    el.innerHTML = `
+      <div class="logo-box ${m.logoClass}">${m.logoText}</div>
+      <div class="label">
+        <div class="t">${tr(m.titleKey)}</div>
+        <div class="s">${tr(m.subKey)}</div>
+      </div>
+      <div class="radio"></div>`;
+    el.onclick = () => {
+      paymentSelection = m.id;
+      document.querySelectorAll(".pay-opt").forEach(o => o.classList.toggle("selected", o.dataset.method === m.id));
+      document.getElementById("pay-btn-amount").textContent = price + " kr";
+    };
+    list.appendChild(el);
+  });
+
+  // Betalingsknapp med beløp
+  const btn = document.getElementById("pay-btn");
+  btn.innerHTML = `<span data-i18n="pay.payNow">${tr("pay.payNow")}</span> <span id="pay-btn-amount">${price} kr</span>`;
+  btn.onclick = processPayment;
+
+  document.getElementById("pay-cancel").onclick = closePaymentModal;
+  document.getElementById("pay-step-select").style.display = "";
+  document.getElementById("pay-step-processing").style.display = "none";
+  document.getElementById("pay-step-success").style.display = "none";
+  document.getElementById("pay-modal").classList.add("show");
+}
+
+function processPayment() {
+  const method = PAYMENT_METHODS.find(m => m.id === paymentSelection);
+  document.getElementById("pay-step-select").style.display = "none";
+  document.getElementById("pay-step-processing").style.display = "";
+  document.getElementById("pay-processing-sub").textContent = tr(method.processingKey);
+
+  setTimeout(() => {
+    // Lagre bookingen med døråpnings-kode
+    const b = pendingBooking;
+    const doorCode = generateDoorCode();
+    const bookingId = Date.now() + "-" + Math.random().toString(36).slice(2,7);
+    bookings.push({
+      id: bookingId,
+      courtId: selectedCourt, dateISO: b.iso, hour: b.hour, price: b.price,
+      holderName: b.name, paymentMethod: method.id, doorCode, createdAt: Date.now()
+    });
+    localStorage.setItem("ktk.bookings", JSON.stringify(bookings));
+
+    document.getElementById("pay-step-processing").style.display = "none";
+    document.getElementById("pay-step-success").style.display = "";
+    document.getElementById("pay-success-sub").textContent = tr(method.successKey);
+    document.getElementById("pay-door-code").textContent = doorCode;
+    renderSlots();
+    renderMyBookings();
+  }, 1600);
+}
+
+// Generer en 4-sifret døråpnings-kode (1000–9999, ikke startende med 0)
+function generateDoorCode() {
+  return String(Math.floor(1000 + Math.random() * 9000));
+}
+
+function closePaymentModal() {
+  document.getElementById("pay-modal").classList.remove("show");
+  pendingBooking = null;
+}
+
+/* ================== PRISER ================== */
+function renderStrotimeTable() {
+  const host = document.getElementById("pt-strotime");
+  if (!host) return;
+  host.innerHTML = "";
+  const header = ["", tr("common.member"), tr("common.nonMember")];
+  header.forEach(h => { const d = document.createElement("div"); d.className = "hd"; d.textContent = h; host.appendChild(d); });
+  STROTIMER.forEach(r => {
+    const l = document.createElement("div"); l.className = "lbl"; l.textContent = tr("prices." + r.key); host.appendChild(l);
+    const m = document.createElement("div"); m.className = "mem"; m.textContent = r.member + " kr"; host.appendChild(m);
+    const n = document.createElement("div"); n.className = "nom"; n.textContent = r.nonMember + " kr"; host.appendChild(n);
+  });
+}
+
+function renderSchoolCoursesOn(hostId) {
+  const host = document.getElementById(hostId);
+  if (!host) return;
+  host.innerHTML = "";
+  SCHOOL_COURSES.forEach(course => {
+    const c = document.createElement("div");
+    c.className = "card";
+    let html = `
+      <div class="course-header">
+        <div class="dot" style="background:${course.color}"></div>
+        <div style="flex:1">
+          <div class="ct">${tr(course.titleKey)}</div>
+          <div class="ca">${tr(course.ageKey)}</div>
+        </div>
+      </div>`;
+    course.tiers.forEach(t => {
+      html += `
+        <div class="tier-line">
+          <div class="hrs">${t.hours} ${tr("common.hoursPerWeek")}</div>
+          <div class="prc">${t.price} kr</div>
+        </div>`;
+    });
+    if (course.noteKey) {
+      html += `<p class="muted" style="font-size:12px;font-style:italic;margin-top:8px">${tr(course.noteKey)}</p>`;
+    }
+    html += `<p class="muted" style="font-size:12px;font-style:italic;margin-top:4px">${tr("tennisSchool.perSemester")} · ${tr("school.followsSchoolYear")}</p>`;
+    c.innerHTML = html;
+    host.appendChild(c);
+  });
+}
+
+function renderMembershipTiers() {
+  const host = document.getElementById("memb-tiers");
+  if (!host) return;
+  host.innerHTML = "";
+  MEMBERSHIP_TIERS.forEach(t => {
+    const c = document.createElement("div");
+    c.className = "card memb-card" + (t.id === selectedMembership ? " selected" : "");
+    c.onclick = () => { selectedMembership = t.id; renderMembershipTiers(); updateSelectedMembership(); };
+    const unit = lang === "nb" ? "kr/år" : "NOK/year";
+    const signup = t.signupFee > 0
+      ? `+ ${t.signupFee} kr ${tr("membership.signupFee")}`
+      : "";
+    c.innerHTML = `
+      <div class="row-top">
+        <div style="flex:1">
+          <div class="name">${tr(t.key)}</div>
+          <div class="info">${tr(t.infoKey)}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="price">${t.price} kr</div>
+          <span class="unit">${unit}</span>
+          ${signup ? `<span class="fee">${signup}</span>` : ""}
+        </div>
+      </div>`;
+    host.appendChild(c);
+  });
+}
+function updateSelectedMembership() {
+  const tier = MEMBERSHIP_TIERS.find(t => t.id === selectedMembership);
+  const sel = document.getElementById("m-selected");
+  if (sel && tier) sel.textContent = `${tr(tier.key)} · ${tier.price} ${lang === "nb" ? "kr/år" : "NOK/yr"}`;
+}
+
+function renderMyBookings() {
+  const host = document.getElementById("my-bookings-list");
+  if (!host) return;
+  host.innerHTML = "";
+  if (bookings.length === 0) {
+    host.innerHTML = `<div class="card"><p>${tr("booking.noBookings")}</p></div>`;
+    return;
+  }
+  bookings.sort((a,b) => (a.dateISO + String(a.hour).padStart(2,"0")).localeCompare(b.dateISO + String(b.hour).padStart(2,"0")));
+  bookings.forEach(b => {
+    const court = COURTS.find(c => c.id === b.courtId)?.nameKey[lang] || b.courtId;
+    // Bakover-kompatibel: gamle bookinger uten doorCode får én generert nå
+    if (!b.doorCode) {
+      b.doorCode = generateDoorCode();
+      localStorage.setItem("ktk.bookings", JSON.stringify(bookings));
+    }
+    const c = document.createElement("div");
+    c.className = "card";
+    c.innerHTML = `
+      <p style="font-weight:700">${court}</p>
+      <p class="muted">${b.dateISO} · ${String(b.hour).padStart(2,"0")}:00 · ${b.holderName}</p>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+        <span class="caption" style="margin:0">${tr("pay.doorCodeShort")}</span>
+        <span class="door-code-mini">${b.doorCode}</span>
+      </div>
+      <div class="price-row" style="margin-top:10px">
+        <div class="l" style="color:var(--primary);font-size:18px">${b.price} kr</div>
+        <button class="btn danger" style="width:auto;padding:8px 14px" onclick="cancelBooking('${b.id}')">${tr("common.cancel")}</button>
+      </div>`;
+    host.appendChild(c);
+  });
+}
+function cancelBooking(id) {
+  bookings = bookings.filter(b => b.id !== id);
+  localStorage.setItem("ktk.bookings", JSON.stringify(bookings));
+  renderMyBookings();
+}
+
+function submitMembership() {
+  const first = document.getElementById("m-first").value.trim();
+  const email = document.getElementById("m-email").value.trim();
+  if (!first || !email) { toast(tr("membership.signupIntro")); return; }
+  toast(tr("membership.thanks"));
+  ["m-first","m-last","m-year","m-email","m-phone"].forEach(i => document.getElementById(i).value = "");
+}
+
+/* ================== MODAL ================== */
+function openModal(title, body, onConfirm) {
+  document.getElementById("modal-title").textContent = title;
+  document.getElementById("modal-body").textContent = body;
+  const cancel = document.getElementById("modal-cancel");
+  const confirm = document.getElementById("modal-confirm");
+  cancel.textContent = tr("common.cancel");
+  confirm.textContent = tr("common.confirm");
+  const m = document.getElementById("modal"); m.classList.add("show");
+  cancel.onclick = () => m.classList.remove("show");
+  confirm.onclick = () => { m.classList.remove("show"); onConfirm(); };
+}
+
+/* ================== RENDER ALL ================== */
+function render() {
+  document.getElementById("lang-nb").classList.toggle("active", lang === "nb");
+  document.getElementById("lang-en").classList.toggle("active", lang === "en");
+  const titles = {
+    home: tr("common.appName"), booking: tr("booking.title"), prices: tr("prices.title"),
+    more: tr("common.appName"), membership: tr("membership.title"),
+    tennisSchool: tr("tennisSchool.title"), sfo: tr("sfo.title"), private: tr("private.title"),
+    mybookings: tr("booking.yourBookings"), settings: tr("settings.title"),
+  };
+  document.getElementById("header-title").textContent = titles[currentScreen] || "";
+
+  renderCourts(); renderDates(); renderSlots();
+  renderStrotimeTable();
+  renderSchoolCoursesOn("pt-school");
+  renderSchoolCoursesOn("school-courses");
+  renderMembershipTiers(); updateSelectedMembership();
+  renderMyBookings();
+
+  // SFO
+  const sfoPriceEls = [document.getElementById("sfo-price"), document.getElementById("sfo-price-2")];
+  sfoPriceEls.forEach(e => { if (e) e.textContent = SFO_PRICE.price + " kr"; });
+  const sfoHoursEls = [document.getElementById("sfo-hours"), document.getElementById("sfo-hours-2")];
+  sfoHoursEls.forEach(e => { if (e) e.textContent = SFO_PRICE.hoursPerWeek; });
+
+  // Private
+  ["priv-member","priv-member-2"].forEach(id => {
+    const e = document.getElementById(id); if (e) e.textContent = PRIVATE_PRICES.member + " kr";
+  });
+  ["priv-nonmember","priv-nonmember-2"].forEach(id => {
+    const e = document.getElementById(id); if (e) e.textContent = PRIVATE_PRICES.nonMember + " kr";
+  });
+}
+
+/* ================== INIT ================== */
+try {
+  const memberSwitch = document.getElementById("member-switch");
+  if (memberSwitch) {
+    memberSwitch.onclick = (e) => {
+      isMember = !isMember;
+      e.currentTarget.classList.toggle("on", isMember);
+      const mnf = document.getElementById("member-number-field");
+      if (mnf) mnf.style.display = isMember ? "" : "none";
+      renderSlots();
+    };
+  }
+  const backBtn = document.getElementById("back-btn");
+  if (backBtn) backBtn.onclick = () => go("more");
+
+  const payDone = document.getElementById("pay-done");
+  if (payDone) payDone.onclick = () => { closePaymentModal(); go("mybookings"); };
+
+  applyI18n();
+  go("home");
+} catch (err) {
+  // Hvis noe feiler, vis hjem-skjermen og en liten feilmelding
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  const home = document.getElementById("screen-home");
+  if (home) home.classList.add("active");
+  const dbg = document.createElement("div");
+  dbg.style.cssText = "position:fixed;bottom:0;left:0;right:0;background:#D14343;color:#fff;padding:8px;font:12px/1.3 system-ui;z-index:9999;";
+  dbg.textContent = "JS-feil: " + (err && err.message ? err.message : err);
+  document.body.appendChild(dbg);
+}
+</script>
+
+</body>
+</html>
