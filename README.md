@@ -6,6 +6,7 @@ Mobil-vennlig demo av KTK-appen. Kan legges til på iPhone/Android hjem-skjerm
 ## Filer
 
 - `index.html` — selve appen
+- `sw.js` — service worker (gjør appen offline-klar etter første besøk)
 - `manifest.json` — PWA-konfig (navn, farger, ikoner)
 - `icon-192.png`, `icon-512.png` — app-ikoner
 
@@ -25,8 +26,9 @@ Mobil-vennlig demo av KTK-appen. Kan legges til på iPhone/Android hjem-skjerm
 
 På den nye repo-siden, klikk **uploading an existing file** (eller dra-og-slipp).
 
-Last opp ALLE 4 filene fra denne mappen:
+Last opp ALLE 5 filene fra denne mappen:
 - `index.html`
+- `sw.js`
 - `manifest.json`
 - `icon-192.png`
 - `icon-512.png`

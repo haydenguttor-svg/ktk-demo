@@ -162,14 +162,19 @@
 
   .slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
   .slot {
-    border-radius: 10px; padding: 10px 8px; text-align: center; border: 1px solid var(--border);
-    background: var(--white); cursor: pointer;
+    border-radius: 10px; padding: 10px 6px; text-align: center; border: 1px solid var(--border);
+    background: var(--white); cursor: pointer; min-height: 62px;
+    display: flex; flex-direction: column; justify-content: center;
   }
   .slot .t { font-weight: 800; font-size: 14px; color: var(--text); }
   .slot .p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .slot .n { font-size: 10px; color: var(--muted); margin-top: 2px; font-weight: 600;
+             white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .slot.booked { background: var(--danger); border-color: var(--danger); cursor: not-allowed; }
-  .slot.booked .t, .slot.booked .p { color: #fff; }
-  .slot:not(.booked):hover { border-color: var(--primary); }
+  .slot.booked .t, .slot.booked .p, .slot.booked .n { color: #fff; opacity: .95; }
+  .slot.mine { background: var(--primary); border-color: var(--primary); cursor: not-allowed; }
+  .slot.mine .t, .slot.mine .p, .slot.mine .n { color: #fff; }
+  .slot:not(.booked):not(.mine):hover { border-color: var(--primary); }
 
   .row-item {
     display: flex; align-items: center; gap: 12px; padding: 12px 14px;
@@ -294,6 +299,186 @@
     border: 0; background: transparent; color: var(--muted);
     font-size: 13px; font-weight: 600; cursor: pointer;
   }
+  /* ===== Kortdetalj-skjema ===== */
+  .card-form-wrap { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .card-form-wrap .field { display: flex; flex-direction: column; gap: 4px; }
+  .card-form-wrap .field label {
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .card-form-wrap input {
+    padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px;
+    font-size: 15px; font-family: inherit; color: var(--text); background: #fff;
+    outline: none; transition: border-color .15s;
+    -webkit-appearance: none;
+  }
+  .card-form-wrap input:focus { border-color: var(--primary); }
+  .card-form-wrap input::placeholder { color: #9CA3AF; }
+  .card-form-wrap input.card-num { font-family: "SF Mono", Menlo, Consolas, monospace; letter-spacing: 1px; }
+  .card-form-wrap .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .card-form-wrap .card-preview {
+    background: linear-gradient(135deg, #1a1f71 0%, #4b5fc2 100%);
+    color: #fff; border-radius: 14px; padding: 16px; margin-bottom: 6px;
+    box-shadow: 0 6px 18px rgba(26,31,113,.25);
+    position: relative; overflow: hidden;
+  }
+  .card-form-wrap .card-preview::after {
+    content: ""; position: absolute; top: -30px; right: -30px;
+    width: 140px; height: 140px; border-radius: 50%;
+    background: rgba(247,181,0,.25);
+  }
+  .card-form-wrap .card-preview .cp-brand {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase; opacity: .85; font-weight: 700;
+  }
+  .card-form-wrap .card-preview .cp-num {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 17px; letter-spacing: 2px; margin: 18px 0 12px; font-weight: 700;
+  }
+  .card-form-wrap .card-preview .cp-foot {
+    display: flex; justify-content: space-between; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: .9;
+  }
+  .card-form-wrap .card-preview .cp-foot .v { font-size: 13px; font-weight: 700; letter-spacing: 0.5px; margin-top: 2px; text-transform: none; }
+  .card-secure-note {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; color: var(--muted); margin-bottom: 10px;
+  }
+  .card-secure-note::before {
+    content: ""; display: inline-block; width: 12px; height: 12px;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231B8A3A' stroke-width='2.5'><rect x='3' y='11' width='18' height='11' rx='2'/><path d='M7 11V7a5 5 0 0 1 10 0v4'/></svg>") no-repeat center / contain;
+  }
+  .card-error {
+    background: #FEE2E2; color: #991B1B; padding: 8px 12px; border-radius: 8px;
+    font-size: 12px; font-weight: 600; margin-bottom: 10px; display: none;
+  }
+  .card-error.show { display: block; }
+
+  /* ===== Auth / Login ===== */
+  .auth-wrap { padding: 8px 4px 20px; }
+  .auth-hero {
+    text-align: center; margin-bottom: 22px;
+  }
+  .auth-hero .av {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 30px; font-weight: 800; margin: 0 auto 12px;
+    box-shadow: 0 8px 20px rgba(11,61,145,0.25);
+  }
+  .auth-hero h2 { margin: 0; font-size: 22px; color: var(--text); font-weight: 800; }
+  .auth-hero p { margin: 6px 0 0; font-size: 13px; color: var(--muted); }
+  .auth-field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+  .auth-field label {
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .auth-field input {
+    padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px;
+    font-size: 15px; font-family: inherit; color: var(--text); background: #fff;
+    outline: none; transition: border-color .15s; -webkit-appearance: none;
+  }
+  .auth-field input:focus { border-color: var(--primary); }
+  .auth-field input::placeholder { color: #9CA3AF; }
+  .auth-error {
+    background: #FEE2E2; color: #991B1B; padding: 8px 12px; border-radius: 8px;
+    font-size: 12px; font-weight: 600; margin-bottom: 10px; display: none;
+  }
+  .auth-error.show { display: block; }
+  .auth-btn {
+    width: 100%; padding: 14px; border-radius: 12px; border: 0;
+    background: var(--primary); color: #fff; font-weight: 800; font-size: 15px;
+    cursor: pointer; margin-top: 6px;
+  }
+  .auth-btn.ghost {
+    background: transparent; color: var(--primary);
+    border: 1.5px solid var(--primary);
+  }
+  .auth-forgot {
+    display: block; text-align: center; margin: 12px 0 16px;
+    color: var(--muted); font-size: 12px; text-decoration: none;
+    cursor: pointer;
+  }
+  .auth-bottom {
+    text-align: center; margin-top: 22px; font-size: 13px; color: var(--muted);
+  }
+  .auth-bottom a { color: var(--primary); font-weight: 700; text-decoration: none; cursor: pointer; }
+  .auth-divider {
+    display: flex; align-items: center; gap: 10px; margin: 16px 0;
+    color: var(--muted); font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .auth-divider::before, .auth-divider::after {
+    content: ""; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* ===== Profil ===== */
+  .profile-hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    border-radius: 18px; padding: 20px; color: #fff;
+    margin-bottom: 14px; display: flex; align-items: center; gap: 14px;
+    box-shadow: 0 8px 20px rgba(11,61,145,0.2);
+  }
+  .profile-hero .pf-avatar {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: rgba(255,255,255,0.2); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 800; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+  .profile-hero .pf-name { font-size: 19px; font-weight: 800; margin: 0; }
+  .profile-hero .pf-email { font-size: 12px; opacity: 0.85; margin: 2px 0 0; }
+  .profile-hero .pf-badge {
+    display: inline-block; margin-top: 6px;
+    background: rgba(255,255,255,0.25); padding: 3px 10px;
+    border-radius: 10px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .profile-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;
+  }
+  .profile-stat {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px; text-align: center;
+  }
+  .profile-stat .v { font-size: 22px; font-weight: 800; color: var(--primary); }
+  .profile-stat .l {
+    font-size: 11px; color: var(--muted); margin-top: 2px;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700;
+  }
+  .profile-section { margin-bottom: 14px; }
+  .profile-section .hd {
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin: 4px 0 8px 4px;
+  }
+  .profile-logout {
+    width: 100%; padding: 14px; margin-top: 8px; border-radius: 12px;
+    background: transparent; color: var(--danger); font-weight: 700;
+    border: 1.5px solid var(--danger); font-size: 14px; cursor: pointer;
+  }
+
+  /* ===== Hjem-skjerm bruker-banner ===== */
+  .user-banner {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 12px 14px; margin-bottom: 14px;
+    cursor: pointer;
+  }
+  .user-banner:active { background: var(--bg); }
+  .user-banner .ub-av {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 17px; font-weight: 800; flex-shrink: 0;
+  }
+  .user-banner .ub-av.empty {
+    background: var(--bg); border: 2px dashed var(--border);
+    color: var(--muted);
+  }
+  .user-banner .ub-txt { flex: 1; }
+  .user-banner .ub-t { font-size: 14px; font-weight: 700; color: var(--text); }
+  .user-banner .ub-s { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .user-banner .ub-chev { color: var(--muted); font-size: 20px; }
+
   .pay-processing {
     text-align: center; padding: 30px 20px;
   }
@@ -329,6 +514,270 @@
     content: ""; display: inline-block; width: 14px; height: 14px;
     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5'><rect x='3' y='11' width='18' height='11' rx='2'/><path d='M7 11V7a5 5 0 0 1 10 0v4'/></svg>") no-repeat center / contain;
   }
+
+  /* ===== Mine bookinger ===== */
+  .booking-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 14px; margin-bottom: 12px; position: relative; overflow: hidden;
+  }
+  .booking-card.past { opacity: .6; }
+  .booking-card .bc-top {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+  }
+  .booking-card .bc-court { font-weight: 800; font-size: 16px; color: var(--text); }
+  .booking-card .bc-meta  { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .booking-card .bc-badge {
+    font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 999px;
+    text-transform: uppercase; letter-spacing: .5px; white-space: nowrap;
+  }
+  .booking-card .bc-badge.live {
+    background: #dbf1e0; color: #1e7a3e; border: 1px solid #8fd19e;
+  }
+  .booking-card .bc-badge.upcoming {
+    background: #e6efff; color: var(--primary); border: 1px solid #bcd1f0;
+  }
+  .booking-card .bc-badge.past {
+    background: #eee; color: #888; border: 1px solid #ddd;
+  }
+  .booking-card .countdown {
+    margin-top: 10px; font-size: 13px; color: var(--primary); font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .booking-card .countdown::before {
+    content: "⏱"; font-size: 14px;
+  }
+  .booking-card .door-big {
+    background: linear-gradient(135deg, #0B3D91 0%, #2E5FBA 100%);
+    border-radius: 14px; padding: 14px 16px; color: #fff;
+    margin-top: 12px; box-shadow: 0 4px 14px rgba(11,61,145,.22);
+  }
+  .booking-card .door-big .lbl {
+    text-transform: uppercase; font-size: 10px; letter-spacing: 1.4px;
+    opacity: .85; font-weight: 700;
+  }
+  .booking-card .door-big .val {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 34px; font-weight: 800; letter-spacing: 6px; margin: 4px 0 4px;
+  }
+  .booking-card .door-big .hint { font-size: 11px; opacity: .85; }
+  .booking-card .bc-actions {
+    display: flex; gap: 8px; margin-top: 12px;
+  }
+  .booking-card .bc-actions .btn {
+    margin: 0; padding: 10px 12px; font-size: 13px;
+  }
+  .booking-card .bc-section-title {
+    font-size: 12px; font-weight: 800; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 1px; margin: 16px 2px 8px;
+  }
+  .booking-card .bc-section-title:first-child { margin-top: 0; }
+
+  /* ===== FAQ ===== */
+  .faq-item {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    margin-bottom: 10px; overflow: hidden;
+  }
+  .faq-item summary {
+    padding: 14px 16px; cursor: pointer; font-weight: 700; font-size: 14px;
+    list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    color: var(--text);
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: "+"; font-size: 20px; font-weight: 400; color: var(--primary);
+    transition: transform .15s;
+  }
+  .faq-item[open] summary::after { content: "−"; }
+  .faq-item .faq-body {
+    padding: 0 16px 14px; font-size: 13px; line-height: 1.55; color: var(--text);
+  }
+  .faq-item .faq-body p { margin: 0 0 8px; }
+  .faq-item .faq-body p:last-child { margin: 0; }
+
+  /* ===== Nyheter & arrangementer ===== */
+  .news-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 0; margin-bottom: 10px; overflow: hidden;
+    display: flex; align-items: stretch; cursor: pointer;
+  }
+  .news-card:active { transform: scale(.99); }
+  .news-card .nc-thumb {
+    width: 72px; flex-shrink: 0;
+    background: linear-gradient(135deg, #0B3D91 0%, #2E5FBA 100%);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+  .news-card .nc-body { padding: 10px 12px; flex: 1; min-width: 0; }
+  .news-card .nc-cat {
+    font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--primary); margin-bottom: 2px;
+  }
+  .news-card .nc-cat.event { color: #b8860b; }
+  .news-card .nc-title { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .news-card .nc-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .event-detail {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 14px; margin-bottom: 12px;
+  }
+  .event-detail .ed-date-row {
+    display: flex; align-items: center; gap: 10px; margin: 8px 0 10px;
+    font-size: 13px; color: var(--muted);
+  }
+  .event-detail .ed-date-row .ic { font-size: 16px; }
+
+  /* ===== Trenere ===== */
+  .trainer-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 14px; margin-bottom: 12px;
+    display: flex; gap: 12px;
+  }
+  .trainer-card .tr-av {
+    width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, #0B3D91 0%, #2E5FBA 100%);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+  }
+  .trainer-card .tr-body { flex: 1; min-width: 0; }
+  .trainer-card .tr-name { font-weight: 800; font-size: 15px; color: var(--text); }
+  .trainer-card .tr-role {
+    font-size: 11px; color: var(--primary); font-weight: 700;
+    text-transform: uppercase; letter-spacing: .6px; margin-top: 2px;
+  }
+  .trainer-card .tr-bio { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+  .trainer-card .tr-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .trainer-card .tr-tag {
+    font-size: 11px; padding: 3px 8px; border-radius: 999px;
+    background: #e6efff; color: var(--primary); font-weight: 700;
+  }
+  .trainer-card .tr-actions { margin-top: 10px; display: flex; gap: 8px; }
+  .trainer-card .tr-actions .btn { margin: 0; padding: 8px 12px; font-size: 13px; }
+
+  /* ===== Finn spillepartner ===== */
+  .partner-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 14px; margin-bottom: 10px; position: relative;
+  }
+  .partner-card.mine { border: 1.5px solid var(--primary); }
+  .partner-card.taken { opacity: .6; }
+  .partner-card .pc-top {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .partner-card .pc-av {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, #0B3D91 0%, #2E5FBA 100%);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 15px; flex-shrink: 0;
+  }
+  .partner-card .pc-head { flex: 1; min-width: 0; }
+  .partner-card .pc-name { font-weight: 800; font-size: 14px; color: var(--text); }
+  .partner-card .pc-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .partner-card .pc-level {
+    font-size: 11px; padding: 3px 8px; border-radius: 999px;
+    background: #e6efff; color: var(--primary); font-weight: 700;
+    white-space: nowrap;
+  }
+  .partner-card .pc-when {
+    margin-top: 10px; font-size: 13px; color: var(--text); font-weight: 700;
+  }
+  .partner-card .pc-note {
+    margin-top: 6px; font-size: 13px; color: var(--muted); line-height: 1.4;
+    background: var(--bg); padding: 8px 10px; border-radius: 8px;
+    font-style: italic;
+  }
+  .partner-card .pc-actions { margin-top: 10px; display: flex; gap: 8px; }
+  .partner-card .pc-actions .btn { margin: 0; padding: 9px 12px; font-size: 13px; }
+  .partner-card .pc-taken-badge {
+    display: inline-block; padding: 4px 10px; border-radius: 999px;
+    background: #dbf1e0; color: #1e7a3e; font-weight: 700; font-size: 11px;
+    margin-top: 10px; border: 1px solid #8fd19e;
+  }
+
+  .partner-fab {
+    background: linear-gradient(135deg, #0B3D91 0%, #2E5FBA 100%);
+    color: #fff; border-radius: 14px; padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px; cursor: pointer;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 14px rgba(11,61,145,.22);
+  }
+  .partner-fab:active { transform: scale(.99); }
+  .partner-fab .fab-ic { font-size: 22px; }
+  .partner-fab .fab-body { flex: 1; }
+  .partner-fab .fab-t { font-weight: 800; font-size: 14px; }
+  .partner-fab .fab-s { font-size: 12px; opacity: .9; margin-top: 2px; }
+
+  /* Level-chips i opprett-form */
+  .level-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .level-chips .chip { cursor: pointer; }
+
+  /* ===== Digitalt medlemskort ===== */
+  .member-card-wrap {
+    background: linear-gradient(135deg, #0B3D91 0%, #2E5FBA 70%, #4a7cc9 100%);
+    color: #fff; border-radius: 18px; padding: 20px 20px; margin-bottom: 14px;
+    box-shadow: 0 10px 30px rgba(11,61,145,.28);
+    position: relative; overflow: hidden;
+  }
+  .member-card-wrap::before {
+    content: ""; position: absolute; right: -50px; top: -50px;
+    width: 180px; height: 180px; border-radius: 50%;
+    background: rgba(255,255,255,.08);
+  }
+  .member-card-wrap::after {
+    content: ""; position: absolute; left: -40px; bottom: -40px;
+    width: 140px; height: 140px; border-radius: 50%;
+    background: rgba(255,255,255,.05);
+  }
+  .member-card-wrap .mc-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    position: relative; z-index: 1; margin-bottom: 18px;
+  }
+  .member-card-wrap .mc-club { font-size: 11px; opacity: .85; text-transform: uppercase; letter-spacing: 1.4px; font-weight: 700; }
+  .member-card-wrap .mc-sub  { font-size: 16px; font-weight: 800; margin-top: 3px; }
+  .member-card-wrap .mc-seal {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 13px; letter-spacing: 1px;
+    border: 1.5px solid rgba(255,255,255,.3);
+  }
+  .member-card-wrap .mc-body { position: relative; z-index: 1; }
+  .member-card-wrap .mc-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px;
+  }
+  .member-card-wrap .mc-field .lbl {
+    font-size: 10px; opacity: .8; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700;
+    margin-bottom: 3px;
+  }
+  .member-card-wrap .mc-field .val { font-size: 15px; font-weight: 700; }
+  .member-card-wrap .mc-field .val.big { font-size: 20px; font-weight: 800; }
+  .member-card-wrap .mc-field .num {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 20px; font-weight: 800; letter-spacing: 2px;
+  }
+
+  /* ===== Om klubben ===== */
+  .about-hero {
+    background: linear-gradient(135deg, #0B3D91 0%, #2E5FBA 100%);
+    color: #fff; border-radius: 16px; padding: 18px; margin-bottom: 12px;
+    box-shadow: 0 6px 20px rgba(11,61,145,.2);
+  }
+  .about-hero h3 { margin: 0 0 4px; font-size: 18px; color: #fff; }
+  .about-hero p { margin: 0; font-size: 13px; opacity: .92; color: #fff; }
+  .about-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px;
+  }
+  .about-stat {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 10px 8px; text-align: center;
+  }
+  .about-stat .n { font-size: 22px; font-weight: 800; color: var(--primary); }
+  .about-stat .l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-top: 2px; }
+  .board-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-top: 1px solid var(--border); font-size: 13px;
+  }
+  .board-row:first-child { border-top: none; }
+  .board-row .role { color: var(--muted); font-size: 12px; }
+  .board-row .name { font-weight: 700; color: var(--text); }
 
   .footer-note { color: var(--muted); font-size: 12px; font-style: italic; margin: 8px 0 24px; }
 
@@ -408,6 +857,58 @@
         </div>
         <button class="pay-btn" id="pay-btn"><span data-i18n="pay.payNow">Betal nå</span></button>
         <button class="pay-cancel" id="pay-cancel" data-i18n="common.cancel">Avbryt</button>
+      </div>
+
+      <div id="pay-step-card" style="display:none">
+        <h3 data-i18n="pay.cardTitle">Kortdetaljer</h3>
+        <div class="pay-summary">
+          <div class="ln total"><span data-i18n="pay.total">Totalt</span><span id="pay-card-total"></span></div>
+        </div>
+
+        <div class="card-form-wrap">
+          <div class="card-preview">
+            <div class="cp-brand">VISA / MASTERCARD</div>
+            <div class="cp-num" id="cp-num">•••• •••• •••• ••••</div>
+            <div class="cp-foot">
+              <div>
+                <div>Navn</div>
+                <div class="v" id="cp-name">—</div>
+              </div>
+              <div>
+                <div data-i18n="pay.cardExpiry">Utløper</div>
+                <div class="v" id="cp-exp">MM/ÅÅ</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-error" id="card-error" data-i18n="pay.cardInvalid">Vennligst fyll ut alle felt korrekt</div>
+
+          <div class="field">
+            <label data-i18n="pay.cardNumber">Kortnummer</label>
+            <input id="card-number" class="card-num" type="text" inputmode="numeric" autocomplete="cc-number" maxlength="19" placeholder="1234 5678 9012 3456" />
+          </div>
+
+          <div class="field">
+            <label data-i18n="pay.cardName">Navn på kort</label>
+            <input id="card-name" type="text" autocomplete="cc-name" maxlength="40" placeholder="KARI NORDMANN" style="text-transform:uppercase" />
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label data-i18n="pay.cardExpiry">Utløper</label>
+              <input id="card-exp" class="card-num" type="text" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/ÅÅ" />
+            </div>
+            <div class="field">
+              <label data-i18n="pay.cardCvc">CVC</label>
+              <input id="card-cvc" class="card-num" type="text" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123" />
+            </div>
+          </div>
+
+          <div class="card-secure-note" data-i18n="pay.cardSecure">Kryptert og sikker. Vi lagrer ikke kortdetaljer.</div>
+        </div>
+
+        <button class="pay-btn" id="card-submit"><span data-i18n="pay.cardContinue">Fortsett til betaling</span> · <span id="card-submit-amount"></span></button>
+        <button class="pay-cancel" id="card-back" data-i18n="pay.back">Tilbake</button>
       </div>
 
       <div id="pay-step-processing" style="display:none">
@@ -490,6 +991,16 @@
         <div class="tagline" data-i18n="home.tagline">Book bane, meld deg på kurs, og hold deg oppdatert.</div>
       </div>
 
+      <!-- Bruker-banner (byttes mellom innlogget/ikke innlogget) -->
+      <div class="user-banner" id="user-banner" onclick="onUserBannerClick()">
+        <div class="ub-av empty" id="ub-av">?</div>
+        <div class="ub-txt">
+          <div class="ub-t" id="ub-t" data-i18n="auth.loginShort">Logg inn</div>
+          <div class="ub-s" id="ub-s" data-i18n="auth.tapToLogin">Trykk for å logge inn</div>
+        </div>
+        <div class="ub-chev">›</div>
+      </div>
+
       <div class="grid">
         <div class="tile" onclick="go('booking')">
           <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
@@ -516,6 +1027,16 @@
           <div class="lbl" data-i18n="home.privateLessons">Privattimer</div>
         </div>
       </div>
+
+      <!-- Finn spillepartner (hjem-preview) -->
+      <div id="home-partner-banner" style="display:none"></div>
+
+      <!-- Nyheter / arrangementer (hjem-preview) -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:16px 0 8px">
+        <div class="section-title" style="margin:0" data-i18n="news.title">Siste nytt</div>
+        <a class="link" style="font-size:13px" onclick="go('news')" data-i18n="common.seeAll">Se alt</a>
+      </div>
+      <div id="home-news-feed"></div>
 
       <div class="card">
         <h3 data-i18n="home.openingHoursTitle">Åpningstider</h3>
@@ -721,6 +1242,11 @@
 
     <!-- MER -->
     <div class="screen" id="screen-more">
+      <div class="row-item" id="more-profile" onclick="onMoreProfileClick()">
+        <div class="ic" id="more-profile-ic">🔐</div>
+        <div class="lbl" id="more-profile-lbl">Logg inn</div>
+        <div class="chev">›</div>
+      </div>
       <div class="row-item" onclick="go('membership')">
         <div class="ic">♥</div><div class="lbl" data-i18n="membership.title">Medlemskap</div><div class="chev">›</div>
       </div>
@@ -736,6 +1262,21 @@
       <div class="row-item" onclick="go('mybookings')">
         <div class="ic">📋</div><div class="lbl" data-i18n="booking.yourBookings">Dine bookinger</div><div class="chev">›</div>
       </div>
+      <div class="row-item" onclick="go('partner')">
+        <div class="ic">🤝</div><div class="lbl" data-i18n="partner.title">Finn spillepartner</div><div class="chev">›</div>
+      </div>
+      <div class="row-item" onclick="go('news')">
+        <div class="ic">📰</div><div class="lbl" data-i18n="news.title">Siste nytt</div><div class="chev">›</div>
+      </div>
+      <div class="row-item" onclick="go('trainers')">
+        <div class="ic">🎾</div><div class="lbl" data-i18n="trainers.title">Trenere</div><div class="chev">›</div>
+      </div>
+      <div class="row-item" onclick="go('about')">
+        <div class="ic">ℹ</div><div class="lbl" data-i18n="about.title">Om klubben</div><div class="chev">›</div>
+      </div>
+      <div class="row-item" onclick="go('faq')">
+        <div class="ic">?</div><div class="lbl" data-i18n="faq.title">Spørsmål og svar</div><div class="chev">›</div>
+      </div>
       <div class="row-item" onclick="go('settings')">
         <div class="ic">⚙</div><div class="lbl" data-i18n="settings.title">Innstillinger</div><div class="chev">›</div>
       </div>
@@ -744,6 +1285,73 @@
     <!-- MINE BOOKINGER -->
     <div class="screen" id="screen-mybookings">
       <div id="my-bookings-list"></div>
+    </div>
+
+    <!-- LOGG INN -->
+    <div class="screen" id="screen-login">
+      <div class="auth-wrap">
+        <div class="auth-hero">
+          <div class="av">KTK</div>
+          <h2 data-i18n="auth.loginTitle">Logg inn</h2>
+          <p data-i18n="auth.loginSub">Logg inn for raskere booking og oversikt over dine aktiviteter</p>
+        </div>
+
+        <div class="auth-error" id="auth-error" data-i18n="auth.invalidLogin">Sjekk e-post og passord</div>
+
+        <div class="auth-field">
+          <label data-i18n="auth.email">E-post</label>
+          <input id="auth-email" type="email" autocomplete="email" placeholder="din@epost.no" />
+        </div>
+        <div class="auth-field">
+          <label data-i18n="auth.password">Passord</label>
+          <input id="auth-password" type="password" autocomplete="current-password" placeholder="••••••••" />
+        </div>
+
+        <a class="auth-forgot" onclick="alert('Demo: passord-reset ikke tilgjengelig')" data-i18n="auth.forgot">Glemt passord?</a>
+
+        <button class="auth-btn" onclick="doLogin()" data-i18n="auth.loginBtn">Logg inn</button>
+
+        <div class="auth-divider">eller</div>
+
+        <button class="auth-btn ghost" onclick="doDemoLogin()" data-i18n="auth.demoBtn">Bruk demo-bruker</button>
+
+        <div class="auth-bottom">
+          <span data-i18n="auth.noAccount">Ikke medlem enda?</span>
+          <a onclick="go('membership')" data-i18n="auth.becomeMember">Bli medlem</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFIL -->
+    <div class="screen" id="screen-profile">
+      <div class="profile-hero">
+        <div class="pf-avatar" id="pf-avatar">K</div>
+        <div style="flex:1;min-width:0">
+          <p class="pf-name" id="pf-name">—</p>
+          <p class="pf-email" id="pf-email">—</p>
+          <span class="pf-badge" id="pf-badge">—</span>
+        </div>
+      </div>
+
+      <div id="pf-member-card"></div>
+
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div class="v" id="pf-bookings">0</div>
+          <div class="l" data-i18n="auth.totalBookings">Bookinger</div>
+        </div>
+        <div class="profile-stat">
+          <div class="v" id="pf-spent">0 kr</div>
+          <div class="l" data-i18n="auth.totalSpent">Totalt brukt</div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <div class="hd" data-i18n="auth.recentBookings">Siste bookinger</div>
+        <div id="pf-recent"></div>
+      </div>
+
+      <button class="profile-logout" onclick="doLogout()" data-i18n="auth.logout">Logg ut</button>
     </div>
 
     <!-- INNSTILLINGER -->
@@ -759,6 +1367,113 @@
         <p style="font-weight:700" data-i18n="common.appName">Kolbotn Tennisklubb</p>
         <p class="muted"><span data-i18n="settings.version">Versjon</span>: 0.1.0</p>
       </div>
+    </div>
+
+    <!-- OM KLUBBEN -->
+    <div class="screen" id="screen-about">
+      <div class="about-hero">
+        <h3 data-i18n="about.heroTitle">Kolbotn Tennisklubb</h3>
+        <p data-i18n="about.heroSub">Nordstrands nærmeste tennisklubb – tennis for alle siden 1917</p>
+      </div>
+
+      <div class="about-stats">
+        <div class="about-stat"><div class="n">800+</div><div class="l" data-i18n="about.statMembers">Medlemmer</div></div>
+        <div class="about-stat"><div class="n">8</div><div class="l" data-i18n="about.statCourts">Baner</div></div>
+        <div class="about-stat"><div class="n">100+</div><div class="l" data-i18n="about.statYears">År</div></div>
+      </div>
+
+      <div class="caption" data-i18n="about.historyTitle">Historie</div>
+      <div class="card">
+        <p data-i18n="about.historyText">Kolbotn Tennisklubb ble stiftet i 1917 og er en av Norges eldste tennisklubber. Klubben har vokst fra noen få entusiaster til en av Østlandets største tennismiljøer, med både bredde- og konkurransetilbud. I 2024 åpnet vi Coop Øst Arena — vårt nye, moderne innendørsanlegg — som gjør oss til en helårsklubb.</p>
+      </div>
+
+      <div class="caption" data-i18n="about.facilitiesTitle">Anlegg</div>
+      <div class="card">
+        <p style="font-weight:700" data-i18n="about.indoorName">Coop Øst Arena (innendørs)</p>
+        <p class="muted" data-i18n="about.indoorDesc">4 hard court-baner med moderne underlag, LED-belysning og klubbhus. Åpent 07–23 alle dager, hele året. Tilrettelagt for både strøtimer, faste timer, tennisskole og privattimer.</p>
+        <p style="font-weight:700;margin-top:12px" data-i18n="about.outdoorName">Ingierkollen (utendørs)</p>
+        <p class="muted" data-i18n="about.outdoorDesc">4 grusbaner i naturskjønne omgivelser, åpent i utesesongen (ca. 15. april – 1. oktober). Klubbhus med garderober og enkel servering under turneringer.</p>
+      </div>
+
+      <div class="caption" data-i18n="about.boardTitle">Styret</div>
+      <div class="card" id="about-board"></div>
+
+      <div class="caption" data-i18n="about.contactTitle">Kontakt</div>
+      <div class="card">
+        <p><b data-i18n="contact.chair">Styreleder</b>: Anne Berit Hansen</p>
+        <p><b data-i18n="contact.headCoach">Hovedtrener</b>: Trond Moldvær</p>
+        <p style="margin-top:8px"><a class="link" href="mailto:post@kolbotntennis.no">post@kolbotntennis.no</a></p>
+        <p class="muted" style="margin-top:8px" data-i18n="contact.postal">Postadresse: PB 15, 1411 Kolbotn</p>
+        <p class="muted" data-i18n="contact.indoorAddr">Coop Øst Arena: Kongeveien 72, 1412 Sofiemyr</p>
+        <p class="muted" data-i18n="contact.outdoorAddr">Utebaner og klubbhus: Ingierveien 17, 1410 Kolbotn</p>
+        <p class="muted" style="margin-top:8px"><span data-i18n="contact.orgNr">Org.nr:</span> 871 257 922</p>
+      </div>
+
+      <button class="btn secondary" onclick="go('membership')" data-i18n="home.becomeMember">Bli medlem</button>
+    </div>
+
+    <!-- FAQ -->
+    <div class="screen" id="screen-faq">
+      <p class="muted" style="margin-bottom:14px" data-i18n="faq.intro">Her finner du svar på de vanligste spørsmålene. Trykk på et spørsmål for å lese svaret.</p>
+      <div id="faq-list"></div>
+
+      <div class="caption" style="margin-top:16px" data-i18n="faq.moreHelp">Fant du ikke svaret?</div>
+      <div class="card">
+        <p data-i18n="faq.moreHelpText">Send oss en e-post så svarer vi så raskt vi kan.</p>
+        <p style="margin-top:8px"><a class="link" href="mailto:post@kolbotntennis.no">post@kolbotntennis.no</a></p>
+      </div>
+    </div>
+
+    <!-- NYHETER & ARRANGEMENTER -->
+    <div class="screen" id="screen-news">
+      <div class="chips" id="news-filter-chips"></div>
+      <div id="news-full-list"></div>
+    </div>
+
+    <!-- ARRANGEMENT DETALJER -->
+    <div class="screen" id="screen-event">
+      <div id="event-detail-host"></div>
+    </div>
+
+    <!-- TRENERE -->
+    <div class="screen" id="screen-trainers">
+      <p class="muted" style="margin-bottom:14px" data-i18n="trainers.intro">Møt klubbens trenere. Alle er sertifiserte og har mange års erfaring med å utvikle spillere på alle nivåer.</p>
+      <div id="trainers-list"></div>
+    </div>
+
+    <!-- FINN SPILLEPARTNER -->
+    <div class="screen" id="screen-partner">
+      <p class="muted" style="margin-bottom:12px" data-i18n="partner.intro">Har du booket bane og søker makker? Eller vil du hoppe inn på en annens booking? Medlemmer deler åpne invitasjoner her.</p>
+
+      <div class="partner-fab" onclick="go('partnerNew')">
+        <div class="fab-ic">+</div>
+        <div class="fab-body">
+          <div class="fab-t" data-i18n="partner.newTitle">Legg ut invitasjon</div>
+          <div class="fab-s" data-i18n="partner.newSub">Søker makker til en av dine bookinger</div>
+        </div>
+      </div>
+
+      <div class="chips" id="partner-filter-chips"></div>
+      <div id="partner-list"></div>
+    </div>
+
+    <!-- OPPRETT INVITASJON -->
+    <div class="screen" id="screen-partnerNew">
+      <p class="muted" style="margin-bottom:14px" data-i18n="partner.newIntro">Velg en av dine kommende bookinger og legg ut som åpen invitasjon.</p>
+
+      <div class="caption" data-i18n="partner.chooseBooking">Velg booking</div>
+      <div id="partner-my-bookings"></div>
+
+      <div class="caption" style="margin-top:14px" data-i18n="partner.chooseLevel">Ditt nivå</div>
+      <div class="level-chips" id="partner-level-chips"></div>
+
+      <div class="caption" style="margin-top:14px" data-i18n="partner.note">Notat (valgfritt)</div>
+      <textarea id="partner-note" placeholder="F.eks. 'Rolig match, siste satsen kan gå til tie-break'"
+                style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;
+                       background:var(--bg);color:var(--text);font-family:inherit;font-size:14px;
+                       min-height:70px;resize:vertical"></textarea>
+
+      <button class="btn" onclick="submitPartnerInvite()" data-i18n="partner.publish">Publiser invitasjon</button>
     </div>
 
   </div>
@@ -795,6 +1510,8 @@ const T = {
       appName: "Kolbotn Tennisklubb", member: "Medlem", nonMember: "Ikke-medlem",
       cancel: "Avbryt", confirm: "Bekreft", yes: "Ja", no: "Nei",
       perYear: "pr år", perSemester: "pr semester", perHour: "pr time", hoursPerWeek: "timer/uke",
+      seeAll: "Se alt", readMore: "Les mer", back: "Tilbake",
+      all: "Alle", news: "Nyheter", events: "Arrangementer",
     },
     tabs: { home: "Hjem", booking: "Booking", prices: "Priser", more: "Mer" },
     home: {
@@ -816,6 +1533,19 @@ const T = {
       total: "Totalt",
       payNow: "Betal",
       done: "Ferdig",
+      back: "Tilbake",
+      cardTitle: "Kortdetaljer",
+      cardNumber: "Kortnummer",
+      cardNumberPh: "1234 5678 9012 3456",
+      cardName: "Navn på kort",
+      cardNamePh: "KARI NORDMANN",
+      cardExpiry: "Utløper",
+      cardExpiryPh: "MM/ÅÅ",
+      cardCvc: "CVC",
+      cardCvcPh: "123",
+      cardContinue: "Fortsett til betaling",
+      cardInvalid: "Vennligst fyll ut alle felt korrekt",
+      cardSecure: "Kryptert og sikker. Vi lagrer ikke kortdetaljer.",
       methodVipps: "Vipps",
       methodVippsSub: "Rask betaling med mobil",
       methodCard: "Visa / Mastercard",
@@ -856,6 +1586,17 @@ const T = {
       confirmText: "Vil du bestille {court} {date} kl. {time} for {price} kr?",
       bookingConfirmed: "Bookingen er bekreftet!",
       guestName: "Navn (for gjestebestilling)", memberNumber: "Medlemsnummer",
+      upcoming: "Kommende", past: "Tidligere",
+      startsIn: "Starter om",
+      ongoing: "Pågår nå",
+      daysShort: "d", hoursShort: "t", minutesShort: "min",
+      today: "I dag", tomorrow: "I morgen",
+      addToCal: "Legg i kalender",
+      cancelBooking: "Avlys",
+      cancelConfirm: "Er du sikker på at du vil avlyse denne bookingen?",
+      cancelled: "Bookingen er avlyst",
+      noUpcoming: "Ingen kommende bookinger.",
+      bookNow: "Book bane nå",
     },
     prices: {
       title: "Priser",
@@ -943,12 +1684,224 @@ const T = {
       contact: "Hovedtrener: Trond Moldvær",
     },
     settings: { title: "Innstillinger", language: "Språk", norwegian: "Norsk", english: "English", about: "Om appen", version: "Versjon" },
+    auth: {
+      loginTitle: "Logg inn",
+      loginSub: "Logg inn for raskere booking og oversikt over dine aktiviteter",
+      email: "E-post",
+      emailPh: "din@epost.no",
+      password: "Passord",
+      passwordPh: "••••••••",
+      loginBtn: "Logg inn",
+      demoBtn: "Bruk demo-bruker",
+      forgot: "Glemt passord?",
+      noAccount: "Ikke medlem enda?",
+      becomeMember: "Bli medlem",
+      invalidLogin: "Sjekk e-post og passord (minst 4 tegn)",
+      loginSuccess: "Velkommen tilbake!",
+      logout: "Logg ut",
+      logoutConfirm: "Er du sikker på at du vil logge ut?",
+      profile: "Min profil",
+      loginShort: "Logg inn",
+      memberNumber: "Medlemsnummer",
+      memberSince: "Medlem siden",
+      notMember: "Ikke medlem",
+      memberStatus: "Medlems-status",
+      toggleMember: "Oppgrader til medlem",
+      totalBookings: "Antall bookinger",
+      totalSpent: "Totalt brukt",
+      recentBookings: "Siste bookinger",
+      noRecent: "Ingen bookinger enda",
+      greeting: "Hei",
+      tapToLogin: "Trykk for å logge inn",
+    },
+    about: {
+      title: "Om klubben",
+      heroTitle: "Kolbotn Tennisklubb",
+      heroSub: "Nordstrands nærmeste tennisklubb – tennis for alle siden 1917",
+      statMembers: "Medlemmer",
+      statCourts: "Baner",
+      statYears: "År",
+      historyTitle: "Historie",
+      historyText:
+        "Kolbotn Tennisklubb ble stiftet i 1917 og er en av Norges eldste tennisklubber. Klubben har vokst fra noen få entusiaster til en av Østlandets største tennismiljøer, med både bredde- og konkurransetilbud. I 2024 åpnet vi Coop Øst Arena — vårt nye, moderne innendørsanlegg — som gjør oss til en helårsklubb.",
+      facilitiesTitle: "Anlegg",
+      indoorName: "Coop Øst Arena (innendørs)",
+      indoorDesc:
+        "4 hard court-baner med moderne underlag, LED-belysning og klubbhus. Åpent 07–23 alle dager, hele året. Tilrettelagt for både strøtimer, faste timer, tennisskole og privattimer.",
+      outdoorName: "Ingierkollen (utendørs)",
+      outdoorDesc:
+        "4 grusbaner i naturskjønne omgivelser, åpent i utesesongen (ca. 15. april – 1. oktober). Klubbhus med garderober og enkel servering under turneringer.",
+      boardTitle: "Styret",
+      contactTitle: "Kontakt",
+    },
+    partner: {
+      title: "Finn spillepartner",
+      intro: "Har du booket bane og søker makker? Eller vil du hoppe inn på en annens booking? Medlemmer deler åpne invitasjoner her.",
+      newTitle: "Legg ut invitasjon",
+      newSub: "Søker makker til en av dine bookinger",
+      newIntro: "Velg en av dine kommende bookinger og legg ut som åpen invitasjon.",
+      chooseBooking: "Velg booking",
+      chooseLevel: "Ditt nivå",
+      note: "Notat (valgfritt)",
+      publish: "Publiser invitasjon",
+      join: "Jeg spiller!",
+      joined: "Du er makker ✓",
+      taken: "Makker funnet",
+      yours: "Din invitasjon",
+      cancel: "Trekk tilbake",
+      empty: "Ingen åpne invitasjoner akkurat nå.",
+      allLevels: "Alle nivåer",
+      needLogin: "Du må være innlogget for å legge ut invitasjon",
+      noBookings: "Du har ingen kommende bookinger — book bane først.",
+      published: "Invitasjon publisert!",
+      joinConfirm: "Bli med som makker hos {name} — {when}?",
+      joinDone: "Du er makker! {name} er varslet.",
+      homeBanner: "{count} åpne invitasjoner denne uken",
+      homeCta: "Se alle",
+      levels: {
+        beginner: "Nybegynner",
+        recreational: "Mosjonist",
+        intermediate: "Middels",
+        competition: "Konkurranse",
+      },
+      openSpot: "Åpen plass",
+    },
+    news: {
+      title: "Siste nytt",
+      signUp: "Meld deg på",
+      signedUp: "Påmeldt ✓",
+      signUpConfirm: "Vil du melde deg på {title}?",
+      signUpDone: "Du er påmeldt! Bekreftelse sendt på e-post.",
+      when: "Når",
+      where: "Hvor",
+      price: "Pris",
+      free: "Gratis",
+      items: [
+        { kind: "event", icon: "🏆", title: "Klubbmesterskapet 2026",
+          date: "10.–12. mai 2026", dateISO: "2026-05-10",
+          location: "Coop Øst Arena + Ingierkollen",
+          price: "200 kr medlem / 300 kr ikke-medlem",
+          body: "Klubbmesterskapet spilles over tre dager med klasser for senior, junior, dobbel og mix. Påmeldingsfrist 5. mai. Alle medlemmer er velkomne — vi kårer nye klubbmestere på Ingierkollen søndag kveld. Kafeteria med vafler og kaffe hele helgen.",
+        },
+        { kind: "news", icon: "🎾", title: "Ny hovedtrener: Trond Moldvær",
+          date: "18. april 2026", dateISO: "2026-04-18",
+          body: "Vi er stolte av å ønske Trond Moldvær velkommen som ny hovedtrener. Trond har 15 års erfaring fra topptennis, inkludert roller i NTF og flere Eliteserie-klubber. Han tar over ansvaret for tennisskolen, privattimer og SFO-tennis fra 1. mai.",
+        },
+        { kind: "event", icon: "🍳", title: "Vårdugnad på Ingierkollen",
+          date: "4. mai 2026, kl 10–14", dateISO: "2026-05-04",
+          location: "Ingierkollen, Ingierveien 17",
+          price: "Gratis — middag inkludert",
+          body: "Tid for å gjøre utebanene klare til sesongen! Vi raker grus, vasker klubbhuset, maler striper og pusser opp benker. Alle medlemmer over 15 år oppfordres til å møte opp. Klubben serverer grillmat etterpå. Ta med arbeidshansker.",
+        },
+        { kind: "news", icon: "🏟️", title: "Coop Øst Arena feirer 1 år",
+          date: "10. april 2026", dateISO: "2026-04-10",
+          body: "Det er nå et år siden vi åpnet dørene til Coop Øst Arena. I løpet av første året har vi hatt over 18 000 banebookinger, startet 6 nye tennisskolegrupper, og fått 120 nye medlemmer. Tusen takk til alle som har støttet prosjektet!",
+        },
+        { kind: "event", icon: "👶", title: "Åpen dag for barn",
+          date: "18. mai 2026, kl 11–15", dateISO: "2026-05-18",
+          location: "Coop Øst Arena",
+          price: "Gratis",
+          body: "Gratis prøvetime for barn 5–12 år. Trenerne våre guider barna gjennom lek og enkle øvelser. Racketer og baller stilles til disposisjon. Foresatte er velkomne til å se på eller prøve selv. Ingen påmelding nødvendig — stikk innom!",
+        },
+        { kind: "news", icon: "🥇", title: "Juniorene tok gull i regionsmesterskapet",
+          date: "6. april 2026", dateISO: "2026-04-06",
+          body: "KTK-juniorene Emma (12) og Sindre (14) gikk til topps i sine klasser i Region Øst-mesterskapet. Emma vant single-finalen 6–3, 6–4 etter tett kamp. Sindre tok doublegullet sammen med Oliver fra Bærum TK. Gratulerer!",
+        },
+      ],
+    },
+    trainers: {
+      title: "Trenere",
+      intro: "Møt klubbens trenere. Alle er sertifiserte og har mange års erfaring med å utvikle spillere på alle nivåer.",
+      bookLesson: "Book privattime",
+      contactCoach: "Kontakt",
+      items: [
+        { initials: "TM", name: "Trond Moldvær",
+          role: "Hovedtrener",
+          bio: "15 års erfaring fra topptennis og trenerroller i NTF. Spesialist på utvikling av junior- og konkurransespillere. Sertifisert NTF-trener nivå 3.",
+          tags: ["Junior", "Voksen", "Konkurranse"],
+        },
+        { initials: "AL", name: "Anna Lindberg",
+          role: "Assistenttrener",
+          bio: "Tidligere spiller på damelandslaget. Fokus på teknikk og taktikk for voksne spillere. Holder også nybegynnerkurs for voksne på helgene.",
+          tags: ["Voksen", "Nybegynner"],
+        },
+        { initials: "MK", name: "Marcus Kristiansen",
+          role: "Junior-trener",
+          bio: "Spesialist på de yngste — arbeider med barn fra 3 år og oppover gjennom ROGY-systemet. Tidligere aktiv i sentertennis på juniorsiden.",
+          tags: ["Junior", "SFO", "Barn 3–9 år"],
+        },
+        { initials: "SL", name: "Silje Lønne",
+          role: "Privattrener",
+          bio: "Tilbyr 1-til-1-trening og smågruppetrening. Lang erfaring med både mosjonister og spillere som ønsker å kvalifisere seg til turneringer.",
+          tags: ["Privat", "Mosjonist", "Turnering"],
+        },
+        { initials: "OH", name: "Oskar Halvorsen",
+          role: "Tennisskole + SFO",
+          bio: "Tidligere collegespiller i USA. Kombinerer leken tilnærming med solid teknikk-grunnlag. Ansvarlig for SFO-tennis og de grønne gruppene.",
+          tags: ["Junior", "SFO", "Grønn gruppe"],
+        },
+      ],
+    },
+    faq: {
+      title: "Spørsmål og svar",
+      intro: "Her finner du svar på de vanligste spørsmålene. Trykk på et spørsmål for å lese svaret.",
+      moreHelp: "Fant du ikke svaret?",
+      moreHelpText: "Send oss en e-post så svarer vi så raskt vi kan.",
+      items: [
+        {
+          q: "Hvordan blir jeg medlem?",
+          a: "Du kan melde deg inn direkte i appen under «Medlemskap», eller på kolbotntennis.no. Fyll ut skjemaet, så får du bekreftelse og betalingsinformasjon på e-post. Medlemskapet gjelder for ett år om gangen.",
+        },
+        {
+          q: "Hvor mye koster medlemskap?",
+          a: "Senior (18–66 år) koster 2 300 kr/år, junior (0–17 år) koster 1 200 kr/år, og familiemedlemskap er 4 500 kr/år for én husstand. Se full prisoversikt under «Medlemskap» i appen.",
+        },
+        {
+          q: "Må jeg være medlem for å spille?",
+          a: "Nei. Alle kan leie strøtime i Coop Øst Arena, men medlemmer får vesentlig rabatterte priser og førsterett til faste timer. Grusbanene på Ingierkollen er forbeholdt medlemmer.",
+        },
+        {
+          q: "Hvordan booker jeg bane?",
+          a: "Åpne «Booking» i appen, velg bane, dato og tidspunkt. Du får opp pris og betalingsalternativer (Vipps, kort, faktura eller klubb-konto). Etter bekreftet betaling får du en døråpnings-kode som gjelder 15 min før til 15 min etter timen.",
+        },
+        {
+          q: "Hva er døråpnings-koden?",
+          a: "Du taster inn 4-sifret kode på keypaden ved hovedinngangen til Coop Øst Arena. Koden er personlig og gyldig 15 minutter før starttid og 15 minutter etter slutt-tid. Hver booking har sin egen kode.",
+        },
+        {
+          q: "Kan jeg avlyse en booking?",
+          a: "Ja, du kan avlyse gratis frem til 24 timer før starttid under «Dine bookinger». Avlysning nærmere starttid krever betaling. Avlysninger pga. akutt sykdom behandles individuelt — kontakt klubben.",
+        },
+        {
+          q: "Kan jeg ta med gjest?",
+          a: "Ja, medlemmer kan bestille time for seg selv og én gjest til medlemspris. Gjester må betale banen via medlemmet. Begge spillernes navn skal registreres ved bookingen.",
+        },
+        {
+          q: "Er det tennisskole for voksne?",
+          a: "Ja. Vi har både nybegynner- og videregående grupper for voksne, som følger skoleåret. Påmelding skjer under «Tennisskolen» i appen. Pris og tider varierer etter nivå og semester.",
+        },
+        {
+          q: "Hva er faste timer?",
+          a: "Faste timer er samme banetid hver uke hele sesongen (1. sept – 31. mai). De selges på sensommeren, og medlemmer får velge først. Ledige timer tilbys deretter til ikke-medlemmer.",
+        },
+        {
+          q: "Finnes det garderober og dusj?",
+          a: "Ja, det er garderober med dusj og låsbare skap i Coop Øst Arena. Medbrakt hengelås anbefales. På Ingierkollen er det enklere fasiliteter i klubbhuset.",
+        },
+        {
+          q: "Kan jeg leie hallen til arrangement?",
+          a: "Ja, medlemmer kan leie hallen til bedriftsturneringer, bursdager og andre arrangementer utenom ordinære åpningstider. Send en e-post til post@kolbotntennis.no for tilbud.",
+        },
+      ],
+    },
   },
   en: {
     common: {
       appName: "Kolbotn Tennis Club", member: "Member", nonMember: "Non-member",
       cancel: "Cancel", confirm: "Confirm", yes: "Yes", no: "No",
       perYear: "per year", perSemester: "per semester", perHour: "per hour", hoursPerWeek: "hours/week",
+      seeAll: "See all", readMore: "Read more", back: "Back",
+      all: "All", news: "News", events: "Events",
     },
     tabs: { home: "Home", booking: "Booking", prices: "Prices", more: "More" },
     home: {
@@ -970,6 +1923,19 @@ const T = {
       total: "Total",
       payNow: "Pay",
       done: "Done",
+      back: "Back",
+      cardTitle: "Card details",
+      cardNumber: "Card number",
+      cardNumberPh: "1234 5678 9012 3456",
+      cardName: "Name on card",
+      cardNamePh: "JOHN DOE",
+      cardExpiry: "Expires",
+      cardExpiryPh: "MM/YY",
+      cardCvc: "CVC",
+      cardCvcPh: "123",
+      cardContinue: "Continue to payment",
+      cardInvalid: "Please fill in all fields correctly",
+      cardSecure: "Encrypted and secure. We don't store card details.",
       methodVipps: "Vipps",
       methodVippsSub: "Quick mobile payment",
       methodCard: "Visa / Mastercard",
@@ -1010,6 +1976,17 @@ const T = {
       confirmText: "Book {court} on {date} at {time} for {price} NOK?",
       bookingConfirmed: "Booking confirmed!",
       guestName: "Name (for guest booking)", memberNumber: "Member number",
+      upcoming: "Upcoming", past: "Past",
+      startsIn: "Starts in",
+      ongoing: "Ongoing",
+      daysShort: "d", hoursShort: "h", minutesShort: "min",
+      today: "Today", tomorrow: "Tomorrow",
+      addToCal: "Add to calendar",
+      cancelBooking: "Cancel",
+      cancelConfirm: "Are you sure you want to cancel this booking?",
+      cancelled: "Booking cancelled",
+      noUpcoming: "No upcoming bookings.",
+      bookNow: "Book a court now",
     },
     prices: {
       title: "Prices",
@@ -1096,6 +2073,216 @@ const T = {
       contact: "Head coach: Trond Moldvær",
     },
     settings: { title: "Settings", language: "Language", norwegian: "Norsk", english: "English", about: "About the app", version: "Version" },
+    auth: {
+      loginTitle: "Log in",
+      loginSub: "Log in for faster booking and overview of your activities",
+      email: "Email",
+      emailPh: "your@email.com",
+      password: "Password",
+      passwordPh: "••••••••",
+      loginBtn: "Log in",
+      demoBtn: "Use demo account",
+      forgot: "Forgot password?",
+      noAccount: "Not a member yet?",
+      becomeMember: "Become a member",
+      invalidLogin: "Check email and password (at least 4 characters)",
+      loginSuccess: "Welcome back!",
+      logout: "Log out",
+      logoutConfirm: "Are you sure you want to log out?",
+      profile: "My profile",
+      loginShort: "Log in",
+      memberNumber: "Member number",
+      memberSince: "Member since",
+      notMember: "Not a member",
+      memberStatus: "Membership status",
+      toggleMember: "Upgrade to member",
+      totalBookings: "Total bookings",
+      totalSpent: "Total spent",
+      recentBookings: "Recent bookings",
+      noRecent: "No bookings yet",
+      greeting: "Hi",
+      tapToLogin: "Tap to log in",
+    },
+    about: {
+      title: "About the club",
+      heroTitle: "Kolbotn Tennis Club",
+      heroSub: "Tennis for all — since 1917",
+      statMembers: "Members",
+      statCourts: "Courts",
+      statYears: "Years",
+      historyTitle: "History",
+      historyText:
+        "Kolbotn Tennis Club was founded in 1917 and is one of Norway's oldest tennis clubs. The club has grown from a handful of enthusiasts into one of eastern Norway's largest tennis communities, with both recreational and competitive offerings. In 2024 we opened Coop Øst Arena — our new, modern indoor facility — making us a year-round club.",
+      facilitiesTitle: "Facilities",
+      indoorName: "Coop Øst Arena (indoor)",
+      indoorDesc:
+        "4 hard courts with modern surfaces, LED lighting and a clubhouse. Open 07–23 every day, year-round. Suitable for drop-in slots, fixed weekly slots, tennis school and private lessons.",
+      outdoorName: "Ingierkollen (outdoor)",
+      outdoorDesc:
+        "4 clay courts in scenic surroundings, open in the outdoor season (approx. April 15 – October 1). Clubhouse with changing rooms and simple refreshments during tournaments.",
+      boardTitle: "Board",
+      contactTitle: "Contact",
+    },
+    partner: {
+      title: "Find a partner",
+      intro: "Booked a court and looking for an opponent? Or want to jump on someone else's booking? Members share open invitations here.",
+      newTitle: "Post an invitation",
+      newSub: "Looking for a partner for one of your bookings",
+      newIntro: "Pick one of your upcoming bookings and post it as an open invitation.",
+      chooseBooking: "Choose booking",
+      chooseLevel: "Your level",
+      note: "Note (optional)",
+      publish: "Publish invitation",
+      join: "I'll play!",
+      joined: "You're the partner ✓",
+      taken: "Partner found",
+      yours: "Your invitation",
+      cancel: "Withdraw",
+      empty: "No open invitations right now.",
+      allLevels: "All levels",
+      needLogin: "You need to be logged in to post an invitation",
+      noBookings: "You have no upcoming bookings — book a court first.",
+      published: "Invitation published!",
+      joinConfirm: "Join {name} as partner — {when}?",
+      joinDone: "You're in! {name} has been notified.",
+      homeBanner: "{count} open invitations this week",
+      homeCta: "See all",
+      levels: {
+        beginner: "Beginner",
+        recreational: "Recreational",
+        intermediate: "Intermediate",
+        competition: "Competition",
+      },
+      openSpot: "Open spot",
+    },
+    news: {
+      title: "News",
+      signUp: "Sign up",
+      signedUp: "Signed up ✓",
+      signUpConfirm: "Would you like to sign up for {title}?",
+      signUpDone: "You're signed up! Confirmation sent by email.",
+      when: "When",
+      where: "Where",
+      price: "Price",
+      free: "Free",
+      items: [
+        { kind: "event", icon: "🏆", title: "Club Championship 2026",
+          date: "May 10–12, 2026", dateISO: "2026-05-10",
+          location: "Coop Øst Arena + Ingierkollen",
+          price: "NOK 200 member / NOK 300 non-member",
+          body: "The club championship runs over three days with classes for senior, junior, doubles and mixed. Registration deadline: May 5. All members welcome — we crown new club champions at Ingierkollen on Sunday evening. Café with waffles and coffee all weekend.",
+        },
+        { kind: "news", icon: "🎾", title: "New head coach: Trond Moldvær",
+          date: "April 18, 2026", dateISO: "2026-04-18",
+          body: "We are proud to welcome Trond Moldvær as our new head coach. Trond has 15 years of experience in competitive tennis, including roles at NTF and several Premier League clubs. He takes over the tennis school, private lessons and after-school tennis from May 1.",
+        },
+        { kind: "event", icon: "🍳", title: "Spring work day at Ingierkollen",
+          date: "May 4, 2026, 10 am – 2 pm", dateISO: "2026-05-04",
+          location: "Ingierkollen, Ingierveien 17",
+          price: "Free — dinner included",
+          body: "Time to get the outdoor courts ready for the season! We rake clay, clean the clubhouse, paint lines and refurbish the benches. All members over 15 are encouraged to join. The club serves grilled food afterwards. Bring work gloves.",
+        },
+        { kind: "news", icon: "🏟️", title: "Coop Øst Arena celebrates 1 year",
+          date: "April 10, 2026", dateISO: "2026-04-10",
+          body: "It is now one year since we opened the doors to Coop Øst Arena. In the first year we have had over 18,000 court bookings, started 6 new tennis school groups, and gained 120 new members. A huge thank you to everyone who has supported the project!",
+        },
+        { kind: "event", icon: "👶", title: "Open day for kids",
+          date: "May 18, 2026, 11 am – 3 pm", dateISO: "2026-05-18",
+          location: "Coop Øst Arena",
+          price: "Free",
+          body: "Free trial session for kids aged 5–12. Our coaches guide the children through play and simple exercises. Rackets and balls are provided. Parents are welcome to watch or try themselves. No sign-up needed — just come by!",
+        },
+        { kind: "news", icon: "🥇", title: "Juniors take gold at regional championship",
+          date: "April 6, 2026", dateISO: "2026-04-06",
+          body: "KTK juniors Emma (12) and Sindre (14) took the top spots in their classes at the Eastern Region championship. Emma won the singles final 6–3, 6–4 after a tight match. Sindre took doubles gold together with Oliver from Bærum TC. Congratulations!",
+        },
+      ],
+    },
+    trainers: {
+      title: "Coaches",
+      intro: "Meet the club's coaches. All are certified and have many years of experience developing players at all levels.",
+      bookLesson: "Book private lesson",
+      contactCoach: "Contact",
+      items: [
+        { initials: "TM", name: "Trond Moldvær",
+          role: "Head coach",
+          bio: "15 years of experience in competitive tennis and coaching roles at NTF. Specialist in developing junior and competition players. NTF-certified coach, level 3.",
+          tags: ["Junior", "Adult", "Competition"],
+        },
+        { initials: "AL", name: "Anna Lindberg",
+          role: "Assistant coach",
+          bio: "Former player on the women's national team. Focus on technique and tactics for adult players. Also runs beginner courses for adults on weekends.",
+          tags: ["Adult", "Beginner"],
+        },
+        { initials: "MK", name: "Marcus Kristiansen",
+          role: "Junior coach",
+          bio: "Specialist for the youngest — works with kids from age 3 upwards using the ROGY system. Formerly active in center tennis at junior level.",
+          tags: ["Junior", "After-school", "Kids 3–9"],
+        },
+        { initials: "SL", name: "Silje Lønne",
+          role: "Private coach",
+          bio: "Offers 1-to-1 training and small group training. Extensive experience with both casual players and those wanting to qualify for tournaments.",
+          tags: ["Private", "Recreational", "Tournament"],
+        },
+        { initials: "OH", name: "Oskar Halvorsen",
+          role: "Tennis school + SFO",
+          bio: "Former college player in the USA. Combines a playful approach with solid technique fundamentals. Responsible for after-school tennis and the green groups.",
+          tags: ["Junior", "After-school", "Green group"],
+        },
+      ],
+    },
+    faq: {
+      title: "FAQ",
+      intro: "Answers to the most common questions. Tap a question to read the answer.",
+      moreHelp: "Didn't find your answer?",
+      moreHelpText: "Send us an email and we'll get back to you as soon as we can.",
+      items: [
+        {
+          q: "How do I become a member?",
+          a: "You can sign up directly in the app under 'Membership', or at kolbotntennis.no. Fill in the form, and you'll receive confirmation and payment details by email. Membership is valid for one year.",
+        },
+        {
+          q: "How much does membership cost?",
+          a: "Senior (18–66) is NOK 2,300/year, junior (0–17) is NOK 1,200/year, and family membership is NOK 4,500/year for one household. See full pricing under 'Membership' in the app.",
+        },
+        {
+          q: "Do I have to be a member to play?",
+          a: "No. Anyone can rent drop-in hours at Coop Øst Arena, but members get significantly reduced prices and priority for fixed weekly slots. The clay courts at Ingierkollen are for members only.",
+        },
+        {
+          q: "How do I book a court?",
+          a: "Open 'Booking' in the app, choose court, date and time. You'll see the price and payment options (Vipps, card, invoice or club account). After confirmed payment you get a door access code valid 15 min before to 15 min after your time slot.",
+        },
+        {
+          q: "What is the door access code?",
+          a: "Enter the 4-digit code on the keypad at the main entrance to Coop Øst Arena. The code is personal and valid 15 minutes before the start and 15 minutes after the end of your booking. Each booking has its own code.",
+        },
+        {
+          q: "Can I cancel a booking?",
+          a: "Yes — you can cancel free of charge up to 24 hours before start under 'Your bookings'. Cancellations closer to the start time are still charged. Cancellations due to acute illness are handled individually — contact the club.",
+        },
+        {
+          q: "Can I bring a guest?",
+          a: "Yes, members can book for themselves and one guest at member price. Guests are paid for via the member. Both players' names must be registered at booking.",
+        },
+        {
+          q: "Is there tennis school for adults?",
+          a: "Yes. We have both beginner and advanced groups for adults, following the school calendar. Sign up under 'Tennis school' in the app. Price and times vary by level and semester.",
+        },
+        {
+          q: "What are fixed weekly slots?",
+          a: "Fixed slots are the same court time every week throughout the season (Sept 1 – May 31). They are sold in late summer, and members get first pick. Remaining slots are then offered to non-members.",
+        },
+        {
+          q: "Are there changing rooms and showers?",
+          a: "Yes, there are changing rooms with showers and lockable cabinets at Coop Øst Arena. Bringing your own padlock is recommended. Ingierkollen has simpler facilities in the clubhouse.",
+        },
+        {
+          q: "Can I rent the hall for an event?",
+          a: "Yes, members can rent the hall for corporate tournaments, birthdays and other events outside regular opening hours. Email post@kolbotntennis.no for a quote.",
+        },
+      ],
+    },
   },
 };
 
@@ -1170,7 +2357,169 @@ let isMember = false;
 let bookings = JSON.parse(localStorage.getItem("ktk.bookings") || "[]");
 let currentScreen = "home";
 let selectedMembership = MEMBERSHIP_TIERS[0].id;
+let user = JSON.parse(localStorage.getItem("ktk.user") || "null");
+if (user && typeof user.isMember === "boolean") isMember = user.isMember;
 const screensWithTabs = ["home", "booking", "prices", "more"];
+
+/* ================== AUTH ================== */
+function initials(name) {
+  if (!name) return "?";
+  const parts = name.trim().split(/\s+/);
+  return (parts[0][0] + (parts[1] ? parts[1][0] : "")).toUpperCase();
+}
+
+function doLogin() {
+  const email = document.getElementById("auth-email").value.trim();
+  const password = document.getElementById("auth-password").value;
+  const err = document.getElementById("auth-error");
+  if (!/^\S+@\S+\.\S+$/.test(email) || password.length < 4) {
+    err.classList.add("show");
+    return;
+  }
+  err.classList.remove("show");
+  // Lag bruker fra e-post (demo: ingen faktisk autentisering)
+  const namePart = email.split("@")[0].replace(/[._-]/g, " ");
+  const name = namePart.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  loginUser({
+    name, email,
+    memberNumber: String(Math.floor(10000 + Math.random() * 90000)),
+    isMember: false,
+    joinedAt: Date.now(),
+  });
+}
+
+function doDemoLogin() {
+  loginUser({
+    name: "Kari Nordmann",
+    email: "kari.nordmann@ktk.no",
+    memberNumber: "10428",
+    isMember: true,
+    joinedAt: new Date("2022-08-15").getTime(),
+  });
+}
+
+function loginUser(u) {
+  user = u;
+  isMember = !!u.isMember;
+  localStorage.setItem("ktk.user", JSON.stringify(user));
+  // Oppdater medlems-toggle i booking-skjerm
+  const ms = document.getElementById("member-switch");
+  if (ms) ms.classList.toggle("on", isMember);
+  const mnf = document.getElementById("member-number-field");
+  if (mnf) mnf.style.display = isMember ? "" : "none";
+  const mn = document.getElementById("member-number-input");
+  if (mn && isMember) mn.value = user.memberNumber;
+  // Pre-fyll navn på booking
+  const gn = document.getElementById("name-input");
+  if (gn) gn.value = user.name;
+  updateUserUI();
+  go("profile");
+}
+
+function doLogout() {
+  if (!confirm(tr("auth.logoutConfirm"))) return;
+  user = null;
+  isMember = false;
+  localStorage.removeItem("ktk.user");
+  const ms = document.getElementById("member-switch");
+  if (ms) ms.classList.remove("on");
+  const mnf = document.getElementById("member-number-field");
+  if (mnf) mnf.style.display = "none";
+  updateUserUI();
+  go("home");
+}
+
+function onUserBannerClick() {
+  if (user) go("profile"); else go("login");
+}
+function onMoreProfileClick() {
+  if (user) go("profile"); else go("login");
+}
+
+function updateUserUI() {
+  // Oppdater bruker-banner på hjem-skjerm
+  const av = document.getElementById("ub-av");
+  const t = document.getElementById("ub-t");
+  const s = document.getElementById("ub-s");
+  if (user) {
+    av.textContent = initials(user.name);
+    av.classList.remove("empty");
+    t.textContent = `${tr("auth.greeting")}, ${user.name.split(" ")[0]}!`;
+    t.removeAttribute("data-i18n");
+    s.textContent = isMember
+      ? `${tr("auth.memberNumber")}: ${user.memberNumber}`
+      : tr("auth.notMember");
+    s.removeAttribute("data-i18n");
+  } else {
+    av.textContent = "?";
+    av.classList.add("empty");
+    t.textContent = tr("auth.loginShort");
+    t.setAttribute("data-i18n", "auth.loginShort");
+    s.textContent = tr("auth.tapToLogin");
+    s.setAttribute("data-i18n", "auth.tapToLogin");
+  }
+  // Oppdater "Mer"-menyen
+  const mpLbl = document.getElementById("more-profile-lbl");
+  const mpIc = document.getElementById("more-profile-ic");
+  if (user) {
+    mpLbl.textContent = tr("auth.profile");
+    mpIc.textContent = initials(user.name);
+    mpIc.style.background = "linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%)";
+    mpIc.style.color = "#fff";
+    mpIc.style.fontSize = "13px";
+    mpIc.style.fontWeight = "800";
+  } else {
+    mpLbl.textContent = tr("auth.loginShort");
+    mpIc.textContent = "🔐";
+    mpIc.style.background = "";
+    mpIc.style.color = "";
+    mpIc.style.fontSize = "";
+    mpIc.style.fontWeight = "";
+  }
+}
+
+function renderProfile() {
+  if (!user) return;
+  document.getElementById("pf-avatar").textContent = initials(user.name);
+  document.getElementById("pf-name").textContent = user.name;
+  document.getElementById("pf-email").textContent = user.email;
+  const badge = document.getElementById("pf-badge");
+  if (isMember) {
+    badge.textContent = `${tr("auth.memberNumber")} · ${user.memberNumber}`;
+  } else {
+    badge.textContent = tr("auth.notMember");
+  }
+  // Statistikk
+  document.getElementById("pf-bookings").textContent = bookings.length;
+  const spent = bookings.reduce((sum, b) => sum + (b.price || 0), 0);
+  document.getElementById("pf-spent").textContent = spent + " kr";
+  // Siste bookinger
+  const host = document.getElementById("pf-recent");
+  host.innerHTML = "";
+  const recent = bookings.slice(-3).reverse();
+  if (!recent.length) {
+    host.innerHTML = `<div class="card"><p class="muted" style="margin:0">${tr("auth.noRecent")}</p></div>`;
+  } else {
+    recent.forEach(b => {
+      const court = COURTS.find(c => c.id === b.courtId);
+      const courtName = court ? court.nameKey[lang] : b.courtId;
+      const d = new Date(b.dateISO);
+      const dateStr = d.toLocaleDateString(lang === "nb" ? "nb-NO" : "en-GB", { day: "2-digit", month: "short" });
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.padding = "12px";
+      card.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:700;font-size:14px">${courtName}</div>
+            <div style="color:var(--muted);font-size:12px;margin-top:2px">${dateStr} · kl. ${String(b.hour).padStart(2,"0")}:00</div>
+          </div>
+          <div style="font-weight:800;color:var(--primary)">${b.price} kr</div>
+        </div>`;
+      host.appendChild(card);
+    });
+  }
+}
 
 /* ================== UTIL ================== */
 function tr(path) {
@@ -1211,6 +2560,8 @@ function toast(msg) {
 }
 
 function go(screen) {
+  // Beskytt profil-ruten: hvis ikke logget inn, send til login
+  if (screen === "profile" && !user) screen = "login";
   currentScreen = screen;
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById("screen-" + screen)?.classList.add("active");
@@ -1257,18 +2608,70 @@ function renderDates() {
     host.appendChild(el);
   }
 }
+/* Mock-bookinger for andre spillere — deterministisk basert på bane + dato */
+const OTHER_PLAYERS = [
+  "Lars E.", "Maria S.", "Per H.", "Ingrid L.", "Ola N.", "Astrid K.",
+  "Knut B.", "Silje R.", "Erik D.", "Helene T.", "Jonas V.", "Nora F.",
+  "Thomas A.", "Camilla Ø.", "Øyvind M.", "Linn P.",
+];
+function seededHash(str) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  return h;
+}
+function seededRand(seed, salt) {
+  const h = seededHash(seed + "|" + salt);
+  return h / 4294967295;
+}
+function otherBookingsFor(courtId, iso) {
+  // Returnerer Map<hour, name> med mock-bookinger for andre spillere.
+  // Deterministisk slik at samme dag/bane viser samme personer.
+  const map = new Map();
+  // 3-6 timer "booket av andre" per bane per dag
+  const count = 3 + Math.floor(seededRand(courtId + iso, "count") * 4);
+  let attempts = 0;
+  while (map.size < count && attempts < 30) {
+    attempts++;
+    const hour = 7 + Math.floor(seededRand(courtId + iso, "h" + attempts) * 16);
+    if (map.has(hour)) continue;
+    const nameIdx = Math.floor(seededRand(courtId + iso, "n" + attempts) * OTHER_PLAYERS.length);
+    map.set(hour, OTHER_PLAYERS[nameIdx]);
+  }
+  return map;
+}
+
+function shortName(full) {
+  if (!full) return "";
+  const parts = full.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0];
+  return parts[0] + " " + parts[parts.length - 1].charAt(0).toUpperCase() + ".";
+}
+
 function renderSlots() {
   const host = document.getElementById("slots-grid");
   host.innerHTML = "";
   const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() + selectedDateOffset);
   const iso = toISO(d);
+  const others = otherBookingsFor(selectedCourt, iso);
   for (let h = 7; h <= 22; h++) {
-    const booked = bookings.some(b => b.courtId === selectedCourt && b.dateISO === iso && b.hour === h);
+    const mine = bookings.find(b => b.courtId === selectedCourt && b.dateISO === iso && b.hour === h);
+    const otherName = others.get(h);
+    const booked = !!mine || !!otherName;
     const price = courtPrice(d, h, isMember);
     const el = document.createElement("div");
-    el.className = "slot" + (booked ? " booked" : "");
+    let cls = "slot";
+    if (mine) cls += " mine";
+    else if (otherName) cls += " booked";
+    el.className = cls;
+    let nameLine = "";
+    if (mine) nameLine = `<div class="n">${shortName(mine.holderName)}</div>`;
+    else if (otherName) nameLine = `<div class="n">${otherName}</div>`;
     el.innerHTML = `<div class="t">${String(h).padStart(2,"0")}:00</div>
-                    <div class="p">${booked ? tr("booking.booked") : price + " kr"}</div>`;
+                    <div class="p">${booked ? tr("booking.booked") : price + " kr"}</div>
+                    ${nameLine}`;
     if (!booked) el.onclick = () => bookSlot(h, d, iso, price);
     host.appendChild(el);
   }
@@ -1328,19 +2731,103 @@ function openPaymentModal({ court, hour, date, iso, price, name }) {
   // Betalingsknapp med beløp
   const btn = document.getElementById("pay-btn");
   btn.innerHTML = `<span data-i18n="pay.payNow">${tr("pay.payNow")}</span> <span id="pay-btn-amount">${price} kr</span>`;
-  btn.onclick = processPayment;
+  btn.onclick = onPayButtonClick;
 
   document.getElementById("pay-cancel").onclick = closePaymentModal;
-  document.getElementById("pay-step-select").style.display = "";
-  document.getElementById("pay-step-processing").style.display = "none";
-  document.getElementById("pay-step-success").style.display = "none";
+  showPayStep("select");
   document.getElementById("pay-modal").classList.add("show");
+}
+
+function showPayStep(step) {
+  ["select", "card", "processing", "success"].forEach(s => {
+    const el = document.getElementById("pay-step-" + s);
+    if (el) el.style.display = step === s ? "" : "none";
+  });
+}
+
+// Når bruker trykker "Betal": hvis kort, vis kort-skjema først. Ellers gå rett til prosessering.
+function onPayButtonClick() {
+  if (paymentSelection === "card") {
+    openCardForm();
+  } else {
+    processPayment();
+  }
+}
+
+function openCardForm() {
+  const price = pendingBooking.price;
+  document.getElementById("pay-card-total").textContent = price + " kr";
+  document.getElementById("card-submit-amount").textContent = price + " kr";
+
+  // Reset felter
+  const num = document.getElementById("card-number");
+  const name = document.getElementById("card-name");
+  const exp = document.getElementById("card-exp");
+  const cvc = document.getElementById("card-cvc");
+  num.value = ""; name.value = ""; exp.value = ""; cvc.value = "";
+  document.getElementById("cp-num").textContent = "•••• •••• •••• ••••";
+  document.getElementById("cp-name").textContent = "—";
+  document.getElementById("cp-exp").textContent = tr("pay.cardExpiryPh");
+  document.getElementById("card-error").classList.remove("show");
+
+  // Formater kortnummer som "1234 5678 9012 3456"
+  num.oninput = () => {
+    const digits = num.value.replace(/\D/g, "").slice(0, 16);
+    num.value = digits.replace(/(.{4})/g, "$1 ").trim();
+    const masked = num.value || "•••• •••• •••• ••••";
+    document.getElementById("cp-num").textContent = masked;
+  };
+  // Navn — oppercase live i preview
+  name.oninput = () => {
+    document.getElementById("cp-name").textContent = name.value.toUpperCase() || "—";
+  };
+  // Utløp — "MM/ÅÅ"
+  exp.oninput = () => {
+    let v = exp.value.replace(/\D/g, "").slice(0, 4);
+    if (v.length >= 3) v = v.slice(0, 2) + "/" + v.slice(2);
+    exp.value = v;
+    document.getElementById("cp-exp").textContent = v || tr("pay.cardExpiryPh");
+  };
+  // CVC — kun tall
+  cvc.oninput = () => {
+    cvc.value = cvc.value.replace(/\D/g, "").slice(0, 4);
+  };
+
+  document.getElementById("card-submit").onclick = submitCardForm;
+  document.getElementById("card-back").onclick = () => showPayStep("select");
+
+  showPayStep("card");
+  setTimeout(() => num.focus(), 100);
+}
+
+function validateCardForm() {
+  const digits = document.getElementById("card-number").value.replace(/\s/g, "");
+  const name = document.getElementById("card-name").value.trim();
+  const exp = document.getElementById("card-exp").value;
+  const cvc = document.getElementById("card-cvc").value;
+
+  if (digits.length < 13 || digits.length > 19) return false;
+  if (name.length < 2) return false;
+  const m = exp.match(/^(\d{2})\/(\d{2})$/);
+  if (!m) return false;
+  const month = parseInt(m[1], 10);
+  if (month < 1 || month > 12) return false;
+  if (cvc.length < 3 || cvc.length > 4) return false;
+  return true;
+}
+
+function submitCardForm() {
+  if (!validateCardForm()) {
+    document.getElementById("card-error").classList.add("show");
+    return;
+  }
+  document.getElementById("card-error").classList.remove("show");
+  processPayment();
 }
 
 function processPayment() {
   const method = PAYMENT_METHODS.find(m => m.id === paymentSelection);
-  document.getElementById("pay-step-select").style.display = "none";
-  document.getElementById("pay-step-processing").style.display = "";
+  showPayStep("processing");
   document.getElementById("pay-processing-sub").textContent = tr(method.processingKey);
 
   setTimeout(() => {
@@ -1355,8 +2842,7 @@ function processPayment() {
     });
     localStorage.setItem("ktk.bookings", JSON.stringify(bookings));
 
-    document.getElementById("pay-step-processing").style.display = "none";
-    document.getElementById("pay-step-success").style.display = "";
+    showPayStep("success");
     document.getElementById("pay-success-sub").textContent = tr(method.successKey);
     document.getElementById("pay-door-code").textContent = doorCode;
     renderSlots();
@@ -1452,42 +2938,662 @@ function updateSelectedMembership() {
   if (sel && tier) sel.textContent = `${tr(tier.key)} · ${tier.price} ${lang === "nb" ? "kr/år" : "NOK/yr"}`;
 }
 
+function bookingStart(b) {
+  // Returns a Date object for the booking's start time
+  return new Date(`${b.dateISO}T${String(b.hour).padStart(2,"0")}:00:00`);
+}
+function bookingEnd(b) {
+  return new Date(`${b.dateISO}T${String(b.hour + 1).padStart(2,"0")}:00:00`);
+}
+function countdownString(ms) {
+  if (ms <= 0) return tr("booking.ongoing");
+  const totalMin = Math.floor(ms / 60000);
+  const days = Math.floor(totalMin / (24 * 60));
+  const hours = Math.floor((totalMin % (24 * 60)) / 60);
+  const mins = totalMin % 60;
+  const dS = tr("booking.daysShort");
+  const hS = tr("booking.hoursShort");
+  const mS = tr("booking.minutesShort");
+  if (days >= 1) return `${days}${dS} ${hours}${hS}`;
+  if (hours >= 1) return `${hours}${hS} ${mins}${mS}`;
+  return `${mins} ${mS}`;
+}
+function humanDate(b) {
+  const start = bookingStart(b);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+  const dayStart = new Date(start); dayStart.setHours(0,0,0,0);
+  if (dayStart.getTime() === today.getTime()) return tr("booking.today");
+  if (dayStart.getTime() === tomorrow.getTime()) return tr("booking.tomorrow");
+  return start.toLocaleDateString(lang === "nb" ? "nb-NO" : "en-GB", { weekday: "short", day: "2-digit", month: "short" });
+}
+
 function renderMyBookings() {
   const host = document.getElementById("my-bookings-list");
   if (!host) return;
   host.innerHTML = "";
   if (bookings.length === 0) {
-    host.innerHTML = `<div class="card"><p>${tr("booking.noBookings")}</p></div>`;
+    host.innerHTML = `
+      <div class="card" style="text-align:center;padding:28px 14px">
+        <p class="muted" style="margin-bottom:12px">${tr("booking.noBookings")}</p>
+        <button class="btn" style="max-width:240px;margin:0 auto" onclick="go('booking')">${tr("booking.bookNow")}</button>
+      </div>`;
     return;
   }
-  bookings.sort((a,b) => (a.dateISO + String(a.hour).padStart(2,"0")).localeCompare(b.dateISO + String(b.hour).padStart(2,"0")));
+  // Backwards compat + split upcoming/past
+  const now = Date.now();
   bookings.forEach(b => {
-    const court = COURTS.find(c => c.id === b.courtId)?.nameKey[lang] || b.courtId;
-    // Bakover-kompatibel: gamle bookinger uten doorCode får én generert nå
-    if (!b.doorCode) {
-      b.doorCode = generateDoorCode();
-      localStorage.setItem("ktk.bookings", JSON.stringify(bookings));
-    }
-    const c = document.createElement("div");
-    c.className = "card";
-    c.innerHTML = `
-      <p style="font-weight:700">${court}</p>
-      <p class="muted">${b.dateISO} · ${String(b.hour).padStart(2,"0")}:00 · ${b.holderName}</p>
-      <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
-        <span class="caption" style="margin:0">${tr("pay.doorCodeShort")}</span>
-        <span class="door-code-mini">${b.doorCode}</span>
-      </div>
-      <div class="price-row" style="margin-top:10px">
-        <div class="l" style="color:var(--primary);font-size:18px">${b.price} kr</div>
-        <button class="btn danger" style="width:auto;padding:8px 14px" onclick="cancelBooking('${b.id}')">${tr("common.cancel")}</button>
-      </div>`;
-    host.appendChild(c);
+    if (!b.doorCode) { b.doorCode = generateDoorCode(); }
+  });
+  localStorage.setItem("ktk.bookings", JSON.stringify(bookings));
+
+  const upcoming = bookings
+    .filter(b => bookingEnd(b).getTime() > now)
+    .sort((a,b) => bookingStart(a).getTime() - bookingStart(b).getTime());
+  const past = bookings
+    .filter(b => bookingEnd(b).getTime() <= now)
+    .sort((a,b) => bookingStart(b).getTime() - bookingStart(a).getTime());
+
+  // --- Upcoming section ---
+  const upTitle = document.createElement("div");
+  upTitle.className = "booking-card bc-section-title";
+  upTitle.style.cssText = "background:none;border:none;padding:0;margin-bottom:8px";
+  upTitle.textContent = tr("booking.upcoming");
+  host.appendChild(upTitle);
+
+  if (upcoming.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "card";
+    empty.innerHTML = `<p class="muted">${tr("booking.noUpcoming")}</p>`;
+    host.appendChild(empty);
+  } else {
+    upcoming.forEach((b, idx) => {
+      const court = COURTS.find(c => c.id === b.courtId)?.nameKey[lang] || b.courtId;
+      const start = bookingStart(b);
+      const end = bookingEnd(b);
+      const isOngoing = now >= start.getTime() && now < end.getTime();
+      const msUntil = start.getTime() - now;
+      // Only first upcoming (next) shows big door code + countdown
+      const isNext = idx === 0;
+      const badge = isOngoing
+        ? `<span class="bc-badge live">● ${tr("booking.ongoing")}</span>`
+        : `<span class="bc-badge upcoming">${countdownString(msUntil)}</span>`;
+
+      const card = document.createElement("div");
+      card.className = "booking-card";
+      card.innerHTML = `
+        <div class="bc-top">
+          <div style="min-width:0;flex:1">
+            <div class="bc-court">${court}</div>
+            <div class="bc-meta">${humanDate(b)} · ${String(b.hour).padStart(2,"0")}:00–${String(b.hour+1).padStart(2,"0")}:00 · ${b.holderName}</div>
+          </div>
+          ${badge}
+        </div>
+        ${isNext && !isOngoing ? `<div class="countdown">${tr("booking.startsIn")} ${countdownString(msUntil)}</div>` : ""}
+        ${isNext || isOngoing ? `
+          <div class="door-big">
+            <div class="lbl">${tr("pay.doorCodeLabel")}</div>
+            <div class="val">${b.doorCode}</div>
+            <div class="hint">${tr("pay.doorCodeHint")}</div>
+          </div>` : `
+          <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
+            <span class="caption" style="margin:0">${tr("pay.doorCodeShort")}</span>
+            <span class="door-code-mini">${b.doorCode}</span>
+          </div>`}
+        <div class="bc-actions">
+          <button class="btn secondary" onclick="exportBookingIcs('${b.id}')">📅 ${tr("booking.addToCal")}</button>
+          <button class="btn danger" onclick="confirmCancelBooking('${b.id}')">${tr("booking.cancelBooking")}</button>
+        </div>
+        <div style="margin-top:10px;color:var(--primary);font-weight:700;font-size:14px">${b.price} kr</div>
+      `;
+      host.appendChild(card);
+    });
+  }
+
+  // --- Past section ---
+  if (past.length > 0) {
+    const pastTitle = document.createElement("div");
+    pastTitle.className = "bc-section-title";
+    pastTitle.style.cssText = "font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:18px 2px 8px";
+    pastTitle.textContent = tr("booking.past");
+    host.appendChild(pastTitle);
+
+    past.forEach(b => {
+      const court = COURTS.find(c => c.id === b.courtId)?.nameKey[lang] || b.courtId;
+      const card = document.createElement("div");
+      card.className = "booking-card past";
+      card.innerHTML = `
+        <div class="bc-top">
+          <div style="min-width:0;flex:1">
+            <div class="bc-court">${court}</div>
+            <div class="bc-meta">${humanDate(b)} · ${String(b.hour).padStart(2,"0")}:00 · ${b.price} kr</div>
+          </div>
+          <span class="bc-badge past">${tr("booking.past")}</span>
+        </div>`;
+      host.appendChild(card);
+    });
+  }
+}
+
+function confirmCancelBooking(id) {
+  openModal(tr("booking.cancelBooking"), tr("booking.cancelConfirm"), () => {
+    bookings = bookings.filter(b => b.id !== id);
+    localStorage.setItem("ktk.bookings", JSON.stringify(bookings));
+    toast(tr("booking.cancelled"));
+    renderMyBookings();
   });
 }
+
 function cancelBooking(id) {
   bookings = bookings.filter(b => b.id !== id);
   localStorage.setItem("ktk.bookings", JSON.stringify(bookings));
   renderMyBookings();
+}
+
+/* ================== OM KLUBBEN ================== */
+const BOARD = [
+  { role: { nb: "Styreleder",    en: "Chair" },              name: "Anne Berit Hansen" },
+  { role: { nb: "Nestleder",     en: "Vice chair" },         name: "Pål Kristiansen" },
+  { role: { nb: "Kasserer",      en: "Treasurer" },          name: "Marit Lien" },
+  { role: { nb: "Sekretær",      en: "Secretary" },          name: "Ingrid Solberg" },
+  { role: { nb: "Styremedlem",   en: "Board member" },       name: "Henrik Dahl" },
+  { role: { nb: "Styremedlem",   en: "Board member" },       name: "Kari Johansen" },
+  { role: { nb: "Anleggsansvarlig", en: "Facilities lead" }, name: "Svein Kolden" },
+];
+function renderAboutBoard() {
+  const host = document.getElementById("about-board");
+  if (!host) return;
+  host.innerHTML = BOARD.map(p => `
+    <div class="board-row">
+      <div class="role">${p.role[lang]}</div>
+      <div class="name">${p.name}</div>
+    </div>`).join("");
+}
+
+/* ================== NYHETER & ARRANGEMENTER ================== */
+let newsFilter = "all";
+let selectedEventIdx = -1;
+let signedUpEvents = JSON.parse(localStorage.getItem("ktk.signups") || "[]");
+
+function newsItems() {
+  const items = tr("news.items");
+  return Array.isArray(items) ? items : [];
+}
+
+function newsCardHtml(item, idx) {
+  const isEvent = item.kind === "event";
+  return `
+    <div class="news-card" onclick="openEvent(${idx})">
+      <div class="nc-thumb">${item.icon}</div>
+      <div class="nc-body">
+        <div class="nc-cat ${isEvent ? "event" : ""}">${isEvent ? tr("common.events") : tr("common.news")}</div>
+        <div class="nc-title">${item.title}</div>
+        <div class="nc-date">${item.date}</div>
+      </div>
+    </div>`;
+}
+
+function renderHomeNews() {
+  const host = document.getElementById("home-news-feed");
+  if (!host) return;
+  const items = newsItems();
+  // Vis topp 3 på hjem-skjermen
+  host.innerHTML = items.slice(0, 3).map((it, i) => newsCardHtml(it, i)).join("");
+}
+
+function renderNewsFilters() {
+  const host = document.getElementById("news-filter-chips");
+  if (!host) return;
+  const filters = [
+    { id: "all",   label: tr("common.all") },
+    { id: "news",  label: tr("common.news") },
+    { id: "event", label: tr("common.events") },
+  ];
+  host.innerHTML = filters.map(f =>
+    `<button class="chip${newsFilter === f.id ? " active" : ""}" onclick="setNewsFilter('${f.id}')">${f.label}</button>`
+  ).join("");
+}
+
+function setNewsFilter(id) {
+  newsFilter = id;
+  renderNewsFilters();
+  renderFullNews();
+}
+
+function renderFullNews() {
+  const host = document.getElementById("news-full-list");
+  if (!host) return;
+  const items = newsItems();
+  const filtered = newsFilter === "all"
+    ? items
+    : items.filter(x => (newsFilter === "event" ? x.kind === "event" : x.kind !== "event"));
+  host.innerHTML = filtered.map(it => {
+    const origIdx = items.indexOf(it);
+    return newsCardHtml(it, origIdx);
+  }).join("");
+}
+
+function openEvent(idx) {
+  selectedEventIdx = idx;
+  go("event");
+}
+
+function renderEventDetail() {
+  const host = document.getElementById("event-detail-host");
+  if (!host) return;
+  const items = newsItems();
+  const item = items[selectedEventIdx];
+  if (!item) { host.innerHTML = ""; return; }
+  const isEvent = item.kind === "event";
+  const alreadySigned = signedUpEvents.includes(selectedEventIdx);
+  host.innerHTML = `
+    <div style="text-align:center;font-size:48px;margin:8px 0 12px">${item.icon}</div>
+    <div class="nc-cat ${isEvent ? "event" : ""}" style="text-align:center;margin-bottom:4px">${isEvent ? tr("common.events") : tr("common.news")}</div>
+    <h2 style="text-align:center;margin:0 0 14px">${item.title}</h2>
+    <div class="event-detail">
+      <div class="ed-date-row"><span class="ic">📅</span><span>${item.date}</span></div>
+      ${item.location ? `<div class="ed-date-row"><span class="ic">📍</span><span>${item.location}</span></div>` : ""}
+      ${item.price ? `<div class="ed-date-row"><span class="ic">💳</span><span>${item.price}</span></div>` : ""}
+      <p style="margin-top:8px;line-height:1.55">${item.body}</p>
+    </div>
+    ${isEvent ? `
+      <button class="btn${alreadySigned ? " secondary" : ""}"
+              onclick="${alreadySigned ? "" : "signUpEvent(" + selectedEventIdx + ")"}"
+              ${alreadySigned ? "disabled style=\"opacity:.7\"" : ""}>
+        ${alreadySigned ? tr("news.signedUp") : tr("news.signUp")}
+      </button>` : ""}
+  `;
+}
+
+function signUpEvent(idx) {
+  const items = newsItems();
+  const item = items[idx];
+  if (!item) return;
+  openModal(tr("news.signUp"), tr("news.signUpConfirm").replace("{title}", item.title), () => {
+    if (!signedUpEvents.includes(idx)) signedUpEvents.push(idx);
+    localStorage.setItem("ktk.signups", JSON.stringify(signedUpEvents));
+    toast(tr("news.signUpDone"));
+    renderEventDetail();
+  });
+}
+
+/* ================== TRENERE ================== */
+function renderTrainers() {
+  const host = document.getElementById("trainers-list");
+  if (!host) return;
+  const items = tr("trainers.items");
+  if (!Array.isArray(items)) { host.innerHTML = ""; return; }
+  host.innerHTML = items.map(t => `
+    <div class="trainer-card">
+      <div class="tr-av">${t.initials}</div>
+      <div class="tr-body">
+        <div class="tr-name">${t.name}</div>
+        <div class="tr-role">${t.role}</div>
+        <div class="tr-bio">${t.bio}</div>
+        <div class="tr-tags">${t.tags.map(tag => `<span class="tr-tag">${tag}</span>`).join("")}</div>
+        <div class="tr-actions">
+          <button class="btn" onclick="go('private')">${tr("trainers.bookLesson")}</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* ================== FINN SPILLEPARTNER ================== */
+const PARTNER_LEVELS = ["beginner", "recreational", "intermediate", "competition"];
+let partnerFilter = "all";
+let partnerDraft = { bookingId: null, level: "recreational", note: "" };
+
+// Seed med mock-invitasjoner fra andre medlemmer (3-6 stk, neste 7 dager)
+function seedMockInvitations() {
+  const existing = JSON.parse(localStorage.getItem("ktk.invitations") || "null");
+  if (existing) return existing;
+  const mocks = [];
+  const base = Date.now();
+  const samples = [
+    { name: "Lars Eriksen",     initials: "LE", level: "recreational", courtId: "arena-1", offsetDays: 1, hour: 18, note: "Rolig match, gjerne best av 3 settar" },
+    { name: "Maria Solheim",    initials: "MS", level: "intermediate", courtId: "arena-2", offsetDays: 2, hour: 19, note: "Trenger makker til torsdag. Spilt i 10 år, NTF rating ~3.5" },
+    { name: "Per Hansen",       initials: "PH", level: "beginner",     courtId: "arena-3", offsetDays: 3, hour: 17, note: "Nybegynner — tar det rolig :)" },
+    { name: "Ingrid Lien",      initials: "IL", level: "competition",  courtId: "grus-1",  offsetDays: 4, hour: 16, note: "Skal trene til Midlands Cup, trenger motstand" },
+    { name: "Ola Nordahl",      initials: "ON", level: "recreational", courtId: "arena-4", offsetDays: 5, hour: 20, note: "" },
+    { name: "Silje Ruud",       initials: "SR", level: "intermediate", courtId: "grus-2",  offsetDays: 6, hour: 10, note: "Lørdag formiddag — kaffe etterpå?" },
+  ];
+  samples.forEach((s, i) => {
+    const date = new Date(); date.setDate(date.getDate() + s.offsetDays); date.setHours(0,0,0,0);
+    mocks.push({
+      id: "mock-" + i,
+      bookingId: null,
+      name: s.name,
+      initials: s.initials,
+      level: s.level,
+      courtId: s.courtId,
+      dateISO: toISO(date),
+      hour: s.hour,
+      note: s.note,
+      takenBy: null,
+      createdAt: base - (5 - i) * 3600000,
+      isMock: true,
+    });
+  });
+  localStorage.setItem("ktk.invitations", JSON.stringify(mocks));
+  return mocks;
+}
+let invitations = seedMockInvitations();
+
+function saveInvitations() { localStorage.setItem("ktk.invitations", JSON.stringify(invitations)); }
+
+function inviteIsUpcoming(inv) {
+  const end = new Date(`${inv.dateISO}T${String(inv.hour + 1).padStart(2,"0")}:00:00`);
+  return end.getTime() > Date.now();
+}
+
+function inviteWhenStr(inv) {
+  const d = new Date(`${inv.dateISO}T${String(inv.hour).padStart(2,"0")}:00:00`);
+  const court = COURTS.find(c => c.id === inv.courtId)?.nameKey[lang] || inv.courtId;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const tomorrow = new Date(today); tomorrow.setDate(today.getDate()+1);
+  const dStart = new Date(d); dStart.setHours(0,0,0,0);
+  let dayStr;
+  if (dStart.getTime() === today.getTime()) dayStr = tr("booking.today");
+  else if (dStart.getTime() === tomorrow.getTime()) dayStr = tr("booking.tomorrow");
+  else dayStr = d.toLocaleDateString(lang === "nb" ? "nb-NO" : "en-GB", { weekday: "long", day: "2-digit", month: "short" });
+  return `${dayStr} ${String(inv.hour).padStart(2,"0")}:00 · ${court}`;
+}
+
+function renderHomePartnerBanner() {
+  const host = document.getElementById("home-partner-banner");
+  if (!host) return;
+  const open = invitations.filter(i => inviteIsUpcoming(i) && !i.takenBy);
+  if (open.length === 0) { host.style.display = "none"; return; }
+  host.style.display = "";
+  const text = tr("partner.homeBanner").replace("{count}", open.length);
+  host.innerHTML = `
+    <div class="partner-fab" onclick="go('partner')" style="margin-top:14px">
+      <div class="fab-ic">🤝</div>
+      <div class="fab-body">
+        <div class="fab-t">${text}</div>
+        <div class="fab-s">${tr("partner.homeCta")} ›</div>
+      </div>
+    </div>`;
+}
+
+function renderPartnerFilters() {
+  const host = document.getElementById("partner-filter-chips");
+  if (!host) return;
+  const chips = [
+    { id: "all", label: tr("partner.allLevels") },
+    ...PARTNER_LEVELS.map(l => ({ id: l, label: tr("partner.levels." + l) })),
+  ];
+  host.innerHTML = chips.map(c =>
+    `<button class="chip${partnerFilter === c.id ? " active" : ""}" onclick="setPartnerFilter('${c.id}')">${c.label}</button>`
+  ).join("");
+}
+
+function setPartnerFilter(id) {
+  partnerFilter = id;
+  renderPartnerFilters();
+  renderPartnerList();
+}
+
+function renderPartnerList() {
+  const host = document.getElementById("partner-list");
+  if (!host) return;
+  const userId = user ? user.email : null;
+  let list = invitations.filter(i => inviteIsUpcoming(i));
+  if (partnerFilter !== "all") list = list.filter(i => i.level === partnerFilter);
+  // Sorter: dine først, så kronologisk
+  list.sort((a, b) => {
+    const aMine = userId && a.ownerEmail === userId ? 1 : 0;
+    const bMine = userId && b.ownerEmail === userId ? 1 : 0;
+    if (aMine !== bMine) return bMine - aMine;
+    return (a.dateISO + String(a.hour)).localeCompare(b.dateISO + String(b.hour));
+  });
+
+  if (list.length === 0) {
+    host.innerHTML = `<div class="card"><p class="muted">${tr("partner.empty")}</p></div>`;
+    return;
+  }
+  host.innerHTML = list.map(inv => {
+    const isMine = userId && inv.ownerEmail === userId;
+    const isTaken = !!inv.takenBy;
+    const iJoined = userId && inv.takenBy === userId;
+    let cls = "partner-card";
+    if (isMine) cls += " mine";
+    if (isTaken) cls += " taken";
+    const levelLabel = tr("partner.levels." + inv.level);
+
+    let actions = "";
+    if (isMine) {
+      actions = `<div class="pc-actions">
+        <button class="btn secondary" onclick="cancelInvite('${inv.id}')">${tr("partner.cancel")}</button>
+      </div>`;
+    } else if (iJoined) {
+      actions = `<span class="pc-taken-badge">${tr("partner.joined")}</span>`;
+    } else if (isTaken) {
+      actions = `<span class="pc-taken-badge">${tr("partner.taken")}</span>`;
+    } else {
+      actions = `<div class="pc-actions">
+        <button class="btn" onclick="joinInvite('${inv.id}')">${tr("partner.join")}</button>
+      </div>`;
+    }
+
+    return `
+      <div class="${cls}">
+        <div class="pc-top">
+          <div class="pc-av">${inv.initials || initials(inv.name)}</div>
+          <div class="pc-head">
+            <div class="pc-name">${inv.name}${isMine ? " · " + tr("partner.yours") : ""}</div>
+            <div class="pc-meta">${inviteWhenStr(inv)}</div>
+          </div>
+          <span class="pc-level">${levelLabel}</span>
+        </div>
+        ${inv.note ? `<div class="pc-note">"${inv.note}"</div>` : ""}
+        ${actions}
+      </div>`;
+  }).join("");
+}
+
+function renderPartnerNew() {
+  // My upcoming bookings as pickable options
+  const host = document.getElementById("partner-my-bookings");
+  const chipsHost = document.getElementById("partner-level-chips");
+  if (!host || !chipsHost) return;
+
+  if (!user) {
+    host.innerHTML = `<div class="card"><p class="muted">${tr("partner.needLogin")}</p>
+      <button class="btn" style="margin-top:10px" onclick="go('login')">${tr("auth.loginBtn")}</button></div>`;
+  } else {
+    const upcoming = bookings
+      .filter(b => bookingEnd(b).getTime() > Date.now())
+      .filter(b => !invitations.some(i => i.bookingId === b.id && !i.takenBy && inviteIsUpcoming(i)))
+      .sort((a,b) => bookingStart(a).getTime() - bookingStart(b).getTime());
+    if (upcoming.length === 0) {
+      host.innerHTML = `<div class="card"><p class="muted">${tr("partner.noBookings")}</p>
+        <button class="btn" style="margin-top:10px" onclick="go('booking')">${tr("booking.bookNow")}</button></div>`;
+      partnerDraft.bookingId = null;
+    } else {
+      if (!partnerDraft.bookingId || !upcoming.find(b => b.id === partnerDraft.bookingId)) {
+        partnerDraft.bookingId = upcoming[0].id;
+      }
+      host.innerHTML = upcoming.map(b => {
+        const court = COURTS.find(c => c.id === b.courtId)?.nameKey[lang] || b.courtId;
+        const selected = b.id === partnerDraft.bookingId;
+        return `
+          <div class="partner-card ${selected ? "mine" : ""}" style="cursor:pointer" onclick="pickInviteBooking('${b.id}')">
+            <div class="pc-top">
+              <div class="pc-av" style="font-size:14px">${selected ? "✓" : "○"}</div>
+              <div class="pc-head">
+                <div class="pc-name">${court}</div>
+                <div class="pc-meta">${humanDate(b)} · ${String(b.hour).padStart(2,"0")}:00</div>
+              </div>
+            </div>
+          </div>`;
+      }).join("");
+    }
+  }
+
+  chipsHost.innerHTML = PARTNER_LEVELS.map(l =>
+    `<button class="chip${partnerDraft.level === l ? " active" : ""}" onclick="pickInviteLevel('${l}')">${tr("partner.levels." + l)}</button>`
+  ).join("");
+
+  const note = document.getElementById("partner-note");
+  if (note && note.value !== partnerDraft.note) note.value = partnerDraft.note;
+}
+
+function pickInviteBooking(id) { partnerDraft.bookingId = id; renderPartnerNew(); }
+function pickInviteLevel(l)    { partnerDraft.level = l;      renderPartnerNew(); }
+
+function submitPartnerInvite() {
+  if (!user) { toast(tr("partner.needLogin")); go("login"); return; }
+  if (!partnerDraft.bookingId) { toast(tr("partner.noBookings")); return; }
+  const b = bookings.find(x => x.id === partnerDraft.bookingId);
+  if (!b) return;
+  const note = (document.getElementById("partner-note")?.value || "").trim();
+  invitations.push({
+    id: "inv-" + Date.now(),
+    bookingId: b.id,
+    ownerEmail: user.email,
+    name: user.name,
+    initials: initials(user.name),
+    level: partnerDraft.level,
+    courtId: b.courtId,
+    dateISO: b.dateISO,
+    hour: b.hour,
+    note: note,
+    takenBy: null,
+    createdAt: Date.now(),
+  });
+  saveInvitations();
+  partnerDraft = { bookingId: null, level: "recreational", note: "" };
+  const noteEl = document.getElementById("partner-note"); if (noteEl) noteEl.value = "";
+  toast(tr("partner.published"));
+  go("partner");
+}
+
+function joinInvite(id) {
+  if (!user) { toast(tr("partner.needLogin")); go("login"); return; }
+  const inv = invitations.find(i => i.id === id);
+  if (!inv || inv.takenBy) return;
+  const msg = tr("partner.joinConfirm")
+    .replace("{name}", inv.name)
+    .replace("{when}", inviteWhenStr(inv));
+  openModal(tr("partner.join"), msg, () => {
+    inv.takenBy = user.email;
+    saveInvitations();
+    toast(tr("partner.joinDone").replace("{name}", inv.name));
+    renderPartnerList();
+  });
+}
+
+function cancelInvite(id) {
+  invitations = invitations.filter(i => i.id !== id);
+  saveInvitations();
+  renderPartnerList();
+}
+
+/* ================== DIGITALT MEDLEMSKORT ================== */
+function renderMemberCard() {
+  const host = document.getElementById("pf-member-card");
+  if (!host) return;
+  if (!user || !user.isMember) {
+    host.innerHTML = "";
+    host.style.display = "none";
+    return;
+  }
+  host.style.display = "";
+  const valid = new Date(Date.now() + 365*24*60*60*1000);
+  const validStr = valid.toLocaleDateString(lang === "nb" ? "nb-NO" : "en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  const joined = user.joinedAt ? new Date(user.joinedAt) : null;
+  const joinedStr = joined ? joined.toLocaleDateString(lang === "nb" ? "nb-NO" : "en-GB", { month: "long", year: "numeric" }) : "";
+  host.innerHTML = `
+    <div class="member-card-wrap">
+      <div class="mc-top">
+        <div>
+          <div class="mc-club">Kolbotn Tennisklubb</div>
+          <div class="mc-sub">${lang === "nb" ? "Digitalt medlemskort" : "Digital membership card"}</div>
+        </div>
+        <div class="mc-seal">KTK</div>
+      </div>
+      <div class="mc-body">
+        <div class="mc-field">
+          <div class="lbl">${lang === "nb" ? "Navn" : "Name"}</div>
+          <div class="val big">${user.name}</div>
+        </div>
+        <div class="mc-grid">
+          <div class="mc-field">
+            <div class="lbl">${tr("auth.memberNumber")}</div>
+            <div class="num">${user.memberNumber}</div>
+          </div>
+          <div class="mc-field">
+            <div class="lbl">${lang === "nb" ? "Gyldig til" : "Valid until"}</div>
+            <div class="val">${validStr}</div>
+          </div>
+        </div>
+        ${joinedStr ? `
+        <div class="mc-field" style="margin-top:10px">
+          <div class="lbl">${tr("auth.memberSince")}</div>
+          <div class="val" style="font-size:13px">${joinedStr}</div>
+        </div>` : ""}
+      </div>
+    </div>`;
+}
+
+/* ================== FAQ ================== */
+function renderFaq() {
+  const host = document.getElementById("faq-list");
+  if (!host) return;
+  const items = tr("faq.items");
+  if (!Array.isArray(items)) { host.innerHTML = ""; return; }
+  host.innerHTML = items.map(it => `
+    <details class="faq-item">
+      <summary>${it.q}</summary>
+      <div class="faq-body"><p>${it.a}</p></div>
+    </details>`).join("");
+}
+
+function pad(n) { return String(n).padStart(2, "0"); }
+function icsFormat(d) {
+  // Return UTC string: YYYYMMDDTHHMMSSZ
+  return d.getUTCFullYear() + pad(d.getUTCMonth()+1) + pad(d.getUTCDate()) + "T" +
+    pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + "Z";
+}
+function exportBookingIcs(id) {
+  const b = bookings.find(x => x.id === id);
+  if (!b) return;
+  const court = COURTS.find(c => c.id === b.courtId)?.nameKey[lang] || b.courtId;
+  const start = bookingStart(b);
+  const end = bookingEnd(b);
+  const title = `Tennis: ${court} — KTK`;
+  const desc = `${lang === "nb" ? "Døråpnings-kode" : "Door code"}: ${b.doorCode}\\n${lang === "nb" ? "Spiller" : "Player"}: ${b.holderName}`;
+  const loc = b.courtId.startsWith("grus") ? "Ingierveien 17, 1410 Kolbotn" : "Coop Øst Arena, Kongeveien 72, 1412 Sofiemyr";
+  const uid = `${b.id}@kolbotntennis.no`;
+  const now = new Date();
+  const ics = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Kolbotn Tennisklubb//KTK Demo//NB",
+    "CALSCALE:GREGORIAN",
+    "BEGIN:VEVENT",
+    `UID:${uid}`,
+    `DTSTAMP:${icsFormat(now)}`,
+    `DTSTART:${icsFormat(start)}`,
+    `DTEND:${icsFormat(end)}`,
+    `SUMMARY:${title}`,
+    `DESCRIPTION:${desc}`,
+    `LOCATION:${loc}`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
+  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `ktk-booking-${b.dateISO}-${pad(b.hour)}.ics`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  toast(tr("booking.addToCal") + " ✓");
 }
 
 function submitMembership() {
@@ -1520,6 +3626,10 @@ function render() {
     more: tr("common.appName"), membership: tr("membership.title"),
     tennisSchool: tr("tennisSchool.title"), sfo: tr("sfo.title"), private: tr("private.title"),
     mybookings: tr("booking.yourBookings"), settings: tr("settings.title"),
+    login: tr("auth.loginTitle"), profile: tr("auth.profile"),
+    about: tr("about.title"), faq: tr("faq.title"),
+    news: tr("news.title"), event: tr("news.title"), trainers: tr("trainers.title"),
+    partner: tr("partner.title"), partnerNew: tr("partner.newTitle"),
   };
   document.getElementById("header-title").textContent = titles[currentScreen] || "";
 
@@ -1529,6 +3639,19 @@ function render() {
   renderSchoolCoursesOn("school-courses");
   renderMembershipTiers(); updateSelectedMembership();
   renderMyBookings();
+  renderAboutBoard();
+  renderFaq();
+  renderHomeNews();
+  renderNewsFilters();
+  renderFullNews();
+  renderTrainers();
+  renderHomePartnerBanner();
+  renderPartnerFilters();
+  renderPartnerList();
+  if (currentScreen === "partnerNew") renderPartnerNew();
+  if (currentScreen === "event") renderEventDetail();
+  updateUserUI();
+  if (currentScreen === "profile") { renderProfile(); renderMemberCard(); }
 
   // SFO
   const sfoPriceEls = [document.getElementById("sfo-price"), document.getElementById("sfo-price-2")];
@@ -1563,8 +3686,40 @@ try {
   const payDone = document.getElementById("pay-done");
   if (payDone) payDone.onclick = () => { closePaymentModal(); go("mybookings"); };
 
+  // Enter-tast i login-feltene skal logge inn
+  const authPw = document.getElementById("auth-password");
+  const authEm = document.getElementById("auth-email");
+  if (authPw) authPw.addEventListener("keydown", (e) => { if (e.key === "Enter") doLogin(); });
+  if (authEm) authEm.addEventListener("keydown", (e) => { if (e.key === "Enter") document.getElementById("auth-password").focus(); });
+
+  // Hvis bruker allerede er innlogget (localStorage), pre-fyll navn i booking
+  if (user) {
+    const gn = document.getElementById("name-input");
+    if (gn) gn.value = user.name;
+    if (isMember) {
+      const mn = document.getElementById("member-number-input");
+      if (mn) mn.value = user.memberNumber;
+      const ms = document.getElementById("member-switch");
+      if (ms) ms.classList.add("on");
+      const mnf = document.getElementById("member-number-field");
+      if (mnf) mnf.style.display = "";
+    }
+  }
+
   applyI18n();
   go("home");
+
+  // Live-oppdater nedtelling hvert minutt når "Mine bookinger" er åpen
+  setInterval(() => {
+    if (currentScreen === "mybookings") renderMyBookings();
+  }, 60000);
+
+  // Registrer service worker for offline-støtte
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").catch(() => { /* stille feil */ });
+    });
+  }
 } catch (err) {
   // Hvis noe feiler, vis hjem-skjermen og en liten feilmelding
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
