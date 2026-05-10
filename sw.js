@@ -2,7 +2,7 @@
    Cache-first for app-shell slik at appen funker offline etter første besøk.
    Øk CACHE_VERSION når du deployer ny index.html. */
 
-const CACHE_VERSION = "ktk-v3";
+const CACHE_VERSION = "ktk-v16";
 const APP_SHELL = [
   "./",
   "./index.html",

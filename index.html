@@ -276,6 +276,7 @@
     font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0;
   }
   .pay-opt .logo-vipps { background: #ff5b24; }
+  .pay-opt .logo-applepay { background: #000; font-size: 13px; letter-spacing: 0; }
   .pay-opt .logo-card { background: linear-gradient(135deg, #1a1f71 0%, #f7b500 130%); }
   .pay-opt .logo-invoice { background: #5B6B80; }
   .pay-opt .logo-klubb { background: var(--primary); }
@@ -418,12 +419,28 @@
     box-shadow: 0 8px 20px rgba(11,61,145,0.2);
   }
   .profile-hero .pf-avatar {
-    width: 60px; height: 60px; border-radius: 50%;
+    position: relative;
+    width: 72px; height: 72px; border-radius: 50%;
     background: rgba(255,255,255,0.2); color: #fff;
     display: flex; align-items: center; justify-content: center;
-    font-size: 24px; font-weight: 800; flex-shrink: 0;
+    font-size: 26px; font-weight: 800; flex-shrink: 0;
     border: 2px solid rgba(255,255,255,0.3);
+    cursor: pointer;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
   }
+  .profile-hero .pf-avatar .av-edit {
+    position: absolute; bottom: 0; right: 0;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #fff; color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    border: 2px solid var(--primary);
+  }
+  .profile-hero .pf-avatar.has-img { background-color: transparent; border-color: rgba(255,255,255,0.5); }
+  .profile-hero .pf-avatar.has-img > .av-text { display: none; }
   .profile-hero .pf-name { font-size: 19px; font-weight: 800; margin: 0; }
   .profile-hero .pf-email { font-size: 12px; opacity: 0.85; margin: 2px 0 0; }
   .profile-hero .pf-badge {
@@ -469,7 +486,11 @@
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     color: #fff; display: flex; align-items: center; justify-content: center;
     font-size: 17px; font-weight: 800; flex-shrink: 0;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
   }
+  .user-banner .ub-av.has-img { background-image: var(--avatar-bg, none); color: transparent; }
   .user-banner .ub-av.empty {
     background: var(--bg); border: 2px dashed var(--border);
     color: var(--muted);
@@ -706,9 +727,270 @@
   .partner-fab .fab-t { font-weight: 800; font-size: 14px; }
   .partner-fab .fab-s { font-size: 12px; opacity: .9; margin-top: 2px; }
 
+  /* Neste booking-banner på forsiden */
+  .next-booking {
+    background: linear-gradient(135deg, #FFB347 0%, #FF8C2E 100%);
+    color: #fff; border-radius: 14px;
+    padding: 14px 16px; margin-bottom: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(255,140,46,.28);
+  }
+  .next-booking:active { transform: scale(.99); }
+  .next-booking.live { background: linear-gradient(135deg, #2bb673 0%, #1e7a3e 100%); box-shadow: 0 4px 14px rgba(43,182,115,.28); }
+  .next-booking .nb-row { display: flex; align-items: center; gap: 12px; }
+  .next-booking .nb-icon { font-size: 28px; }
+  .next-booking .nb-body { flex: 1; min-width: 0; }
+  .next-booking .nb-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; opacity: .9; text-transform: uppercase; }
+  .next-booking .nb-title { font-size: 15px; font-weight: 800; margin-top: 2px; }
+  .next-booking .nb-sub { font-size: 12px; opacity: .92; margin-top: 2px; }
+  .next-booking .nb-code {
+    background: rgba(255,255,255,.25);
+    padding: 6px 10px; border-radius: 8px;
+    font-weight: 800; font-size: 16px;
+    letter-spacing: 2px;
+    flex-shrink: 0;
+  }
+
+  /* Hero-CTA på forsiden — fanger inn ikke-medlemmer */
+  .home-cta {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    padding: 18px 18px 16px;
+    margin-bottom: 14px;
+    color: #fff;
+    background: linear-gradient(135deg, #0B3D91 0%, #1B5AA6 55%, #2E7BC9 100%);
+    box-shadow: 0 6px 20px rgba(11,61,145,.28);
+  }
+  .home-cta::after {
+    content: "";
+    position: absolute; right: -40px; top: -40px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(255,255,255,.18), transparent 70%);
+    pointer-events: none;
+  }
+  .home-cta .cta-eyebrow {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    opacity: .85; margin-bottom: 6px;
+  }
+  .home-cta .cta-title {
+    font-size: 18px; font-weight: 800;
+    margin: 0 0 4px; line-height: 1.2;
+  }
+  .home-cta .cta-sub {
+    font-size: 13px; opacity: .92; margin: 0 0 14px;
+    line-height: 1.4;
+  }
+  .home-cta .cta-perks {
+    list-style: none; padding: 0; margin: 0 0 14px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .home-cta .cta-perks li {
+    font-size: 12px; opacity: .95;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .home-cta .cta-perks li::before {
+    content: "✓";
+    font-weight: 800;
+    color: #FFD43B;
+    font-size: 13px;
+  }
+  .home-cta .cta-row {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .home-cta .cta-btn {
+    flex: 1; min-width: 130px;
+    background: #fff; color: var(--primary);
+    border: none; border-radius: 10px;
+    padding: 12px 14px; font-weight: 800; font-size: 14px;
+    cursor: pointer;
+  }
+  .home-cta .cta-btn:active { transform: scale(.98); }
+  .home-cta .cta-btn.ghost {
+    background: rgba(255,255,255,.18);
+    color: #fff;
+    backdrop-filter: blur(8px);
+  }
+
   /* Level-chips i opprett-form */
   .level-chips { display: flex; gap: 8px; flex-wrap: wrap; }
   .level-chips .chip { cursor: pointer; }
+
+  /* ===== Ladder / stigesystem ===== */
+  .ladder-banner {
+    background: #fff7d6; border: 1px solid #f0d36a; color: #6b5500;
+    padding: 10px 12px; border-radius: 10px; font-size: 13px;
+    margin-bottom: 12px; display: flex; gap: 10px; align-items: center;
+    cursor: pointer;
+  }
+  .ladder-banner .lb-ic { font-size: 18px; flex-shrink: 0; }
+  .ladder-banner .lb-body { flex: 1; line-height: 1.35; }
+  .ladder-banner .lb-cta { font-weight: 800; }
+  .ladder-banner.danger { background: #fde0e0; border-color: #f3a3a3; color: #882020; }
+
+  .ladder-tabs {
+    display: flex; gap: 6px; background: var(--soft); padding: 4px;
+    border-radius: 12px; margin-bottom: 14px;
+  }
+  .ladder-tabs .ltab {
+    flex: 1; padding: 8px 10px; border-radius: 9px; text-align: center;
+    font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer;
+    border: none; background: transparent;
+  }
+  .ladder-tabs .ltab.active { background: var(--card); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+
+  .ladder-row {
+    display: grid; grid-template-columns: 36px 1fr auto auto;
+    gap: 10px; align-items: center;
+    background: var(--card); border: 1px solid var(--border);
+    padding: 10px 12px; border-radius: 10px; margin-bottom: 6px;
+  }
+  .ladder-row.me { border-color: var(--primary); background: rgba(11,61,145,.05); }
+  .ladder-row.targetable { border-color: #8fd19e; background: rgba(143,209,158,.10); cursor: pointer; }
+  .ladder-row.targetable:active { transform: scale(.99); }
+  .ladder-row .lr-pos {
+    font-weight: 800; font-size: 15px; color: var(--text);
+    width: 30px; text-align: center;
+  }
+  .ladder-row .lr-name { font-weight: 700; font-size: 14px; color: var(--text); }
+  .ladder-row .lr-meta { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .ladder-row .lr-wl {
+    font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums;
+  }
+  .ladder-row .lr-arrow {
+    width: 24px; text-align: center; font-size: 14px; color: var(--primary); font-weight: 800;
+  }
+  .ladder-row .lr-away {
+    background: #efe2ff; color: #5b3a8a; font-size: 10px; padding: 2px 7px;
+    border-radius: 999px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+  }
+
+  .challenge-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px; margin-bottom: 10px;
+  }
+  .challenge-card.urgent { border-left: 4px solid #e6a700; }
+  .challenge-card.live   { border-left: 4px solid var(--primary); }
+  .challenge-card.done   { opacity: .7; }
+  .challenge-card .cc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .challenge-card .cc-name { font-weight: 800; font-size: 14px; color: var(--text); }
+  .challenge-card .cc-sub  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .challenge-card .cc-status {
+    padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .4px;
+  }
+  .challenge-card .cc-status.pending  { background: #fff5d6; color: #6b5500; }
+  .challenge-card .cc-status.accepted { background: #d6eaff; color: #1a4d8f; }
+  .challenge-card .cc-status.confirm  { background: #fde0e0; color: #882020; }
+  .challenge-card .cc-status.completed{ background: #dbf1e0; color: #1e7a3e; }
+  .challenge-card .cc-actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .challenge-card .cc-actions .btn { margin: 0; padding: 8px 12px; font-size: 13px; }
+
+  .ladder-stat-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0;
+  }
+  .ladder-stat {
+    background: var(--soft); padding: 10px 8px; border-radius: 10px; text-align: center;
+  }
+  .ladder-stat .v { font-weight: 800; font-size: 18px; color: var(--text); }
+  .ladder-stat .l { font-size: 10px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); margin-top: 2px; font-weight: 700; }
+
+  .chat-thread {
+    background: var(--soft); border-radius: 12px; padding: 12px;
+    min-height: 200px; max-height: 360px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;
+  }
+  .chat-msg {
+    max-width: 78%; padding: 8px 12px; border-radius: 14px;
+    font-size: 13px; line-height: 1.4; word-wrap: break-word;
+  }
+  .chat-msg .ts { display: block; font-size: 10px; opacity: .65; margin-top: 3px; }
+  .chat-msg.them { background: #fff; color: var(--text); align-self: flex-start;
+    border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+  .chat-msg.me   { background: var(--primary); color: #fff; align-self: flex-end;
+    border-bottom-right-radius: 4px; }
+  .chat-input {
+    display: flex; gap: 8px; align-items: stretch;
+  }
+  .chat-input input {
+    flex: 1; padding: 10px 12px; border: 1px solid var(--border);
+    border-radius: 10px; background: var(--bg); color: var(--text); font-size: 14px;
+  }
+  .chat-input button {
+    background: var(--primary); color: #fff; border: none; padding: 0 16px;
+    border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 14px;
+  }
+  .quick-replies { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .quick-replies .chip { font-size: 12px; padding: 6px 10px; cursor: pointer; }
+
+  .set-input-row {
+    display: flex; gap: 8px; align-items: center; margin-bottom: 8px;
+  }
+  .set-input-row label { font-size: 13px; color: var(--muted); width: 56px; }
+  .set-input-row input {
+    width: 50px; padding: 8px; text-align: center; border: 1px solid var(--border);
+    border-radius: 8px; background: var(--bg); color: var(--text); font-size: 15px;
+    font-weight: 700;
+  }
+  .set-input-row .vs { color: var(--muted); font-weight: 700; }
+
+  .noshow-badge {
+    display: inline-block; padding: 3px 8px; border-radius: 999px;
+    background: #fde0e0; color: #882020; font-size: 10px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .5px; margin-left: 6px;
+  }
+  .noshow-warn {
+    background: #fff5d6; border: 1px solid #f0d36a; color: #6b5500;
+    padding: 8px 10px; border-radius: 8px; font-size: 12px; margin-top: 8px;
+  }
+
+  /* ===== Admin / mod-panel ===== */
+  .admin-hero {
+    background: linear-gradient(135deg, #5a1010 0%, #882020 100%);
+    color: #fff; border-radius: 14px; padding: 14px 16px; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .admin-hero .ah-ic {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .admin-hero .ah-t { font-weight: 800; font-size: 15px; }
+  .admin-hero .ah-s { font-size: 12px; opacity: .85; margin-top: 2px; }
+
+  .admin-section {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px; margin-bottom: 12px;
+  }
+  .admin-section h4 { margin: 0 0 8px; font-size: 14px; }
+  .admin-section .row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .admin-section .row:last-child { border-bottom: none; }
+  .admin-section .row .meta { color: var(--muted); font-size: 12px; margin-top: 1px; }
+  .admin-section .row button {
+    background: var(--soft); border: 1px solid var(--border);
+    padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer;
+    color: var(--text); font-weight: 600;
+  }
+  .admin-section .row button.danger { background: #fde0e0; border-color: #f3a3a3; color: #882020; }
+  .admin-section .row button.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .admin-form {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;
+  }
+  .admin-form input, .admin-form select {
+    padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px;
+    background: var(--bg); color: var(--text); font-size: 13px;
+  }
+  .admin-form .full { grid-column: 1 / span 2; }
+  .mod-toggle {
+    background: linear-gradient(135deg,#882020 0%,#aa3030 100%); color: #fff;
+    border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700;
+    cursor: pointer; width: 100%; margin-top: 10px;
+  }
 
   /* ===== Digitalt medlemskort ===== */
   .member-card-wrap {
@@ -934,7 +1216,11 @@
             <div class="door-code-hint" data-i18n="pay.doorCodeHint">Tast inn på keypad ved hovedinngang</div>
           </div>
 
-          <button class="pay-btn" style="margin-top:18px" id="pay-done"><span data-i18n="pay.done">Ferdig</span></button>
+          <p class="muted" style="margin:14px 0 0;font-size:12px;text-align:center">
+            🔔 <span data-i18n="booking.reminderInApp">Påminnelser i appen og på e-post</span>
+          </p>
+
+          <button class="pay-btn" style="margin-top:14px" id="pay-done"><span data-i18n="pay.done">Ferdig</span></button>
         </div>
       </div>
     </div>
@@ -991,6 +1277,9 @@
         <div class="tagline" data-i18n="home.tagline">Book bane, meld deg på kurs, og hold deg oppdatert.</div>
       </div>
 
+      <!-- Hero-CTA: fanger inn ikke-medlemmer / ikke-innloggede -->
+      <div id="home-cta-banner" style="display:none"></div>
+
       <!-- Bruker-banner (byttes mellom innlogget/ikke innlogget) -->
       <div class="user-banner" id="user-banner" onclick="onUserBannerClick()">
         <div class="ub-av empty" id="ub-av">?</div>
@@ -1000,6 +1289,9 @@
         </div>
         <div class="ub-chev">›</div>
       </div>
+
+      <!-- Påminnelses-banner: neste booking i nær fremtid -->
+      <div id="home-next-booking" style="display:none"></div>
 
       <div class="grid">
         <div class="tile" onclick="go('booking')">
@@ -1030,6 +1322,9 @@
 
       <!-- Finn spillepartner (hjem-preview) -->
       <div id="home-partner-banner" style="display:none"></div>
+
+      <!-- Stigesystem (hjem-preview) -->
+      <div id="home-ladder-banner" style="display:none"></div>
 
       <!-- Nyheter / arrangementer (hjem-preview) -->
       <div style="display:flex;justify-content:space-between;align-items:center;margin:16px 0 8px">
@@ -1265,6 +1560,9 @@
       <div class="row-item" onclick="go('partner')">
         <div class="ic">🤝</div><div class="lbl" data-i18n="partner.title">Finn spillepartner</div><div class="chev">›</div>
       </div>
+      <div class="row-item" onclick="openLadder()">
+        <div class="ic">🏆</div><div class="lbl" data-i18n="ladder.title">Stigesystem</div><div class="chev">›</div>
+      </div>
       <div class="row-item" onclick="go('news')">
         <div class="ic">📰</div><div class="lbl" data-i18n="news.title">Siste nytt</div><div class="chev">›</div>
       </div>
@@ -1316,8 +1614,59 @@
         <button class="auth-btn ghost" onclick="doDemoLogin()" data-i18n="auth.demoBtn">Bruk demo-bruker</button>
 
         <div class="auth-bottom">
-          <span data-i18n="auth.noAccount">Ikke medlem enda?</span>
-          <a onclick="go('membership')" data-i18n="auth.becomeMember">Bli medlem</a>
+          <span data-i18n="auth.noAccount">Har du ikke konto?</span>
+          <a onclick="go('signup')" data-i18n="auth.createAccount">Opprett konto</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPPRETT KONTO -->
+    <div class="screen" id="screen-signup">
+      <div class="auth-wrap">
+        <div class="auth-hero">
+          <div class="av">KTK</div>
+          <h2 data-i18n="auth.signupTitle">Opprett konto</h2>
+          <p data-i18n="auth.signupSub">Du trenger ikke være medlem for å booke.</p>
+        </div>
+
+        <div class="auth-error" id="signup-error">—</div>
+
+        <div class="auth-field">
+          <label data-i18n="auth.fullName">Fullt navn</label>
+          <input id="su-name" type="text" autocomplete="name" placeholder="Ola Nordmann" />
+        </div>
+        <div class="auth-field">
+          <label data-i18n="auth.email">E-post</label>
+          <input id="su-email" type="email" autocomplete="email" placeholder="din@epost.no" />
+        </div>
+        <div class="auth-field">
+          <label data-i18n="auth.phone">Telefon</label>
+          <input id="su-phone" type="tel" autocomplete="tel" placeholder="+47 ..." />
+        </div>
+        <div class="auth-field">
+          <label data-i18n="auth.password">Passord</label>
+          <input id="su-password" type="password" autocomplete="new-password" placeholder="••••••••" />
+        </div>
+        <div class="auth-field">
+          <label data-i18n="auth.passwordConfirm">Bekreft passord</label>
+          <input id="su-password2" type="password" autocomplete="new-password" placeholder="••••••••" />
+        </div>
+
+        <label style="display:flex;gap:10px;align-items:flex-start;margin:14px 0 6px;cursor:pointer;font-size:13px">
+          <input id="su-terms" type="checkbox" style="margin-top:3px;flex-shrink:0"/>
+          <span data-i18n="auth.acceptTerms">Jeg godtar vilkårene og personvernerklæringen</span>
+        </label>
+        <label style="display:flex;gap:10px;align-items:flex-start;margin:6px 0 4px;cursor:pointer;font-size:13px">
+          <input id="su-member" type="checkbox" style="margin-top:3px;flex-shrink:0"/>
+          <span data-i18n="auth.becomeMemberOpt">Jeg ønsker også å bli medlem (få medlemspris og rabatter)</span>
+        </label>
+        <p class="muted" style="font-size:11px;margin:0 0 14px 26px" data-i18n="auth.becomeMemberOptHint">Du kan oppgradere senere fra profilen din.</p>
+
+        <button class="auth-btn" onclick="doSignup()" data-i18n="auth.createBtn">Opprett konto</button>
+
+        <div class="auth-bottom">
+          <span data-i18n="auth.haveAccount">Har du allerede konto?</span>
+          <a onclick="go('login')" data-i18n="auth.loginInstead">Logg inn</a>
         </div>
       </div>
     </div>
@@ -1325,7 +1674,11 @@
     <!-- PROFIL -->
     <div class="screen" id="screen-profile">
       <div class="profile-hero">
-        <div class="pf-avatar" id="pf-avatar">K</div>
+        <div class="pf-avatar" id="pf-avatar" onclick="openAvatarPicker()" title="Endre profilbilde">
+          <span class="av-text" id="pf-avatar-text">K</span>
+          <div class="av-edit">✎</div>
+        </div>
+        <input type="file" id="pf-avatar-input" accept="image/*" style="display:none" onchange="handleAvatarFile(event)"/>
         <div style="flex:1;min-width:0">
           <p class="pf-name" id="pf-name">—</p>
           <p class="pf-email" id="pf-email">—</p>
@@ -1350,6 +1703,8 @@
         <div class="hd" data-i18n="auth.recentBookings">Siste bookinger</div>
         <div id="pf-recent"></div>
       </div>
+
+      <div id="pf-admin-section"></div>
 
       <button class="profile-logout" onclick="doLogout()" data-i18n="auth.logout">Logg ut</button>
     </div>
@@ -1476,6 +1831,44 @@
       <button class="btn" onclick="submitPartnerInvite()" data-i18n="partner.publish">Publiser invitasjon</button>
     </div>
 
+    <!-- STIGE-SYSTEM: hovedskjerm med 3 faner -->
+    <div class="screen" id="screen-ladder">
+      <div id="ladder-banner-host"></div>
+      <div class="ladder-tabs" id="ladder-tabs">
+        <button class="ltab active" data-tab="board"   onclick="setLadderTab('board')"   data-i18n="ladder.tabBoard">Stigen</button>
+        <button class="ltab"        data-tab="inbox"   onclick="setLadderTab('inbox')"   data-i18n="ladder.tabInbox">Innboks</button>
+        <button class="ltab"        data-tab="profile" onclick="setLadderTab('profile')" data-i18n="ladder.tabProfile">Min profil</button>
+      </div>
+
+      <div id="ladder-pane-board" class="ladder-pane">
+        <p class="muted" style="font-size:12px;margin-bottom:10px" data-i18n="ladder.boardHelp">Du kan utfordre noen 1–3 plasser over deg. Trykk på en grønn rad for å sende utfordring.</p>
+        <div id="ladder-list"></div>
+      </div>
+
+      <div id="ladder-pane-inbox" class="ladder-pane" style="display:none">
+        <div id="ladder-inbox-list"></div>
+      </div>
+
+      <div id="ladder-pane-profile" class="ladder-pane" style="display:none">
+        <div id="ladder-profile-host"></div>
+      </div>
+    </div>
+
+    <!-- STIGE: chat -->
+    <div class="screen" id="screen-ladderChat">
+      <div id="ladder-chat-host"></div>
+    </div>
+
+    <!-- STIGE: kamphistorikk -->
+    <div class="screen" id="screen-ladderHistory">
+      <div id="ladder-history-host"></div>
+    </div>
+
+    <!-- ADMIN / MOD-PANEL -->
+    <div class="screen" id="screen-admin">
+      <div id="admin-host"></div>
+    </div>
+
   </div>
 
   <!-- TABS -->
@@ -1524,6 +1917,24 @@ const T = {
       indoorHours: "Mandag – søndag: 07:00 – 23:00 · åpen hele året",
       outdoorHours: "Utesesong ca. 15. april – 1. oktober",
       contact: "Kontakt klubben",
+      // CTA-banner for ikke-medlemmer
+      ctaGuestEyebrow: "Ny her?",
+      ctaGuestTitle: "Spill tennis i Kolbotn — bli med i dag",
+      ctaGuestSub: "Opprett gratis konto og book bane på minutter. Bli medlem og få medlemspriser, stigespill og mer.",
+      ctaGuestPerk1: "Booking på 30 sekunder",
+      ctaGuestPerk2: "Medlemspris fra 200 kr/time",
+      ctaGuestPerk3: "Bli med i stigespillet",
+      ctaGuestPrimary: "Opprett gratis konto",
+      ctaGuestSecondary: "Logg inn",
+      // Logget inn, men ikke medlem
+      ctaUpgradeEyebrow: "Hei {name}!",
+      ctaUpgradeTitle: "Oppgrader til medlem",
+      ctaUpgradeSub: "Spar opptil 100 kr per time, få tilgang til stigen og bli en del av klubben.",
+      ctaUpgradePerk1: "Medlemspris på alle baner",
+      ctaUpgradePerk2: "Stigespill og turneringer",
+      ctaUpgradePerk3: "Forhåndsbooking og prioritet",
+      ctaUpgradePrimary: "Bli medlem nå",
+      ctaUpgradeSecondary: "Senere",
     },
     pay: {
       title: "Velg betalingsmetode",
@@ -1548,6 +1959,8 @@ const T = {
       cardSecure: "Kryptert og sikker. Vi lagrer ikke kortdetaljer.",
       methodVipps: "Vipps",
       methodVippsSub: "Rask betaling med mobil",
+      methodApplePay: "Apple Pay",
+      methodApplePaySub: "Bekreft med Touch ID / Face ID",
       methodCard: "Visa / Mastercard",
       methodCardSub: "Betalingskort",
       methodInvoice: "Faktura",
@@ -1555,11 +1968,13 @@ const T = {
       methodAccount: "Klubb-konto",
       methodAccountSub: "Trekkes fra medlemskonto",
       processingVipps: "Åpner Vipps...",
+      processingApplePay: "Bekreft med Face ID...",
       processingCard: "Sikker betaling...",
       processingInvoice: "Sender faktura...",
       processingAccount: "Trekker fra konto...",
       successTitle: "Betaling fullført!",
       successSubVipps: "Bookingen er bekreftet. Kvittering sendt til Vipps.",
+      successSubApplePay: "Bookingen er bekreftet. Kvittering i Wallet.",
       successSubCard: "Bookingen er bekreftet. Kvittering på e-post.",
       successSubInvoice: "Bookingen er bekreftet. Faktura sendt til din e-post.",
       successSubAccount: "Bookingen er bekreftet. Beløp trukket fra konto.",
@@ -1595,6 +2010,25 @@ const T = {
       cancelBooking: "Avlys",
       cancelConfirm: "Er du sikker på at du vil avlyse denne bookingen?",
       cancelled: "Bookingen er avlyst",
+      cancelTitle: "Avlys booking",
+      cancelFullRefund: "Du avlyser mer enn 24 timer før. Du får full refusjon ({amount} kr).",
+      cancelHalfRefund: "Du avlyser mellom 12–24 timer før. Du får 50% refusjon ({amount} kr).",
+      cancelNoRefund: "Du avlyser mindre enn 12 timer før. Ingen refusjon ({amount} kr).",
+      cancelOngoing: "Bookingen er allerede startet og kan ikke avlyses.",
+      cancelTooLate: "For sent å avlyse — bookingen har startet.",
+      refundLabel: "Refusjon",
+      refundFull: "100% refusjon",
+      refundHalf: "50% refusjon",
+      refundNone: "Ingen refusjon",
+      cancelledRefunded: "Avlyst — {amount} kr refundert til {method}",
+      cancelledNoRefund: "Avlyst — ingen refusjon",
+      // Påminnelser
+      reminderTitle: "Neste booking",
+      reminderBody: "{court} om {time} · kode {code}",
+      reminderToday: "i dag",
+      reminderSoon: "om {min} min",
+      reminderEmailSent: "Påminnelse sendt på e-post",
+      reminderInApp: "Påminnelser i appen og på e-post",
       noUpcoming: "Ingen kommende bookinger.",
       bookNow: "Book bane nå",
     },
@@ -1694,8 +2128,9 @@ const T = {
       loginBtn: "Logg inn",
       demoBtn: "Bruk demo-bruker",
       forgot: "Glemt passord?",
-      noAccount: "Ikke medlem enda?",
+      noAccount: "Har du ikke konto?",
       becomeMember: "Bli medlem",
+      createAccount: "Opprett konto",
       invalidLogin: "Sjekk e-post og passord (minst 4 tegn)",
       loginSuccess: "Velkommen tilbake!",
       logout: "Logg ut",
@@ -1713,6 +2148,39 @@ const T = {
       noRecent: "Ingen bookinger enda",
       greeting: "Hei",
       tapToLogin: "Trykk for å logge inn",
+      // Sign-up / opprett konto
+      signupTitle: "Opprett konto",
+      signupSub: "Du trenger ikke være medlem for å booke. Opprett en gratis konto for å komme i gang.",
+      fullName: "Fullt navn",
+      fullNamePh: "Ola Nordmann",
+      phone: "Telefon",
+      phonePh: "+47 ...",
+      passwordConfirm: "Bekreft passord",
+      passwordMin: "Passordet må være minst 6 tegn",
+      passwordMismatch: "Passordene er ikke like",
+      emailInvalid: "Ugyldig e-postadresse",
+      nameRequired: "Skriv inn fullt navn",
+      phoneInvalid: "Skriv inn et gyldig telefonnummer",
+      emailTaken: "Denne e-posten er allerede registrert",
+      acceptTerms: "Jeg godtar vilkårene og personvernerklæringen",
+      acceptTermsRequired: "Du må godta vilkårene for å fortsette",
+      becomeMemberOpt: "Jeg ønsker også å bli medlem (få medlemspris og rabatter)",
+      becomeMemberOptHint: "Du kan oppgradere senere fra profilen din.",
+      createBtn: "Opprett konto",
+      accountCreated: "Konto opprettet — velkommen, {name}!",
+      haveAccount: "Har du allerede konto?",
+      loginInstead: "Logg inn",
+      backToLogin: "← Tilbake til innlogging",
+      guestBookingHint: "Du booker som gjest. Opprett konto for å beholde bookingene dine på tvers av enheter.",
+      // Profilbilde
+      avatarTitle: "Profilbilde",
+      avatarChoose: "Hva vil du gjøre med bildet?",
+      avatarChange: "Bytt bilde",
+      avatarRemove: "Fjern bilde",
+      avatarUpdated: "Profilbilde oppdatert",
+      avatarRemoved: "Profilbilde fjernet",
+      avatarInvalidType: "Ugyldig bildefil",
+      avatarTooBig: "Bildet er for stort (maks 5 MB)",
     },
     about: {
       title: "Om klubben",
@@ -1765,6 +2233,187 @@ const T = {
         competition: "Konkurranse",
       },
       openSpot: "Åpen plass",
+    },
+    ladder: {
+      title: "Stigesystem",
+      tabBoard: "Stigen",
+      tabInbox: "Innboks",
+      tabProfile: "Min profil",
+      membersOnlyTitle: "Bare for medlemmer",
+      membersOnlyBody: "Stigesystemet er åpent for medlemmer av KTK. Bli medlem for å bli med i stigen, sende utfordringer og spille mot andre medlemmer.",
+      membersOnlyCta: "Bli medlem",
+      perkChallenges: "Utfordre andre medlemmer på din nivå",
+      perkRanking: "Egen plassering på klubbstigen",
+      perkRecos: "Smarte forslag til motstandere",
+      perkChat: "Innebygd chat for å avtale kamp",
+      perkSeason: "Sesong-statistikk og premiering for topp 3",
+      // Når du ikke er logget inn / ikke har konto
+      joinNowTitle: "Bare for medlemmer",
+      joinNowBody: "Stigespillet er for medlemmer av KTK. Meld deg på nå — det tar et minutt, og så kan du utfordre, spille kamper og klatre på stigen.",
+      joinNowCta: "Meld deg på nå",
+      joinNowLogin: "Jeg har allerede konto",
+      boardHelp: "Du kan utfordre noen 1–3 plasser over deg. Trykk på en grønn rad for å sende utfordring.",
+      challenge: "Utfordre",
+      youAreHere: "Du er her",
+      pos: "Plass",
+      wins: "Seire",
+      losses: "Tap",
+      played: "Kamper",
+      bestPos: "Beste plass",
+      away: "Borte",
+      setAway: "Sett meg som borte",
+      setBack: "Sett meg som tilbake",
+      awayHelp: "Bortemodus pauser stigen din — andre kan ikke utfordre deg, og du faller ikke ned ved inaktivitet.",
+      seeHistory: "Se kamphistorikk",
+      historyTitle: "Kamphistorikk",
+      noHistory: "Du har ingen spilte kamper ennå.",
+      vs: "mot",
+      won: "Vant",
+      lost: "Tapte",
+      newChallenge: "Ny utfordring",
+      challengeIntro: "Foreslå 2–3 tider du kan spille. Motstander velger en og bekrefter.",
+      challengeSent: "Utfordring sendt!",
+      acceptDeadlineFmt: "Aksepter innen {date}",
+      playByFmt: "Spill innen {date}",
+      proposedTimes: "Foreslåtte tider",
+      addTime: "Legg til tid",
+      send: "Send utfordring",
+      inboxEmpty: "Ingen pågående utfordringer.",
+      incoming: "Innkommende",
+      outgoing: "Utgående",
+      completedSection: "Ferdige",
+      accept: "Aksepter",
+      decline: "Avslå",
+      acceptedToast: "Utfordring akseptert! Avtal tid i chatten.",
+      declinedToast: "Utfordring avslått.",
+      withdraw: "Trekk tilbake",
+      withdrawn: "Utfordring trukket tilbake.",
+      pickTime: "Velg tid",
+      timeChosen: "Tid valgt — booking-flyten åpnes.",
+      reportResult: "Rapporter resultat",
+      openChat: "Åpne chat",
+      bookCourt: "Book bane for kampen",
+      statusPending: "Venter svar",
+      statusAccepted: "Akseptert",
+      statusScheduled: "Planlagt",
+      statusAwaitConfirm: "Vent på bekreftelse",
+      statusCompleted: "Ferdig",
+      statusDeclined: "Avslått",
+      statusExpired: "Utløpt",
+      youWonByDefault: "Walkover — du vinner",
+      bannerIncoming: "{name} har utfordret deg — svar innen {days} dager",
+      bannerConfirmResult: "Resultat venter bekreftelse fra deg",
+      bannerNextMatch: "Stige-kamp i morgen mot {name}",
+      bannerProposedTime: "{name} godtok — book bane og avtal tid",
+      modalIncomingTitle: "Ny utfordring",
+      modalIncomingBody: "{name} (#{pos}) utfordrer deg. Aksepter for å avtale tid i chatten.",
+      reportTitle: "Rapporter resultat",
+      reportIntro: "Skriv inn settene fra kampen mot {name}. Begge må bekrefte før plassering oppdateres.",
+      reportWinner: "Hvem vant?",
+      reportWinnerMe: "Jeg vant",
+      reportWinnerOpp: "{name} vant",
+      reportSet1: "Sett 1",
+      reportSet2: "Sett 2",
+      reportSet3: "Sett 3 (valgfri)",
+      reportSubmit: "Send resultat",
+      reportSent: "Resultat sendt — venter på bekreftelse fra {name}.",
+      confirmResult: "Bekreft resultat",
+      confirmResultBody: "{name} rapporterte: {sets}. Er dette riktig?",
+      confirmYes: "Ja, bekreft",
+      confirmDispute: "Nei, ikke riktig",
+      resultConfirmed: "Resultat bekreftet — stige oppdatert.",
+      resultDisputed: "Tvist registrert. Klubbansvarlig vil ta kontakt.",
+      chatTitle: "Chat med {name}",
+      chatStarted: "Chat opprettes når utfordring aksepteres.",
+      chatPlaceholder: "Skriv en melding…",
+      send2: "Send",
+      qrYes: "Passer for meg",
+      qrMove: "Må vi flytte?",
+      qrBook: "Jeg booker bane nå",
+      qrCancel: "Beklager, må kansellere",
+      homeBanner: "Du er #{pos}. Nærmeste mål: {name} (#{npos})",
+      homeCta: "Åpne stigen",
+      noOpponentsYet: "Du er på topp! Vent til noen utfordrer deg.",
+      seasonLabel: "Sesong",
+      seasonSpring: "Vår 2026",
+      // Anbefalte motstandere
+      recommended: "Anbefalte motstandere",
+      recommendedHelp: "Spillere som passer deg basert på aktivitet, nivå og når dere sist spilte.",
+      recoNew: "Aldri spilt før",
+      recoActive: "Spilte nylig",
+      recoSimilar: "Nesten samme nivå",
+      recoRematch: "Klar for rematch",
+      recoH2H: "Tidligere: {wl}",
+      noRecos: "Ingen tilgjengelige motstandere akkurat nå.",
+      seasonAutumn: "Høst 2026",
+      noShow: "Møtte ikke opp",
+      noShowBtn: "Motstander møtte ikke",
+      noShowConfirm: "Marker {name} som ikke-møtt? Du får walkover, og {name} får en strike på rullebladet (maks 2 før straff).",
+      noShowDone: "Registrert. {name} har nå {count} no-show(s).",
+      noShowPenalty: "{name} har 2 no-shows og er flyttet 5 plasser ned + satt i 14 dagers karantene.",
+      noShowsLabel: "No-shows",
+      noShowWarn: "{count} av 2 no-shows. Én til = automatisk straff.",
+    },
+    admin: {
+      title: "Admin",
+      heroTitle: "Moderator-panel",
+      heroSub: "Du har full tilgang til å redigere stigen og innholdet i appen.",
+      becomeMod: "Bli moderator (demo-modus)",
+      leaveMod: "Slå av moderator-modus",
+      modeOn: "Moderator-modus aktivert.",
+      modeOff: "Moderator-modus slått av.",
+      seasonSection: "Sesong-innstillinger",
+      seasonStart: "Start-dato",
+      seasonEnd: "Slutt-dato",
+      seasonName: "Sesong-navn",
+      saveSeason: "Lagre sesong",
+      seasonSaved: "Sesong lagret.",
+      resetSeason: "Nullstill sesongen",
+      resetSeasonConfirm: "Sikker på at du vil nullstille? Alle vinn/tap og no-shows slettes, men plasseringer beholdes.",
+      seasonReset: "Sesongen er nullstilt.",
+      ladderSection: "Stige-administrasjon",
+      editMember: "Rediger",
+      memberPos: "Plass",
+      memberWins: "S",
+      memberLosses: "T",
+      memberNoShows: "NS",
+      saveMember: "Lagre",
+      memberSaved: "Lagret.",
+      removeAway: "Fjern bortemodus",
+      forceConfirm: "Tvangs-bekreft",
+      forceConfirmConfirm: "Tvangs-bekrefte resultatet for {name}?",
+      forceConfirmed: "Resultat tvangs-bekreftet.",
+      challengesSection: "Pågående utfordringer",
+      noChallenges: "Ingen aktive utfordringer.",
+      cancelChallenge: "Kanseller",
+      cancelled: "Utfordring kansellert.",
+      newsSection: "Nyheter / arrangement",
+      newsHelp: "Klikk på et element for å redigere eller skjul.",
+      newsHide: "Skjul",
+      newsShow: "Vis",
+      newsHidden: "Element skjult.",
+      newsRestored: "Element gjenopprettet.",
+      facilitiesSection: "Baner & lys",
+      facilitiesHelp: "Skru baner av/på, og bestem når lyset er tilgjengelig per bane.",
+      courtEnabled: "Åpen for booking",
+      courtDisabled: "Stengt",
+      lightOnAt: "Lys på fra (kl)",
+      lightOffAt: "Lys av (kl)",
+      courtNote: "Beskjed (vises til medlemmer)",
+      courtNotePh: "F.eks. «stengt for vedlikehold mandag»",
+      saveCourt: "Lagre bane",
+      courtSaved: "Bane oppdatert.",
+      lightsAllOn: "Skru på alt lys",
+      lightsAllOff: "Skru av alt lys",
+      lightsAllOnDone: "Lys skrudd på alle baner.",
+      lightsAllOffDone: "Lys skrudd av alle baner.",
+      courtClosedBanner: "Stengt: {note}",
+      outsideHours: "Lyset er ikke på",
+      dangerSection: "Farlige handlinger",
+      clearAll: "Slett alle lokale data",
+      clearAllConfirm: "Sletter ALT (bookinger, bruker, stige, invitasjoner, innstillinger). Sikker?",
+      cleared: "Alle lokale data er slettet.",
+      ofMembers: "av {n} medlemmer",
     },
     news: {
       title: "Siste nytt",
@@ -1914,6 +2563,22 @@ const T = {
       indoorHours: "Monday – Sunday: 07:00 – 23:00 · open year-round",
       outdoorHours: "Outdoor season approx. April 15 – October 1",
       contact: "Contact the club",
+      ctaGuestEyebrow: "New here?",
+      ctaGuestTitle: "Play tennis in Kolbotn — join today",
+      ctaGuestSub: "Create a free account and book a court in minutes. Become a member for member pricing, ladder play and more.",
+      ctaGuestPerk1: "Booking in 30 seconds",
+      ctaGuestPerk2: "Member rate from 200 NOK/hour",
+      ctaGuestPerk3: "Join the ladder",
+      ctaGuestPrimary: "Create free account",
+      ctaGuestSecondary: "Log in",
+      ctaUpgradeEyebrow: "Hi {name}!",
+      ctaUpgradeTitle: "Upgrade to member",
+      ctaUpgradeSub: "Save up to 100 NOK per hour, get access to the ladder, and become part of the club.",
+      ctaUpgradePerk1: "Member rate on every court",
+      ctaUpgradePerk2: "Ladder play and tournaments",
+      ctaUpgradePerk3: "Advance booking and priority",
+      ctaUpgradePrimary: "Become a member",
+      ctaUpgradeSecondary: "Later",
     },
     pay: {
       title: "Choose payment method",
@@ -1938,6 +2603,8 @@ const T = {
       cardSecure: "Encrypted and secure. We don't store card details.",
       methodVipps: "Vipps",
       methodVippsSub: "Quick mobile payment",
+      methodApplePay: "Apple Pay",
+      methodApplePaySub: "Confirm with Touch ID / Face ID",
       methodCard: "Visa / Mastercard",
       methodCardSub: "Credit or debit card",
       methodInvoice: "Invoice",
@@ -1945,11 +2612,13 @@ const T = {
       methodAccount: "Club account",
       methodAccountSub: "Charged to your member account",
       processingVipps: "Opening Vipps...",
+      processingApplePay: "Confirm with Face ID...",
       processingCard: "Secure payment...",
       processingInvoice: "Sending invoice...",
       processingAccount: "Charging account...",
       successTitle: "Payment complete!",
       successSubVipps: "Booking confirmed. Receipt sent to Vipps.",
+      successSubApplePay: "Booking confirmed. Receipt in Wallet.",
       successSubCard: "Booking confirmed. Receipt by email.",
       successSubInvoice: "Booking confirmed. Invoice sent to your email.",
       successSubAccount: "Booking confirmed. Amount charged to your account.",
@@ -1985,6 +2654,24 @@ const T = {
       cancelBooking: "Cancel",
       cancelConfirm: "Are you sure you want to cancel this booking?",
       cancelled: "Booking cancelled",
+      cancelTitle: "Cancel booking",
+      cancelFullRefund: "You're cancelling more than 24 hours ahead. You'll get a full refund ({amount} NOK).",
+      cancelHalfRefund: "You're cancelling between 12–24 hours ahead. You'll get a 50% refund ({amount} NOK).",
+      cancelNoRefund: "You're cancelling less than 12 hours ahead. No refund ({amount} NOK).",
+      cancelOngoing: "Booking has already started and cannot be cancelled.",
+      cancelTooLate: "Too late to cancel — booking has started.",
+      refundLabel: "Refund",
+      refundFull: "100% refund",
+      refundHalf: "50% refund",
+      refundNone: "No refund",
+      cancelledRefunded: "Cancelled — {amount} NOK refunded to {method}",
+      cancelledNoRefund: "Cancelled — no refund",
+      reminderTitle: "Next booking",
+      reminderBody: "{court} in {time} · code {code}",
+      reminderToday: "today",
+      reminderSoon: "in {min} min",
+      reminderEmailSent: "Reminder sent by email",
+      reminderInApp: "Reminders in app and by email",
       noUpcoming: "No upcoming bookings.",
       bookNow: "Book a court now",
     },
@@ -2083,8 +2770,9 @@ const T = {
       loginBtn: "Log in",
       demoBtn: "Use demo account",
       forgot: "Forgot password?",
-      noAccount: "Not a member yet?",
+      noAccount: "Don't have an account?",
       becomeMember: "Become a member",
+      createAccount: "Create account",
       invalidLogin: "Check email and password (at least 4 characters)",
       loginSuccess: "Welcome back!",
       logout: "Log out",
@@ -2102,6 +2790,38 @@ const T = {
       noRecent: "No bookings yet",
       greeting: "Hi",
       tapToLogin: "Tap to log in",
+      // Sign-up
+      signupTitle: "Create account",
+      signupSub: "You don't need to be a member to book. Create a free account to get started.",
+      fullName: "Full name",
+      fullNamePh: "Jane Doe",
+      phone: "Phone",
+      phonePh: "+47 ...",
+      passwordConfirm: "Confirm password",
+      passwordMin: "Password must be at least 6 characters",
+      passwordMismatch: "Passwords don't match",
+      emailInvalid: "Invalid email address",
+      nameRequired: "Please enter your full name",
+      phoneInvalid: "Please enter a valid phone number",
+      emailTaken: "This email is already registered",
+      acceptTerms: "I accept the terms and the privacy policy",
+      acceptTermsRequired: "You must accept the terms to continue",
+      becomeMemberOpt: "I'd also like to become a member (member pricing & discounts)",
+      becomeMemberOptHint: "You can upgrade later from your profile.",
+      createBtn: "Create account",
+      accountCreated: "Account created — welcome, {name}!",
+      haveAccount: "Already have an account?",
+      loginInstead: "Log in",
+      backToLogin: "← Back to login",
+      guestBookingHint: "You're booking as a guest. Create an account to keep your bookings across devices.",
+      avatarTitle: "Profile picture",
+      avatarChoose: "What would you like to do with your photo?",
+      avatarChange: "Change photo",
+      avatarRemove: "Remove photo",
+      avatarUpdated: "Profile picture updated",
+      avatarRemoved: "Profile picture removed",
+      avatarInvalidType: "Invalid image file",
+      avatarTooBig: "Image too large (max 5 MB)",
     },
     about: {
       title: "About the club",
@@ -2154,6 +2874,185 @@ const T = {
         competition: "Competition",
       },
       openSpot: "Open spot",
+    },
+    ladder: {
+      title: "Ladder",
+      tabBoard: "Ladder",
+      tabInbox: "Inbox",
+      tabProfile: "My profile",
+      membersOnlyTitle: "Members only",
+      membersOnlyBody: "The ladder is open to KTK members. Become a member to join the ladder, send challenges, and play other members.",
+      membersOnlyCta: "Become a member",
+      perkChallenges: "Challenge other members at your level",
+      perkRanking: "Your own spot on the club ladder",
+      perkRecos: "Smart opponent recommendations",
+      perkChat: "Built-in chat to arrange matches",
+      perkSeason: "Season stats and prizes for top 3",
+      joinNowTitle: "Members only",
+      joinNowBody: "The ladder is for KTK members. Sign up now — it takes a minute, and then you can challenge, play matches, and climb the ladder.",
+      joinNowCta: "Sign up now",
+      joinNowLogin: "I already have an account",
+      boardHelp: "You can challenge anyone 1–3 spots above you. Tap a green row to send a challenge.",
+      challenge: "Challenge",
+      youAreHere: "You are here",
+      pos: "Position",
+      wins: "Wins",
+      losses: "Losses",
+      played: "Matches",
+      bestPos: "Best position",
+      away: "Away",
+      setAway: "Set me as away",
+      setBack: "Set me as back",
+      awayHelp: "Away mode pauses your ladder — others can't challenge you, and you don't drop from inactivity.",
+      seeHistory: "See match history",
+      historyTitle: "Match history",
+      noHistory: "You have no matches played yet.",
+      vs: "vs",
+      won: "Won",
+      lost: "Lost",
+      newChallenge: "New challenge",
+      challengeIntro: "Suggest 2–3 times you can play. Opponent picks one and confirms.",
+      challengeSent: "Challenge sent!",
+      acceptDeadlineFmt: "Accept by {date}",
+      playByFmt: "Play by {date}",
+      proposedTimes: "Proposed times",
+      addTime: "Add time",
+      send: "Send challenge",
+      inboxEmpty: "No active challenges.",
+      incoming: "Incoming",
+      outgoing: "Outgoing",
+      completedSection: "Completed",
+      accept: "Accept",
+      decline: "Decline",
+      acceptedToast: "Challenge accepted! Arrange time in the chat.",
+      declinedToast: "Challenge declined.",
+      withdraw: "Withdraw",
+      withdrawn: "Challenge withdrawn.",
+      pickTime: "Pick time",
+      timeChosen: "Time chosen — booking flow opens.",
+      reportResult: "Report result",
+      openChat: "Open chat",
+      bookCourt: "Book a court for the match",
+      statusPending: "Awaiting reply",
+      statusAccepted: "Accepted",
+      statusScheduled: "Scheduled",
+      statusAwaitConfirm: "Awaiting confirmation",
+      statusCompleted: "Completed",
+      statusDeclined: "Declined",
+      statusExpired: "Expired",
+      youWonByDefault: "Walkover — you win",
+      bannerIncoming: "{name} has challenged you — reply within {days} days",
+      bannerConfirmResult: "A result is waiting for your confirmation",
+      bannerNextMatch: "Ladder match tomorrow vs {name}",
+      bannerProposedTime: "{name} accepted — book a court and confirm time",
+      modalIncomingTitle: "New challenge",
+      modalIncomingBody: "{name} (#{pos}) challenges you. Accept to arrange time in the chat.",
+      reportTitle: "Report result",
+      reportIntro: "Enter the sets from your match against {name}. Both must confirm before positions update.",
+      reportWinner: "Who won?",
+      reportWinnerMe: "I won",
+      reportWinnerOpp: "{name} won",
+      reportSet1: "Set 1",
+      reportSet2: "Set 2",
+      reportSet3: "Set 3 (optional)",
+      reportSubmit: "Submit result",
+      reportSent: "Result sent — waiting on {name} to confirm.",
+      confirmResult: "Confirm result",
+      confirmResultBody: "{name} reported: {sets}. Is this correct?",
+      confirmYes: "Yes, confirm",
+      confirmDispute: "No, not correct",
+      resultConfirmed: "Result confirmed — ladder updated.",
+      resultDisputed: "Dispute filed. The club admin will follow up.",
+      chatTitle: "Chat with {name}",
+      chatStarted: "Chat opens once the challenge is accepted.",
+      chatPlaceholder: "Type a message…",
+      send2: "Send",
+      qrYes: "Works for me",
+      qrMove: "Need to reschedule?",
+      qrBook: "I'm booking a court now",
+      qrCancel: "Sorry, have to cancel",
+      homeBanner: "You're #{pos}. Next target: {name} (#{npos})",
+      homeCta: "Open ladder",
+      noOpponentsYet: "You're on top! Wait for someone to challenge you.",
+      seasonLabel: "Season",
+      seasonSpring: "Spring 2026",
+      recommended: "Recommended opponents",
+      recommendedHelp: "Players we think suit you based on activity, level, and when you last played.",
+      recoNew: "Never played before",
+      recoActive: "Played recently",
+      recoSimilar: "Similar level",
+      recoRematch: "Time for a rematch",
+      recoH2H: "Head-to-head: {wl}",
+      noRecos: "No available opponents right now.",
+      seasonAutumn: "Autumn 2026",
+      noShow: "No-show",
+      noShowBtn: "Opponent didn't show",
+      noShowConfirm: "Mark {name} as no-show? You get a walkover, and {name} gets a strike (max 2 before penalty).",
+      noShowDone: "Registered. {name} now has {count} no-show(s).",
+      noShowPenalty: "{name} has 2 no-shows — dropped 5 places and benched 14 days.",
+      noShowsLabel: "No-shows",
+      noShowWarn: "{count} of 2 no-shows. One more = automatic penalty.",
+    },
+    admin: {
+      title: "Admin",
+      heroTitle: "Moderator panel",
+      heroSub: "You have full access to edit the ladder and app content.",
+      becomeMod: "Become moderator (demo)",
+      leaveMod: "Leave moderator mode",
+      modeOn: "Moderator mode enabled.",
+      modeOff: "Moderator mode disabled.",
+      seasonSection: "Season settings",
+      seasonStart: "Start date",
+      seasonEnd: "End date",
+      seasonName: "Season name",
+      saveSeason: "Save season",
+      seasonSaved: "Season saved.",
+      resetSeason: "Reset season",
+      resetSeasonConfirm: "Sure you want to reset? All wins/losses and no-shows clear, but positions remain.",
+      seasonReset: "Season has been reset.",
+      ladderSection: "Ladder administration",
+      editMember: "Edit",
+      memberPos: "Pos",
+      memberWins: "W",
+      memberLosses: "L",
+      memberNoShows: "NS",
+      saveMember: "Save",
+      memberSaved: "Saved.",
+      removeAway: "Remove away mode",
+      forceConfirm: "Force confirm",
+      forceConfirmConfirm: "Force-confirm the result for {name}?",
+      forceConfirmed: "Result force-confirmed.",
+      challengesSection: "Active challenges",
+      noChallenges: "No active challenges.",
+      cancelChallenge: "Cancel",
+      cancelled: "Challenge cancelled.",
+      newsSection: "News / events",
+      newsHelp: "Click an item to edit or hide.",
+      newsHide: "Hide",
+      newsShow: "Show",
+      newsHidden: "Item hidden.",
+      newsRestored: "Item restored.",
+      facilitiesSection: "Courts & lights",
+      facilitiesHelp: "Toggle courts on/off and decide when lights are available per court.",
+      courtEnabled: "Open for booking",
+      courtDisabled: "Closed",
+      lightOnAt: "Light on from (h)",
+      lightOffAt: "Light off (h)",
+      courtNote: "Notice (shown to members)",
+      courtNotePh: "E.g. \"closed for maintenance Monday\"",
+      saveCourt: "Save court",
+      courtSaved: "Court updated.",
+      lightsAllOn: "Turn all lights on",
+      lightsAllOff: "Turn all lights off",
+      lightsAllOnDone: "Lights on for all courts.",
+      lightsAllOffDone: "Lights off for all courts.",
+      courtClosedBanner: "Closed: {note}",
+      outsideHours: "Lights are off",
+      dangerSection: "Danger zone",
+      clearAll: "Clear all local data",
+      clearAllConfirm: "Deletes EVERYTHING (bookings, user, ladder, invitations, settings). Sure?",
+      cleared: "All local data cleared.",
+      ofMembers: "of {n} members",
     },
     news: {
       title: "News",
@@ -2299,6 +3198,42 @@ const COURTS = [
   { id: "grus-4",  nameKey: { nb: "Grusbane 4 (Ingierkollen)", en: "Clay 4 (Ingierkollen)" } },
 ];
 
+/* ================== FACILITIES (admin styrer baner & lys) ================== */
+function defaultFacilities() {
+  const courts = {};
+  COURTS.forEach(c => {
+    courts[c.id] = { enabled: true, openHour: 7, closeHour: 23, note: "" };
+  });
+  return { courts, lightsMaster: true };
+}
+function loadFacilities() {
+  const cached = JSON.parse(localStorage.getItem("ktk.facilities") || "null");
+  if (!cached || !cached.courts) {
+    const def = defaultFacilities();
+    localStorage.setItem("ktk.facilities", JSON.stringify(def));
+    return def;
+  }
+  // Migrasjon: sørg for at alle baner finnes
+  COURTS.forEach(c => {
+    if (!cached.courts[c.id]) cached.courts[c.id] = { enabled: true, openHour: 7, closeHour: 23, note: "" };
+  });
+  if (typeof cached.lightsMaster !== "boolean") cached.lightsMaster = true;
+  return cached;
+}
+let facilities = loadFacilities();
+function saveFacilities() { localStorage.setItem("ktk.facilities", JSON.stringify(facilities)); }
+function courtCfg(id) { return facilities.courts[id] || { enabled: true, openHour: 7, closeHour: 23, note: "" }; }
+function isCourtBookable(id) {
+  if (!facilities.lightsMaster) return false;
+  return !!courtCfg(id).enabled;
+}
+function isHourLit(courtId, hour) {
+  if (!facilities.lightsMaster) return false;
+  const c = courtCfg(courtId);
+  if (!c.enabled) return false;
+  return hour >= c.openHour && hour < c.closeHour;
+}
+
 // Strøtimer – 5 tidsvinduer
 const STROTIMER = [
   { key: "earlyBird",    member: 200, nonMember: 300 },
@@ -2398,6 +3333,160 @@ function doDemoLogin() {
   });
 }
 
+/* ---- Profilbilde (last opp, endre, fjern) ---- */
+function openAvatarPicker() {
+  if (!user) { go("login"); return; }
+  // Hvis bruker har et bilde — vis modal med valg "Endre" / "Fjern"
+  if (user.avatar) {
+    const m = document.getElementById("modal");
+    document.getElementById("modal-title").textContent = tr("auth.avatarTitle");
+    document.getElementById("modal-body").innerHTML = `
+      <div style="text-align:center;margin-bottom:14px">
+        <div style="width:96px;height:96px;border-radius:50%;background:url(${user.avatar}) center/cover;margin:0 auto;border:2px solid var(--primary);"></div>
+      </div>
+      <p style="margin:0;font-size:13px;text-align:center">${tr("auth.avatarChoose")}</p>
+    `;
+    const cancel = document.getElementById("modal-cancel");
+    const confirm = document.getElementById("modal-confirm");
+    cancel.textContent = tr("auth.avatarRemove");
+    confirm.textContent = tr("auth.avatarChange");
+    m.classList.add("show");
+    cancel.onclick = () => { m.classList.remove("show"); removeAvatar(); };
+    confirm.onclick = () => { m.classList.remove("show"); document.getElementById("pf-avatar-input").click(); };
+    return;
+  }
+  // Ingen bilde fra før — åpne filvelger direkte
+  document.getElementById("pf-avatar-input").click();
+}
+
+function handleAvatarFile(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    toast(tr("auth.avatarInvalidType"));
+    return;
+  }
+  // Maks 5 MB rå-fil før komprimering
+  if (file.size > 5 * 1024 * 1024) {
+    toast(tr("auth.avatarTooBig"));
+    return;
+  }
+  // Les til Image og krymp til 256x256 før lagring
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      const size = 256;
+      const canvas = document.createElement("canvas");
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext("2d");
+      // Kvadratisk crop fra senter
+      const minDim = Math.min(img.width, img.height);
+      const sx = (img.width - minDim) / 2;
+      const sy = (img.height - minDim) / 2;
+      ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, size, size);
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+      saveAvatar(dataUrl);
+    };
+    img.onerror = () => toast(tr("auth.avatarInvalidType"));
+    img.src = e.target.result;
+  };
+  reader.onerror = () => toast(tr("auth.avatarInvalidType"));
+  reader.readAsDataURL(file);
+  // Reset filvelger så samme fil kan velges på nytt senere
+  event.target.value = "";
+}
+
+function saveAvatar(dataUrl) {
+  if (!user) return;
+  user.avatar = dataUrl;
+  localStorage.setItem("ktk.user", JSON.stringify(user));
+  // Oppdater også i accounts-listen om den finnes
+  try {
+    const accounts = loadAccounts();
+    const idx = accounts.findIndex(a => a.email === user.email);
+    if (idx >= 0) {
+      accounts[idx].avatar = dataUrl;
+      saveAccounts(accounts);
+    }
+  } catch {}
+  toast(tr("auth.avatarUpdated"));
+  if (currentScreen === "profile") renderProfile();
+  updateUserUI();
+}
+
+function removeAvatar() {
+  if (!user) return;
+  delete user.avatar;
+  localStorage.setItem("ktk.user", JSON.stringify(user));
+  try {
+    const accounts = loadAccounts();
+    const idx = accounts.findIndex(a => a.email === user.email);
+    if (idx >= 0) {
+      delete accounts[idx].avatar;
+      saveAccounts(accounts);
+    }
+  } catch {}
+  toast(tr("auth.avatarRemoved"));
+  if (currentScreen === "profile") renderProfile();
+  updateUserUI();
+}
+
+/* ---- Sign-up (opprett konto, også for ikke-medlemmer) ---- */
+function loadAccounts() {
+  return JSON.parse(localStorage.getItem("ktk.accounts") || "[]");
+}
+function saveAccounts(list) {
+  localStorage.setItem("ktk.accounts", JSON.stringify(list));
+}
+
+function showSignupError(msg) {
+  const el = document.getElementById("signup-error");
+  el.textContent = msg;
+  el.classList.add("show");
+}
+
+function doSignup() {
+  const name = document.getElementById("su-name").value.trim();
+  const email = document.getElementById("su-email").value.trim().toLowerCase();
+  const phone = document.getElementById("su-phone").value.trim();
+  const pw = document.getElementById("su-password").value;
+  const pw2 = document.getElementById("su-password2").value;
+  const acceptedTerms = document.getElementById("su-terms").checked;
+  const wantsMember = document.getElementById("su-member").checked;
+  const errEl = document.getElementById("signup-error");
+  errEl.classList.remove("show");
+
+  // Validering
+  if (!name || name.length < 2) return showSignupError(tr("auth.nameRequired"));
+  if (!/^\S+@\S+\.\S+$/.test(email)) return showSignupError(tr("auth.emailInvalid"));
+  if (phone && !/^[+\d][\d\s\-]{6,}$/.test(phone)) return showSignupError(tr("auth.phoneInvalid"));
+  if (pw.length < 6) return showSignupError(tr("auth.passwordMin"));
+  if (pw !== pw2) return showSignupError(tr("auth.passwordMismatch"));
+  if (!acceptedTerms) return showSignupError(tr("auth.acceptTermsRequired"));
+
+  // Sjekk om e-post allerede finnes
+  const accounts = loadAccounts();
+  if (accounts.some(a => a.email === email)) {
+    return showSignupError(tr("auth.emailTaken"));
+  }
+
+  // Opprett konto. Demo: vi lagrer ikke ekte passord-hash — kun en placeholder
+  const newAccount = {
+    name, email,
+    phone: phone || "",
+    isMember: wantsMember,
+    memberNumber: wantsMember ? String(Math.floor(10000 + Math.random() * 90000)) : "",
+    joinedAt: Date.now(),
+    pwLen: pw.length, // bare lengde for demo, ingen ekte hash
+  };
+  accounts.push(newAccount);
+  saveAccounts(accounts);
+
+  toast(tr("auth.accountCreated").replace("{name}", name.split(" ")[0]));
+  loginUser(newAccount);
+}
+
 function loginUser(u) {
   user = u;
   isMember = !!u.isMember;
@@ -2442,8 +3531,17 @@ function updateUserUI() {
   const t = document.getElementById("ub-t");
   const s = document.getElementById("ub-s");
   if (user) {
-    av.textContent = initials(user.name);
-    av.classList.remove("empty");
+    if (user.avatar) {
+      av.textContent = "";
+      av.classList.remove("empty");
+      av.classList.add("has-img");
+      av.style.backgroundImage = `url(${user.avatar})`;
+    } else {
+      av.textContent = initials(user.name);
+      av.classList.remove("empty");
+      av.classList.remove("has-img");
+      av.style.backgroundImage = "";
+    }
     t.textContent = `${tr("auth.greeting")}, ${user.name.split(" ")[0]}!`;
     t.removeAttribute("data-i18n");
     s.textContent = isMember
@@ -2453,6 +3551,8 @@ function updateUserUI() {
   } else {
     av.textContent = "?";
     av.classList.add("empty");
+    av.classList.remove("has-img");
+    av.style.backgroundImage = "";
     t.textContent = tr("auth.loginShort");
     t.setAttribute("data-i18n", "auth.loginShort");
     s.textContent = tr("auth.tapToLogin");
@@ -2480,7 +3580,19 @@ function updateUserUI() {
 
 function renderProfile() {
   if (!user) return;
-  document.getElementById("pf-avatar").textContent = initials(user.name);
+  // Avatar: bilde eller initialer
+  const av = document.getElementById("pf-avatar");
+  const avText = document.getElementById("pf-avatar-text");
+  if (avText) avText.textContent = initials(user.name);
+  if (av) {
+    if (user.avatar) {
+      av.classList.add("has-img");
+      av.style.backgroundImage = `url(${user.avatar})`;
+    } else {
+      av.classList.remove("has-img");
+      av.style.backgroundImage = "";
+    }
+  }
   document.getElementById("pf-name").textContent = user.name;
   document.getElementById("pf-email").textContent = user.email;
   const badge = document.getElementById("pf-badge");
@@ -2518,6 +3630,31 @@ function renderProfile() {
         </div>`;
       host.appendChild(card);
     });
+  }
+  // Admin / moderator-seksjon
+  const adminHost = document.getElementById("pf-admin-section");
+  if (adminHost) {
+    if (user.isMod) {
+      adminHost.innerHTML = `
+        <div class="profile-section">
+          <div class="hd">${tr("admin.title")}</div>
+          <div class="card" style="padding:12px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#bfdbfe">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+              <div style="flex:1;min-width:120px">
+                <div style="font-weight:700">⚙ ${tr("admin.heroTitle")}</div>
+                <div class="muted" style="font-size:12px;margin-top:2px">${tr("admin.heroSub")}</div>
+              </div>
+              <button class="btn" style="padding:8px 14px" onclick="go('admin')">${tr("admin.title")} →</button>
+            </div>
+            <button class="btn secondary" style="margin-top:10px;width:100%;font-size:12px" onclick="toggleModRole()">${tr("admin.leaveMod")}</button>
+          </div>
+        </div>`;
+    } else {
+      adminHost.innerHTML = `
+        <div class="profile-section">
+          <button class="btn secondary" style="width:100%" onclick="toggleModRole()">${tr("admin.becomeMod")}</button>
+        </div>`;
+    }
   }
 }
 
@@ -2562,6 +3699,18 @@ function toast(msg) {
 function go(screen) {
   // Beskytt profil-ruten: hvis ikke logget inn, send til login
   if (screen === "profile" && !user) screen = "login";
+  // Stige-rutene: ikke-innloggede ledes til signup/login via modal.
+  // Innloggede ikke-medlemmer får lov å åpne skjermen — den viser
+  // selv "kun for medlemmer"-tilstand når renderes.
+  if (["ladder","ladderChat","ladderHistory"].includes(screen)) {
+    if (!user) {
+      if (typeof openLadder === "function") { openLadder(); return; }
+      screen = "login";
+    } else if (!isMemberUser() && (screen === "ladderChat" || screen === "ladderHistory")) {
+      // Underskjermer (chat/historikk) gir ingen mening uten medlemskap
+      screen = "ladder";
+    }
+  }
   currentScreen = screen;
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById("screen-" + screen)?.classList.add("active");
@@ -2588,11 +3737,26 @@ function formatDate(d) {
 function renderCourts() {
   const host = document.getElementById("court-chips");
   host.innerHTML = "";
+  // Hvis valgt bane er stengt — flytt valg til første åpne
+  if (!isCourtBookable(selectedCourt)) {
+    const firstOpen = COURTS.find(c => isCourtBookable(c.id));
+    if (firstOpen) selectedCourt = firstOpen.id;
+  }
   COURTS.forEach(c => {
+    const closed = !isCourtBookable(c.id);
     const el = document.createElement("button");
     el.className = "chip" + (c.id === selectedCourt ? " active" : "");
-    el.textContent = c.nameKey[lang];
-    el.onclick = () => { selectedCourt = c.id; renderCourts(); renderSlots(); };
+    if (closed) {
+      el.style.opacity = ".45";
+      el.style.textDecoration = "line-through";
+      el.style.cursor = "not-allowed";
+      el.title = courtCfg(c.id).note || tr("admin.courtDisabled");
+      el.textContent = "🚧 " + c.nameKey[lang];
+      el.onclick = () => toast(courtCfg(c.id).note || tr("admin.courtDisabled"));
+    } else {
+      el.textContent = c.nameKey[lang];
+      el.onclick = () => { selectedCourt = c.id; renderCourts(); renderSlots(); };
+    }
     host.appendChild(el);
   });
 }
@@ -2655,24 +3819,62 @@ function renderSlots() {
   host.innerHTML = "";
   const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() + selectedDateOffset);
   const iso = toISO(d);
+
+  // Hvis bane er stengt: vis stengt-banner i stedet
+  const cfg = courtCfg(selectedCourt);
+  if (!isCourtBookable(selectedCourt)) {
+    const note = cfg.note || tr("admin.courtDisabled");
+    host.innerHTML = `
+      <div style="grid-column:1/-1;padding:24px;text-align:center;background:#fff5f5;border:1px dashed #f3a3a3;border-radius:12px;color:#882020">
+        <div style="font-size:32px;margin-bottom:6px">🚧</div>
+        <div style="font-weight:700">${tr("admin.courtDisabled")}</div>
+        <div style="margin-top:6px;font-size:13px">${note}</div>
+      </div>`;
+    return;
+  }
+
   const others = otherBookingsFor(selectedCourt, iso);
+  // Sjekk om dette er dagens dato — da må vi sperre tider som allerede er passert
+  const now = new Date();
+  const today = new Date(); today.setHours(0,0,0,0);
+  const isToday = d.getTime() === today.getTime();
+  const currentHour = now.getHours();
+  const PASSED_LABEL = lang === "nb" ? "Passert" : "Passed";
+
   for (let h = 7; h <= 22; h++) {
     const mine = bookings.find(b => b.courtId === selectedCourt && b.dateISO === iso && b.hour === h);
     const otherName = others.get(h);
     const booked = !!mine || !!otherName;
+    const lit = isHourLit(selectedCourt, h);
+    // Tid er passert hvis det er i dag og timen er nå eller tidligere
+    const passed = isToday && h <= currentHour;
     const price = courtPrice(d, h, isMember);
     const el = document.createElement("div");
     let cls = "slot";
-    if (mine) cls += " mine";
+    if (passed || !lit) cls += " booked";
+    else if (mine) cls += " mine";
     else if (otherName) cls += " booked";
     el.className = cls;
     let nameLine = "";
+    if (passed) {
+      el.style.opacity = ".4";
+      el.style.cursor = "not-allowed";
+      el.title = PASSED_LABEL;
+    } else if (!lit) {
+      el.style.opacity = ".55";
+      el.title = tr("admin.outsideHours");
+    }
     if (mine) nameLine = `<div class="n">${shortName(mine.holderName)}</div>`;
     else if (otherName) nameLine = `<div class="n">${otherName}</div>`;
+    const priceLine = passed
+      ? `⏱ ${PASSED_LABEL}`
+      : !lit ? `💡 ${tr("admin.outsideHours")}`
+      : booked ? tr("booking.booked")
+      : price + " kr";
     el.innerHTML = `<div class="t">${String(h).padStart(2,"0")}:00</div>
-                    <div class="p">${booked ? tr("booking.booked") : price + " kr"}</div>
+                    <div class="p">${priceLine}</div>
                     ${nameLine}`;
-    if (!booked) el.onclick = () => bookSlot(h, d, iso, price);
+    if (!passed && lit && !booked) el.onclick = () => bookSlot(h, d, iso, price);
     host.appendChild(el);
   }
 }
@@ -2691,10 +3893,10 @@ let paymentSelection = "vipps";
 let pendingBooking = null;
 
 const PAYMENT_METHODS = [
-  { id: "vipps",   logoClass: "logo-vipps",   logoText: "vipps",  titleKey: "pay.methodVipps",   subKey: "pay.methodVippsSub",   processingKey: "pay.processingVipps",   successKey: "pay.successSubVipps" },
-  { id: "card",    logoClass: "logo-card",    logoText: "VISA",   titleKey: "pay.methodCard",    subKey: "pay.methodCardSub",    processingKey: "pay.processingCard",    successKey: "pay.successSubCard" },
-  { id: "invoice", logoClass: "logo-invoice", logoText: "FAKT",   titleKey: "pay.methodInvoice", subKey: "pay.methodInvoiceSub", processingKey: "pay.processingInvoice", successKey: "pay.successSubInvoice" },
-  { id: "account", logoClass: "logo-klubb",   logoText: "KTK",    titleKey: "pay.methodAccount", subKey: "pay.methodAccountSub", processingKey: "pay.processingAccount", successKey: "pay.successSubAccount" },
+  { id: "vipps",    logoClass: "logo-vipps",    logoText: "vipps",  titleKey: "pay.methodVipps",    subKey: "pay.methodVippsSub",    processingKey: "pay.processingVipps",    successKey: "pay.successSubVipps" },
+  { id: "applepay", logoClass: "logo-applepay", logoText: "Pay",   titleKey: "pay.methodApplePay", subKey: "pay.methodApplePaySub", processingKey: "pay.processingApplePay", successKey: "pay.successSubApplePay" },
+  { id: "card",     logoClass: "logo-card",     logoText: "VISA",   titleKey: "pay.methodCard",     subKey: "pay.methodCardSub",     processingKey: "pay.processingCard",     successKey: "pay.successSubCard" },
+  { id: "account",  logoClass: "logo-klubb",    logoText: "KTK",    titleKey: "pay.methodAccount",  subKey: "pay.methodAccountSub",  processingKey: "pay.processingAccount",  successKey: "pay.successSubAccount" },
 ];
 
 function openPaymentModal({ court, hour, date, iso, price, name }) {
@@ -2847,6 +4049,10 @@ function processPayment() {
     document.getElementById("pay-door-code").textContent = doorCode;
     renderSlots();
     renderMyBookings();
+    if (typeof renderHomeNextBooking === "function") renderHomeNextBooking();
+
+    // Påminnelse simulert: vis toast med "påminnelse sendt på e-post"
+    setTimeout(() => toast(tr("booking.reminderEmailSent")), 1200);
   }, 1600);
 }
 
@@ -3075,19 +4281,77 @@ function renderMyBookings() {
   }
 }
 
-function confirmCancelBooking(id) {
-  openModal(tr("booking.cancelBooking"), tr("booking.cancelConfirm"), () => {
-    bookings = bookings.filter(b => b.id !== id);
-    localStorage.setItem("ktk.bookings", JSON.stringify(bookings));
-    toast(tr("booking.cancelled"));
-    renderMyBookings();
-  });
+/* Beregner refusjon basert på hvor lenge før kampstart vi avlyser:
+   - 24+ timer før: 100% refusjon
+   - 12–24 timer før: 50%
+   - 0–12 timer før: 0%
+   - Etter start: kan ikke avlyses */
+function computeRefund(booking) {
+  const start = bookingStart(booking).getTime();
+  const now = Date.now();
+  const hoursUntil = (start - now) / 3600000;
+  const price = booking.price || 0;
+  if (hoursUntil <= 0) return { allowed: false, amount: 0, percent: 0, tier: "none" };
+  if (hoursUntil >= 24) return { allowed: true, amount: price, percent: 100, tier: "full" };
+  if (hoursUntil >= 12) return { allowed: true, amount: Math.round(price / 2), percent: 50, tier: "half" };
+  return { allowed: true, amount: 0, percent: 0, tier: "none" };
 }
 
-function cancelBooking(id) {
-  bookings = bookings.filter(b => b.id !== id);
+function confirmCancelBooking(id) {
+  const b = bookings.find(x => x.id === id);
+  if (!b) return;
+  const ref = computeRefund(b);
+
+  if (!ref.allowed) {
+    toast(tr("booking.cancelTooLate"));
+    return;
+  }
+
+  const m = document.getElementById("modal");
+  document.getElementById("modal-title").textContent = tr("booking.cancelTitle");
+
+  // Bygg vakkert modal-innhold med refusjons-detaljer
+  const tierColor = ref.tier === "full" ? "#1e7a3e" : ref.tier === "half" ? "#b07000" : "#9b1c1c";
+  const tierBg = ref.tier === "full" ? "#e6f5ec" : ref.tier === "half" ? "#fdf3df" : "#fde0e0";
+  const tierLabel = ref.tier === "full" ? tr("booking.refundFull") : ref.tier === "half" ? tr("booking.refundHalf") : tr("booking.refundNone");
+  const explainKey = ref.tier === "full" ? "cancelFullRefund" : ref.tier === "half" ? "cancelHalfRefund" : "cancelNoRefund";
+
+  document.getElementById("modal-body").innerHTML = `
+    <div style="background:${tierBg};border-radius:10px;padding:12px;margin-bottom:10px">
+      <div style="font-weight:800;color:${tierColor};font-size:14px;margin-bottom:4px">${tierLabel}</div>
+      <div style="font-size:18px;font-weight:800;color:${tierColor}">${ref.amount} kr</div>
+    </div>
+    <p style="margin:0;font-size:13px">${tr("booking." + explainKey).replace("{amount}", ref.amount)}</p>
+  `;
+
+  const cancel = document.getElementById("modal-cancel");
+  const confirm = document.getElementById("modal-confirm");
+  cancel.textContent = tr("common.cancel");
+  confirm.textContent = tr("booking.cancelBooking");
+  m.classList.add("show");
+  cancel.onclick = () => m.classList.remove("show");
+  confirm.onclick = () => {
+    m.classList.remove("show");
+    cancelBooking(id, ref);
+  };
+}
+
+function cancelBooking(id, refund) {
+  const b = bookings.find(x => x.id === id);
+  if (!b) return;
+  const ref = refund || computeRefund(b);
+  bookings = bookings.filter(x => x.id !== id);
   localStorage.setItem("ktk.bookings", JSON.stringify(bookings));
+  if (ref.amount > 0) {
+    const method = b.paymentMethod || "Vipps";
+    toast(tr("booking.cancelledRefunded").replace("{amount}", ref.amount).replace("{method}", method));
+  } else {
+    toast(tr("booking.cancelledNoRefund"));
+  }
   renderMyBookings();
+  // Oppdater hjem-banner og tids-luker også
+  if (typeof renderHomeNextBooking === "function") renderHomeNextBooking();
+  if (typeof renderSlots === "function") renderSlots();
 }
 
 /* ================== OM KLUBBEN ================== */
@@ -3617,6 +4881,1546 @@ function openModal(title, body, onConfirm) {
   confirm.onclick = () => { m.classList.remove("show"); onConfirm(); };
 }
 
+/* ================== STIGE-SYSTEM ================== */
+/* Stigespill er kun for medlemmer. Alle ladder-entry-points går via openLadder().
+   VIKTIG: Sjekken må kun se på user.isMember (ekte medlemskap fra konto), IKKE den
+   globale isMember-flagget — det er booking-skjermens "er du medlem?"-toggle og kan
+   slås på selv om kontoen ikke er medlem. */
+function isMemberUser() {
+  return !!(user && user.isMember);
+}
+function openLadder() {
+  // Hjelper for å vise en "join nå" modal med tilpassede knapper
+  function showJoinModal(opts) {
+    const m = document.getElementById("modal");
+    const title = document.getElementById("modal-title");
+    const body = document.getElementById("modal-body");
+    const cancel = document.getElementById("modal-cancel");
+    const confirm = document.getElementById("modal-confirm");
+    title.textContent = opts.title;
+    // Bruk innerHTML slik at vi kan inkludere "har konto?"-link under teksten
+    body.innerHTML = `<span>${opts.body}</span>` +
+      (opts.secondaryLabel ? `<br/><a class="link" style="display:inline-block;margin-top:10px;font-size:13px;cursor:pointer" id="modal-secondary">${opts.secondaryLabel}</a>` : "");
+    cancel.textContent = tr("common.cancel");
+    confirm.textContent = opts.cta;
+    m.classList.add("show");
+    cancel.onclick = () => m.classList.remove("show");
+    confirm.onclick = () => { m.classList.remove("show"); opts.onCta(); };
+    if (opts.secondaryLabel) {
+      const sec = document.getElementById("modal-secondary");
+      if (sec) sec.onclick = () => { m.classList.remove("show"); opts.onSecondary(); };
+    }
+  }
+
+  if (!user) {
+    // Ikke logget inn — vennlig invitasjon til å melde seg på
+    showJoinModal({
+      title: tr("ladder.joinNowTitle"),
+      body: tr("ladder.joinNowBody"),
+      cta: tr("ladder.joinNowCta"),
+      onCta: () => go("signup"),
+      secondaryLabel: tr("ladder.joinNowLogin"),
+      onSecondary: () => go("login"),
+    });
+    return;
+  }
+  // Logget inn — gå alltid til stige-skjermen. Selve skjermen viser
+  // "kun for medlemmer"-tilstand hvis brukeren ikke er medlem.
+  go("ladder");
+}
+
+const ME_ID = "me";
+const LADDER_CHALLENGE_RANGE = 3; // hvor mange plasser opp man kan utfordre
+const LADDER_ACCEPT_DAYS = 7;
+const LADDER_PLAY_DAYS = 14;
+
+const LADDER_BASE_PLAYERS = [
+  { id: "p01", name: "Trond Moldvær",   level: "competition" },
+  { id: "p02", name: "Marcus Berg",     level: "competition" },
+  { id: "p03", name: "Anna Lindberg",   level: "intermediate" },
+  { id: "p04", name: "Silje Rønning",   level: "intermediate" },
+  { id: "p05", name: "Lars Eriksen",    level: "intermediate" },
+  { id: "p06", name: "Maria Solheim",   level: "intermediate" },
+  { id: "p07", name: "Per Hansen",      level: "intermediate" },
+  { id: "p08", name: "Ingrid Larsen",   level: "recreational" },
+  { id: "p09", name: "Ola Nilsen",      level: "recreational" },
+  { id: "p10", name: "Astrid Karlsen",  level: "recreational" },
+  { id: "p11", name: "Knut Berge",      level: "recreational" },
+  { id: "p12", name: "Helene Tjelle",   level: "recreational" },
+  { id: "p13", name: "Erik Dahl",       level: "recreational" },
+  { id: "p14", name: "Jonas Vik",       level: "recreational" },
+  { id: "p15", name: "Nora Fredriksen", level: "recreational" },
+  { id: "p16", name: "Thomas Andersen", level: "recreational" },
+  { id: "p17", name: "Camilla Østgaard",level: "recreational" },
+  { id: "p18", name: "Øyvind Moe",      level: "recreational" },
+  { id: "p19", name: "Linn Pedersen",   level: "beginner" },
+  { id: "p20", name: "Oskar Berntsen",  level: "beginner" },
+];
+
+function seedLadder() {
+  const cached = JSON.parse(localStorage.getItem("ktk.ladder") || "null");
+  if (cached && cached.members && cached.members.length) {
+    // Migrasjoner ved oppgradering: sørg for nye felt
+    cached.members.forEach(m => {
+      if (typeof m.noShows !== "number") m.noShows = 0;
+    });
+    if (!cached.season) {
+      cached.season = { name: "spring2026", startDate: "2026-04-01", endDate: "2026-09-30" };
+    }
+    cached.hiddenNews = cached.hiddenNews || [];
+    localStorage.setItem("ktk.ladder", JSON.stringify(cached));
+    return cached;
+  }
+
+  const members = LADDER_BASE_PLAYERS.map((p, i) => ({
+    id: p.id, name: p.name, level: p.level,
+    position: i + 1,
+    wins: Math.max(0, 8 - i + Math.floor(seededRand(p.id, "w") * 4)),
+    losses: Math.floor(seededRand(p.id, "l") * 6) + (i > 10 ? 2 : 0),
+    bestPosition: Math.max(1, i + 1 - Math.floor(seededRand(p.id, "b") * 4)),
+    lastMatchAt: Date.now() - Math.floor(seededRand(p.id, "lm") * 30) * 86400000,
+    awayUntil: null,
+    noShows: 0,
+  }));
+  // Gi én demo-spiller en eksisterende strike så admin-panelet har noe å vise
+  if (members[10]) members[10].noShows = 1;
+  // Sett inn meg på plass 14 (skiftes hvis bruker er logget inn)
+  members.splice(13, 0, {
+    id: ME_ID, name: "Du", level: "recreational",
+    position: 14, wins: 3, losses: 2, bestPosition: 12,
+    lastMatchAt: Date.now() - 8 * 86400000, awayUntil: null,
+    noShows: 0,
+  });
+  members.forEach((m, i) => m.position = i + 1);
+
+  // Lag noen mock-utfordringer slik at innboksen ikke er tom
+  const now = Date.now();
+  const challenges = [
+    {
+      id: "c1", fromId: "p17", toId: ME_ID, status: "pending",
+      sentAt: now - 1 * 86400000,
+      acceptDeadline: now + 6 * 86400000,
+      playDeadline: null,
+      proposedTimes: [
+        new Date(now + 2 * 86400000 + 18 * 3600000).toISOString(),
+        new Date(now + 4 * 86400000 + 19 * 3600000).toISOString(),
+        new Date(now + 5 * 86400000 + 17 * 3600000).toISOString(),
+      ],
+      chosenTime: null, bookingId: null,
+      messages: [],
+    },
+    {
+      id: "c2", fromId: ME_ID, toId: "p11", status: "accepted",
+      sentAt: now - 4 * 86400000,
+      acceptDeadline: now + 3 * 86400000,
+      playDeadline: now + 10 * 86400000,
+      proposedTimes: [
+        new Date(now + 1 * 86400000 + 18 * 3600000).toISOString(),
+        new Date(now + 2 * 86400000 + 19 * 3600000).toISOString(),
+      ],
+      chosenTime: new Date(now + 1 * 86400000 + 18 * 3600000).toISOString(),
+      bookingId: null,
+      messages: [
+        { from: "p11", text: "Ja, kan spille i morgen kl 18 — perfekt!", ts: now - 3 * 86400000 },
+        { from: ME_ID, text: "Top, jeg booker bane 1.", ts: now - 3 * 86400000 + 600000 },
+      ],
+    },
+    {
+      id: "c3", fromId: "p09", toId: ME_ID, status: "awaitConfirm",
+      sentAt: now - 12 * 86400000,
+      acceptDeadline: now - 5 * 86400000,
+      playDeadline: now + 2 * 86400000,
+      proposedTimes: [],
+      chosenTime: new Date(now - 1 * 86400000 + 18 * 3600000).toISOString(),
+      bookingId: null,
+      messages: [
+        { from: "p09", text: "Bra kamp i går!", ts: now - 12 * 3600000 },
+        { from: "p09", text: "Jeg har lagt inn resultatet — bekrefter du?", ts: now - 11 * 3600000 },
+      ],
+      pendingResult: { winnerId: "p09", sets: [[6,4],[3,6],[7,5]], reportedBy: "p09", confirmedBy: ["p09"] },
+    },
+  ];
+
+  const matches = [
+    {
+      id: "m1", winnerId: ME_ID, loserId: "p15",
+      sets: [[6,3],[6,4]],
+      date: now - 18 * 86400000,
+      confirmedBy: [ME_ID, "p15"],
+    },
+    {
+      id: "m2", winnerId: "p13", loserId: ME_ID,
+      sets: [[4,6],[6,2],[6,4]],
+      date: now - 32 * 86400000,
+      confirmedBy: [ME_ID, "p13"],
+    },
+  ];
+
+  const data = {
+    members, challenges, matches,
+    season: { name: "spring2026", startDate: "2026-04-01", endDate: "2026-09-30" },
+    hiddenNews: [],
+  };
+  localStorage.setItem("ktk.ladder", JSON.stringify(data));
+  return data;
+}
+
+let ladder = seedLadder();
+let ladderTab = "board";
+let activeChallengeId = null;
+
+function saveLadder() { localStorage.setItem("ktk.ladder", JSON.stringify(ladder)); }
+function findMember(id) { return ladder.members.find(m => m.id === id); }
+function meMember() { return findMember(ME_ID); }
+function nameForId(id) {
+  if (id === ME_ID) return user ? user.name.split(" ")[0] : tr("ladder.youAreHere");
+  const m = findMember(id);
+  return m ? m.name : "?";
+}
+function shortNameForId(id) {
+  if (id === ME_ID) return user ? user.name.split(" ")[0] : "Du";
+  const m = findMember(id);
+  if (!m) return "?";
+  const parts = m.name.split(" ");
+  return parts[0] + (parts[1] ? " " + parts[1][0] + "." : "");
+}
+function canChallenge(targetId) {
+  const me = meMember(); if (!me) return false;
+  const t = findMember(targetId); if (!t || t.id === ME_ID) return false;
+  if (t.awayUntil && t.awayUntil > Date.now()) return false;
+  if (me.awayUntil && me.awayUntil > Date.now()) return false;
+  const diff = me.position - t.position;
+  if (diff < 1 || diff > LADDER_CHALLENGE_RANGE) return false;
+  // Maks 1 aktiv utfordring av gangen totalt
+  const activeMine = ladder.challenges.filter(c =>
+    (c.fromId === ME_ID || c.toId === ME_ID) &&
+    (c.status === "pending" || c.status === "accepted" || c.status === "awaitConfirm")
+  );
+  if (activeMine.length > 0) return false;
+  return true;
+}
+
+function fmtDateShort(ms) {
+  const d = new Date(ms);
+  return d.toLocaleDateString(lang === "nb" ? "nb-NO" : "en-GB",
+    { weekday: "short", day: "2-digit", month: "short" });
+}
+function fmtDateTimeShort(iso) {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  return d.toLocaleString(lang === "nb" ? "nb-NO" : "en-GB",
+    { weekday: "short", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+}
+
+/* ----- Tab switching ----- */
+function setLadderTab(tab) {
+  ladderTab = tab;
+  document.querySelectorAll("#ladder-tabs .ltab").forEach(b =>
+    b.classList.toggle("active", b.dataset.tab === tab));
+  ["board","inbox","profile"].forEach(t => {
+    const el = document.getElementById("ladder-pane-" + t);
+    if (el) el.style.display = (t === tab) ? "" : "none";
+  });
+  if (tab === "board") renderLadderList();
+  if (tab === "inbox") renderLadderInbox();
+  if (tab === "profile") renderLadderProfile();
+}
+
+/* ----- Ladder list (Stigen) ----- */
+function renderLadderList() {
+  const host = document.getElementById("ladder-list");
+  if (!host) return;
+  const me = meMember();
+  host.innerHTML = ladder.members.map(m => {
+    let cls = "ladder-row";
+    let arrow = "";
+    if (m.id === ME_ID) {
+      cls += " me";
+      arrow = `<span class="lr-arrow">●</span>`;
+    } else if (canChallenge(m.id)) {
+      cls += " targetable";
+      arrow = `<span class="lr-arrow">⚔</span>`;
+    } else {
+      arrow = `<span class="lr-arrow"></span>`;
+    }
+    const isAway = m.awayUntil && m.awayUntil > Date.now();
+    const awayBadge = isAway ? `<span class="lr-away">${tr("ladder.away")}</span>` : "";
+    const onClick = canChallenge(m.id) ? `onclick="openChallengeModal('${m.id}')"` : "";
+    const displayName = m.id === ME_ID ? (user ? user.name : "Du") : m.name;
+    return `
+      <div class="${cls}" ${onClick}>
+        <div class="lr-pos">#${m.position}</div>
+        <div>
+          <div class="lr-name">${displayName} ${awayBadge}</div>
+          <div class="lr-meta">${tr("partner.levels." + m.level)}</div>
+        </div>
+        <div class="lr-wl">${m.wins}–${m.losses}</div>
+        ${arrow}
+      </div>
+    `;
+  }).join("");
+}
+
+/* ----- Inbox ----- */
+function renderLadderInbox() {
+  const host = document.getElementById("ladder-inbox-list");
+  if (!host) return;
+  const mine = ladder.challenges.filter(c => c.fromId === ME_ID || c.toId === ME_ID);
+  if (!mine.length) {
+    host.innerHTML = `<div class="card"><p class="muted">${tr("ladder.inboxEmpty")}</p></div>`;
+    return;
+  }
+  const incoming = mine.filter(c => c.toId === ME_ID && (c.status === "pending" || c.status === "awaitConfirm"));
+  const outgoing = mine.filter(c => c.fromId === ME_ID && (c.status === "pending" || c.status === "accepted"));
+  const accepted = mine.filter(c => c.toId === ME_ID && c.status === "accepted");
+  const completed = mine.filter(c => c.status === "completed" || c.status === "declined" || c.status === "expired");
+
+  let html = "";
+  if (incoming.length) {
+    html += `<div class="caption">${tr("ladder.incoming")}</div>`;
+    html += incoming.map(c => challengeCardHtml(c, "incoming")).join("");
+  }
+  if (accepted.length) {
+    html += `<div class="caption" style="margin-top:14px">${tr("ladder.statusAccepted")}</div>`;
+    html += accepted.map(c => challengeCardHtml(c, "accepted")).join("");
+  }
+  if (outgoing.length) {
+    html += `<div class="caption" style="margin-top:14px">${tr("ladder.outgoing")}</div>`;
+    html += outgoing.map(c => challengeCardHtml(c, "outgoing")).join("");
+  }
+  if (completed.length) {
+    html += `<div class="caption" style="margin-top:14px">${tr("ladder.completedSection")}</div>`;
+    html += completed.map(c => challengeCardHtml(c, "completed")).join("");
+  }
+  host.innerHTML = html || `<div class="card"><p class="muted">${tr("ladder.inboxEmpty")}</p></div>`;
+}
+
+function challengeCardHtml(c, role) {
+  const otherId = c.fromId === ME_ID ? c.toId : c.fromId;
+  const other = findMember(otherId);
+  const otherName = other ? other.name : "?";
+  let cls = "challenge-card";
+  let statusLabel = tr("ladder.statusPending");
+  let statusCls = "pending";
+  let actions = "";
+
+  if (c.status === "pending") {
+    if (role === "incoming") {
+      cls += " urgent";
+      statusLabel = tr("ladder.statusPending");
+      const days = Math.max(0, Math.ceil((c.acceptDeadline - Date.now()) / 86400000));
+      actions = `
+        <button class="btn" style="flex:1" onclick="acceptChallenge('${c.id}')">${tr("ladder.accept")}</button>
+        <button class="btn secondary" onclick="declineChallenge('${c.id}')">${tr("ladder.decline")}</button>
+      `;
+      statusLabel = days + (lang === "nb" ? " dg igjen" : " d left");
+      statusCls = "pending";
+    } else {
+      actions = `<button class="btn secondary" onclick="withdrawChallenge('${c.id}')">${tr("ladder.withdraw")}</button>`;
+    }
+  } else if (c.status === "accepted") {
+    cls += " live";
+    statusLabel = tr("ladder.statusAccepted");
+    statusCls = "accepted";
+    actions = `
+      <button class="btn" style="flex:1" onclick="openLadderChat('${c.id}')">${tr("ladder.openChat")}</button>
+      <button class="btn secondary" onclick="openReportResult('${c.id}')">${tr("ladder.reportResult")}</button>
+      <button class="btn secondary" style="background:#fde0e0;color:#882020;border-color:#f3a3a3" onclick="confirmNoShow('${c.id}')">${tr("ladder.noShowBtn")}</button>
+    `;
+  } else if (c.status === "awaitConfirm") {
+    cls += " urgent";
+    statusLabel = tr("ladder.statusAwaitConfirm");
+    statusCls = "confirm";
+    actions = `<button class="btn" style="flex:1" onclick="openConfirmResult('${c.id}')">${tr("ladder.confirmResult")}</button>`;
+  } else if (c.status === "completed") {
+    cls += " done";
+    statusLabel = tr("ladder.statusCompleted");
+    statusCls = "completed";
+  } else if (c.status === "declined") {
+    cls += " done";
+    statusLabel = tr("ladder.statusDeclined");
+    statusCls = "completed";
+  } else if (c.status === "expired") {
+    cls += " done";
+    statusLabel = tr("ladder.statusExpired");
+    statusCls = "completed";
+  }
+
+  let extra = "";
+  if (c.chosenTime) {
+    extra = `<div class="cc-sub">📅 ${fmtDateTimeShort(c.chosenTime)}</div>`;
+  } else if (c.proposedTimes && c.proposedTimes.length) {
+    extra = `<div class="cc-sub">${tr("ladder.proposedTimes")}: ${c.proposedTimes.length}</div>`;
+  }
+
+  return `
+    <div class="${cls}">
+      <div class="cc-top">
+        <div>
+          <div class="cc-name">${role === "incoming" || role === "accepted" ? otherName + " → " + tr("ladder.youAreHere").toLowerCase() : tr("ladder.youAreHere") + " → " + otherName}</div>
+          ${extra}
+        </div>
+        <span class="cc-status ${statusCls}">${statusLabel}</span>
+      </div>
+      <div class="cc-actions">${actions}</div>
+    </div>
+  `;
+}
+
+/* ----- Profile pane ----- */
+/* Hovedrenderer for stige-skjermen — håndterer både medlems-tilstand og ikke-medlems-tilstand */
+function renderLadderScreen() {
+  const tabs = document.getElementById("ladder-tabs");
+  const paneBoard = document.getElementById("ladder-pane-board");
+  const paneInbox = document.getElementById("ladder-pane-inbox");
+  const paneProfile = document.getElementById("ladder-pane-profile");
+  const banner = document.getElementById("ladder-banner-host");
+
+  // Ikke-medlemmer: skjul fanene og vis stort medlems-kort i stedet
+  if (!isMemberUser()) {
+    if (tabs) tabs.style.display = "none";
+    if (banner) banner.innerHTML = "";
+    if (paneInbox) paneInbox.style.display = "none";
+    if (paneProfile) paneProfile.style.display = "none";
+    if (paneBoard) {
+      paneBoard.style.display = "";
+      paneBoard.innerHTML = `
+        <div class="card" style="background:linear-gradient(135deg,#0B3D91 0%,#1B5AA6 60%,#2E7BC9 100%);color:#fff;border:none;padding:22px;text-align:center;box-shadow:0 6px 20px rgba(11,61,145,.28)">
+          <div style="font-size:48px;margin-bottom:6px">🏆</div>
+          <h3 style="margin:0 0 6px;color:#fff;font-size:20px">${tr("ladder.membersOnlyTitle")}</h3>
+          <p style="margin:0 0 16px;font-size:13px;opacity:.92;line-height:1.5">${tr("ladder.membersOnlyBody")}</p>
+          <button class="btn" style="background:#fff;color:var(--primary);font-weight:800;padding:12px 22px;width:100%" onclick="go('membership')">${tr("ladder.membersOnlyCta")}</button>
+        </div>
+
+        <div class="caption" style="margin-top:18px">${lang === "nb" ? "Hva får du?" : "What do you get?"}</div>
+        <div class="card">
+          <ul style="margin:0;padding-left:20px;font-size:14px;line-height:1.7">
+            <li>${tr("ladder.perkChallenges")}</li>
+            <li>${tr("ladder.perkRanking")}</li>
+            <li>${tr("ladder.perkRecos")}</li>
+            <li>${tr("ladder.perkChat")}</li>
+            <li>${tr("ladder.perkSeason")}</li>
+          </ul>
+        </div>
+
+        <button class="btn secondary" style="margin-top:14px;width:100%" onclick="go('home')">${lang === "nb" ? "Tilbake til forsiden" : "Back to home"}</button>
+      `;
+    }
+    return;
+  }
+
+  // Medlemmer: normal stige-skjerm
+  if (tabs) tabs.style.display = "";
+  if (paneBoard) paneBoard.style.display = ladderTab === "board" ? "" : "none";
+  if (paneInbox) paneInbox.style.display = ladderTab === "inbox" ? "" : "none";
+  if (paneProfile) paneProfile.style.display = ladderTab === "profile" ? "" : "none";
+  // Sørg for at board-pane har riktig innhold (ikke restene fra ikke-medlems-staten)
+  if (paneBoard && !document.getElementById("ladder-list")) {
+    paneBoard.innerHTML = `
+      <p class="muted" style="font-size:12px;margin-bottom:10px">${tr("ladder.boardHelp")}</p>
+      <div id="ladder-list"></div>`;
+  }
+  renderLadderBanner();
+  if (ladderTab === "board") renderLadderList();
+  if (ladderTab === "inbox") renderLadderInbox();
+  if (ladderTab === "profile") renderLadderProfile();
+}
+
+/* Anbefalte motstandere — scorer kandidater basert på aktivitet, nivå og H2H-historikk */
+function recommendedOpponents(maxResults) {
+  const me = meMember();
+  if (!me) return [];
+  const now = Date.now();
+  const myWinRate = (me.wins + me.losses) > 0 ? me.wins / (me.wins + me.losses) : 0.5;
+
+  // Aktive utfordringer som blokkerer (allerede engasjert)
+  const blocked = new Set();
+  ladder.challenges.forEach(c => {
+    if ((c.fromId === ME_ID || c.toId === ME_ID) &&
+        (c.status === "pending" || c.status === "accepted" || c.status === "awaitConfirm")) {
+      blocked.add(c.fromId === ME_ID ? c.toId : c.fromId);
+    }
+  });
+
+  // Kandidater: alle innenfor utfordringsrekkevidde, ikke borte, ikke blokkert
+  const candidates = ladder.members.filter(m =>
+    m.id !== ME_ID &&
+    m.position < me.position &&
+    me.position - m.position <= LADDER_CHALLENGE_RANGE &&
+    !(m.awayUntil && m.awayUntil > now) &&
+    !blocked.has(m.id)
+  );
+
+  // Scoring
+  const scored = candidates.map(m => {
+    let score = 0;
+    const reasons = [];
+
+    // 1. Recent activity: yngre lastMatchAt = høyere score (max 30)
+    const daysSinceMatch = (now - (m.lastMatchAt || 0)) / 86400000;
+    const activityScore = Math.max(0, 30 - daysSinceMatch);
+    score += activityScore;
+    if (daysSinceMatch < 10) reasons.push("recoActive");
+
+    // 2. Win-rate similarity: nærmere min vinn-rate = bedre match (max 25)
+    const theirRate = (m.wins + m.losses) > 0 ? m.wins / (m.wins + m.losses) : 0.5;
+    const rateDiff = Math.abs(myWinRate - theirRate);
+    const simScore = 25 * (1 - Math.min(1, rateDiff * 2));
+    score += simScore;
+    if (rateDiff < 0.15 && (m.wins + m.losses) >= 3) reasons.push("recoSimilar");
+
+    // 3. H2H-analyse
+    const h2hMatches = ladder.matches.filter(match =>
+      (match.winnerId === ME_ID && match.loserId === m.id) ||
+      (match.winnerId === m.id && match.loserId === ME_ID)
+    );
+    let h2hLabel = null;
+    if (h2hMatches.length === 0) {
+      score += 10; // Aldri møtt — bonus for friske kamper
+      reasons.unshift("recoNew");
+    } else {
+      const myH2H = h2hMatches.filter(x => x.winnerId === ME_ID).length;
+      const theirH2H = h2hMatches.length - myH2H;
+      h2hLabel = `${myH2H}–${theirH2H}`;
+      const lastH2H = h2hMatches.sort((a, b) => b.date - a.date)[0];
+      const daysSinceH2H = (now - lastH2H.date) / 86400000;
+      if (daysSinceH2H < 14) score -= 25;        // Spilte nylig — straff
+      else if (daysSinceH2H < 30) score -= 8;
+      else if (daysSinceH2H >= 60) reasons.push("recoRematch"); // Tid for rematch
+    }
+
+    return { player: m, score, reasons, h2hLabel };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, maxResults || 3);
+}
+
+function reasonLabel(key) { return tr("ladder." + key); }
+
+function renderLadderProfile() {
+  const host = document.getElementById("ladder-profile-host");
+  if (!host) return;
+  const me = meMember();
+  if (!me) { host.innerHTML = ""; return; }
+  const isAway = me.awayUntil && me.awayUntil > Date.now();
+
+  const recos = recommendedOpponents(3);
+  const recoCards = recos.length === 0
+    ? `<p class="muted" style="margin:8px 0 0">${tr("ladder.noRecos")}</p>`
+    : recos.map((r, i) => {
+        const rankBadge = i === 0
+          ? `<span style="position:absolute;top:-6px;right:8px;background:#FFD43B;color:#5a4400;border-radius:10px;padding:2px 8px;font-size:10px;font-weight:800">${lang === "nb" ? "BEST MATCH" : "BEST MATCH"}</span>`
+          : "";
+        const reasonChips = (r.reasons.slice(0, 2)).map(rs =>
+          `<span style="display:inline-block;background:#eef4ff;color:#234e8a;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:600;margin-right:4px;margin-top:6px">${reasonLabel(rs)}</span>`
+        ).join("");
+        const h2hLine = r.h2hLabel
+          ? `<div class="muted" style="font-size:11px;margin-top:4px">${tr("ladder.recoH2H").replace("{wl}", r.h2hLabel)}</div>`
+          : "";
+        return `
+          <div class="ladder-row targetable" style="position:relative;margin-bottom:8px;padding-right:10px" onclick="openChallengeModal('${r.player.id}')">
+            ${rankBadge}
+            <div class="lr-pos">#${r.player.position}</div>
+            <div style="flex:1;min-width:0">
+              <div class="lr-name">${r.player.name}</div>
+              <div class="lr-meta">${tr("partner.levels." + r.player.level)} · ${r.player.wins}–${r.player.losses}</div>
+              ${reasonChips ? `<div>${reasonChips}</div>` : ""}
+              ${h2hLine}
+            </div>
+            <div class="lr-arrow">⚔</div>
+          </div>`;
+      }).join("");
+
+  host.innerHTML = `
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <p class="caption" style="margin:0">${tr("ladder.seasonLabel")}: ${tr("ladder.seasonSpring")}</p>
+          <h3 style="margin:4px 0 0">#${me.position} ${tr("ladder.youAreHere")}</h3>
+        </div>
+        ${isAway ? `<span class="lr-away">${tr("ladder.away")}</span>` : ""}
+      </div>
+      <div class="ladder-stat-grid">
+        <div class="ladder-stat"><div class="v">${me.wins}</div><div class="l">${tr("ladder.wins")}</div></div>
+        <div class="ladder-stat"><div class="v">${me.losses}</div><div class="l">${tr("ladder.losses")}</div></div>
+        <div class="ladder-stat"><div class="v">#${me.bestPosition}</div><div class="l">${tr("ladder.bestPos")}</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">⚡ ${tr("ladder.recommended")}</h3>
+      <p class="muted" style="font-size:12px;margin:0 0 10px">${tr("ladder.recommendedHelp")}</p>
+      ${recoCards}
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">${tr("ladder.away")}</h3>
+      <p class="muted" style="font-size:13px">${tr("ladder.awayHelp")}</p>
+      <button class="btn ${isAway ? "secondary" : ""}" onclick="toggleAway()">${isAway ? tr("ladder.setBack") : tr("ladder.setAway")}</button>
+    </div>
+
+    <div class="card">
+      <button class="btn secondary" style="margin:0" onclick="go('ladderHistory')">${tr("ladder.seeHistory")} ›</button>
+    </div>
+  `;
+}
+
+/* ----- History ----- */
+function renderLadderHistory() {
+  const host = document.getElementById("ladder-history-host");
+  if (!host) return;
+  const mine = ladder.matches.filter(m => m.winnerId === ME_ID || m.loserId === ME_ID)
+    .sort((a, b) => b.date - a.date);
+  if (!mine.length) {
+    host.innerHTML = `<div class="card"><p class="muted">${tr("ladder.noHistory")}</p></div>`;
+    return;
+  }
+  host.innerHTML = mine.map(m => {
+    const won = m.winnerId === ME_ID;
+    const oppId = won ? m.loserId : m.winnerId;
+    const opp = findMember(oppId);
+    const setStr = m.sets.map(s => s[0] + "–" + s[1]).join(", ");
+    return `
+      <div class="card" style="padding:12px;margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:800;color:${won ? "#1e7a3e" : "#882020"}">${won ? tr("ladder.won") : tr("ladder.lost")}</div>
+            <div style="font-size:13px;margin-top:2px">${tr("ladder.vs")} ${opp ? opp.name : "?"}</div>
+            <div class="muted" style="font-size:12px;margin-top:2px">${setStr}</div>
+          </div>
+          <div class="muted" style="font-size:12px">${fmtDateShort(m.date)}</div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+/* ----- Banner notifications ----- */
+function ladderBanner() {
+  const incoming = ladder.challenges.find(c => c.toId === ME_ID && c.status === "pending");
+  const awaitConfirm = ladder.challenges.find(c => c.toId === ME_ID && c.status === "awaitConfirm");
+  const acceptedOutgoing = ladder.challenges.find(c => c.fromId === ME_ID && c.status === "accepted" && !c.bookingId);
+
+  if (awaitConfirm) {
+    return { kind: "danger", icon: "⚠", text: tr("ladder.bannerConfirmResult"), action: () => openConfirmResult(awaitConfirm.id) };
+  }
+  if (incoming) {
+    const days = Math.max(0, Math.ceil((incoming.acceptDeadline - Date.now()) / 86400000));
+    const txt = tr("ladder.bannerIncoming")
+      .replace("{name}", nameForId(incoming.fromId))
+      .replace("{days}", days);
+    return { kind: "warn", icon: "⚔", text: txt, action: () => { go("ladder"); setLadderTab("inbox"); } };
+  }
+  if (acceptedOutgoing) {
+    const txt = tr("ladder.bannerProposedTime").replace("{name}", nameForId(acceptedOutgoing.toId));
+    return { kind: "warn", icon: "✓", text: txt, action: () => openLadderChat(acceptedOutgoing.id) };
+  }
+  return null;
+}
+function renderLadderBanner() {
+  const host = document.getElementById("ladder-banner-host");
+  if (!host) return;
+  const b = ladderBanner();
+  if (!b) { host.innerHTML = ""; return; }
+  host.innerHTML = `
+    <div class="ladder-banner ${b.kind === "danger" ? "danger" : ""}" id="ladder-banner-click">
+      <div class="lb-ic">${b.icon}</div>
+      <div class="lb-body">${b.text}</div>
+      <div class="lb-cta">›</div>
+    </div>
+  `;
+  document.getElementById("ladder-banner-click").onclick = b.action;
+}
+
+/* ----- Home widget ----- */
+function renderHomeCtaBanner() {
+  const host = document.getElementById("home-cta-banner");
+  if (!host) return;
+  // Skjult hvis bruker er medlem (har alt de trenger)
+  if (isMemberUser()) { host.style.display = "none"; return; }
+
+  let html = "";
+  if (!user) {
+    // Ikke logget inn — størst CTA, fang inn nye
+    html = `
+      <div class="home-cta">
+        <div class="cta-eyebrow">${tr("home.ctaGuestEyebrow")}</div>
+        <h3 class="cta-title">${tr("home.ctaGuestTitle")}</h3>
+        <p class="cta-sub">${tr("home.ctaGuestSub")}</p>
+        <ul class="cta-perks">
+          <li>${tr("home.ctaGuestPerk1")}</li>
+          <li>${tr("home.ctaGuestPerk2")}</li>
+          <li>${tr("home.ctaGuestPerk3")}</li>
+        </ul>
+        <div class="cta-row">
+          <button class="cta-btn" onclick="go('signup')">${tr("home.ctaGuestPrimary")}</button>
+          <button class="cta-btn ghost" onclick="go('login')">${tr("home.ctaGuestSecondary")}</button>
+        </div>
+      </div>`;
+  } else {
+    // Logget inn men ikke medlem — oppgrader-CTA. Respekter "Senere"
+    const dismissed = parseInt(localStorage.getItem("ktk.ctaDismissedAt") || "0", 10);
+    // Vis igjen etter 7 dager
+    if (dismissed && Date.now() - dismissed < 7 * 86400000) {
+      host.style.display = "none"; return;
+    }
+    const firstName = (user.name || "").split(" ")[0] || "";
+    html = `
+      <div class="home-cta">
+        <div class="cta-eyebrow">${tr("home.ctaUpgradeEyebrow").replace("{name}", firstName)}</div>
+        <h3 class="cta-title">${tr("home.ctaUpgradeTitle")}</h3>
+        <p class="cta-sub">${tr("home.ctaUpgradeSub")}</p>
+        <ul class="cta-perks">
+          <li>${tr("home.ctaUpgradePerk1")}</li>
+          <li>${tr("home.ctaUpgradePerk2")}</li>
+          <li>${tr("home.ctaUpgradePerk3")}</li>
+        </ul>
+        <div class="cta-row">
+          <button class="cta-btn" onclick="go('membership')">${tr("home.ctaUpgradePrimary")}</button>
+          <button class="cta-btn ghost" onclick="dismissHomeCta()">${tr("home.ctaUpgradeSecondary")}</button>
+        </div>
+      </div>`;
+  }
+  host.style.display = "";
+  host.innerHTML = html;
+}
+
+/* Neste booking-banner: vises når bruker har en booking innen 6 timer eller pågår */
+function renderHomeNextBooking() {
+  const host = document.getElementById("home-next-booking");
+  if (!host) return;
+  if (!bookings || bookings.length === 0) { host.style.display = "none"; return; }
+
+  const now = Date.now();
+  // Finn første booking som ennå ikke er ferdig, sortert etter starttid
+  const upcoming = bookings
+    .filter(b => bookingEnd(b).getTime() > now)
+    .sort((a, b) => bookingStart(a).getTime() - bookingStart(b).getTime());
+  if (upcoming.length === 0) { host.style.display = "none"; return; }
+
+  const next = upcoming[0];
+  const start = bookingStart(next).getTime();
+  const end = bookingEnd(next).getTime();
+  const isLive = now >= start && now < end;
+  const minutesUntil = Math.round((start - now) / 60000);
+
+  // Vis kun hvis pågår, eller starter innen 6 timer
+  if (!isLive && minutesUntil > 360) { host.style.display = "none"; return; }
+
+  if (!next.doorCode) { next.doorCode = generateDoorCode(); localStorage.setItem("ktk.bookings", JSON.stringify(bookings)); }
+
+  const court = COURTS.find(c => c.id === next.courtId)?.nameKey[lang] || next.courtId;
+  let timeLabel;
+  if (isLive) {
+    timeLabel = lang === "nb" ? "Pågår nå" : "Ongoing";
+  } else if (minutesUntil < 60) {
+    timeLabel = tr("booking.reminderSoon").replace("{min}", minutesUntil);
+  } else {
+    const hours = Math.floor(minutesUntil / 60);
+    const mins = minutesUntil % 60;
+    timeLabel = lang === "nb"
+      ? (mins === 0 ? `om ${hours} t` : `om ${hours} t ${mins} min`)
+      : (mins === 0 ? `in ${hours} h` : `in ${hours} h ${mins} min`);
+  }
+
+  const eyebrow = isLive
+    ? (lang === "nb" ? "BANEN ER KLAR" : "COURT IS READY")
+    : tr("booking.reminderTitle").toUpperCase();
+
+  host.style.display = "";
+  host.innerHTML = `
+    <div class="next-booking ${isLive ? "live" : ""}" onclick="go('mybookings')">
+      <div class="nb-row">
+        <div class="nb-icon">${isLive ? "🟢" : "⏰"}</div>
+        <div class="nb-body">
+          <div class="nb-eyebrow">${eyebrow}</div>
+          <div class="nb-title">${court} · ${String(next.hour).padStart(2,"0")}:00</div>
+          <div class="nb-sub">${timeLabel}</div>
+        </div>
+        <div class="nb-code">${next.doorCode}</div>
+      </div>
+    </div>
+  `;
+}
+
+function dismissHomeCta() {
+  // Skjul CTA-banneret resten av økten
+  localStorage.setItem("ktk.ctaDismissedAt", String(Date.now()));
+  const host = document.getElementById("home-cta-banner");
+  if (host) host.style.display = "none";
+}
+
+function renderLadderHomeBanner() {
+  const host = document.getElementById("home-ladder-banner");
+  if (!host) return;
+  // Stigespill er kun for medlemmer
+  if (!isMemberUser()) { host.style.display = "none"; return; }
+  const me = meMember();
+  if (!me) { host.style.display = "none"; return; }
+  // Hvis du har en pågående utfordring, vis den i stedet
+  const live = ladder.challenges.find(c =>
+    (c.fromId === ME_ID || c.toId === ME_ID) &&
+    (c.status === "pending" || c.status === "accepted" || c.status === "awaitConfirm"));
+  if (live) {
+    host.style.display = "";
+    host.innerHTML = `
+      <div class="partner-fab" onclick="go('ladder')" style="background:linear-gradient(135deg,#7a1f7a 0%,#a73fa7 100%)">
+        <div class="fab-ic">🏆</div>
+        <div class="fab-body">
+          <div class="fab-t">${tr("ladder.title")}</div>
+          <div class="fab-s">${live.status === "awaitConfirm" ? tr("ladder.bannerConfirmResult") :
+            live.toId === ME_ID && live.status === "pending" ?
+              tr("ladder.bannerIncoming").replace("{name}", nameForId(live.fromId)).replace(" innen {days} dager", "").replace(" within {days} days", "") :
+              "#" + me.position + " · " + me.wins + "–" + me.losses}</div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+  // Ellers, vis "nærmeste mål"
+  let next = null;
+  for (let p = me.position - 1; p >= Math.max(1, me.position - LADDER_CHALLENGE_RANGE); p--) {
+    const t = ladder.members.find(m => m.position === p);
+    if (t) { next = t; break; }
+  }
+  if (!next) { host.style.display = "none"; return; }
+  host.style.display = "";
+  const txt = tr("ladder.homeBanner")
+    .replace("{pos}", me.position)
+    .replace("{name}", next.name)
+    .replace("{npos}", next.position);
+  host.innerHTML = `
+    <div class="partner-fab" onclick="go('ladder')" style="background:linear-gradient(135deg,#7a1f7a 0%,#a73fa7 100%)">
+      <div class="fab-ic">🏆</div>
+      <div class="fab-body">
+        <div class="fab-t">${tr("ladder.title")}</div>
+        <div class="fab-s">${txt}</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ----- Actions ----- */
+function openChallengeModal(targetId) {
+  if (!user) { toast(tr("partner.needLogin")); go("login"); return; }
+  if (!canChallenge(targetId)) { toast(lang === "nb" ? "Kan ikke utfordre denne spilleren nå." : "Cannot challenge this player right now."); return; }
+  const t = findMember(targetId);
+  const now = Date.now();
+  // Auto-foreslå tre tider: dag +2 kl 18, +4 kl 19, +6 kl 17
+  const proposed = [
+    new Date(now + 2 * 86400000 + 18 * 3600000).toISOString(),
+    new Date(now + 4 * 86400000 + 19 * 3600000).toISOString(),
+    new Date(now + 6 * 86400000 + 17 * 3600000).toISOString(),
+  ];
+  const body = `${t.name} (#${t.position})\n\n${tr("ladder.challengeIntro")}\n\n${proposed.map(p => "• " + fmtDateTimeShort(p)).join("\n")}`;
+  openModal(tr("ladder.newChallenge"), body, () => {
+    ladder.challenges.push({
+      id: "c" + (ladder.challenges.length + 1) + "_" + Date.now(),
+      fromId: ME_ID, toId: targetId, status: "pending",
+      sentAt: now, acceptDeadline: now + LADDER_ACCEPT_DAYS * 86400000,
+      playDeadline: null, proposedTimes: proposed, chosenTime: null, bookingId: null,
+      messages: [],
+    });
+    saveLadder();
+    toast(tr("ladder.challengeSent"));
+    go("ladder"); setLadderTab("inbox");
+  });
+}
+
+function acceptChallenge(id) {
+  const c = ladder.challenges.find(x => x.id === id); if (!c) return;
+  c.status = "accepted";
+  c.playDeadline = Date.now() + LADDER_PLAY_DAYS * 86400000;
+  // Velg første foreslåtte tid som default
+  if (c.proposedTimes && c.proposedTimes.length) c.chosenTime = c.proposedTimes[0];
+  c.messages.push({ from: "system", text: lang === "nb" ? "Utfordring akseptert. Avtal tid og book bane." : "Challenge accepted. Arrange time and book a court.", ts: Date.now() });
+  saveLadder();
+  toast(tr("ladder.acceptedToast"));
+  openLadderChat(id);
+}
+
+function declineChallenge(id) {
+  const c = ladder.challenges.find(x => x.id === id); if (!c) return;
+  c.status = "declined"; saveLadder();
+  toast(tr("ladder.declinedToast"));
+  renderLadderInbox(); renderLadderBanner();
+}
+
+function withdrawChallenge(id) {
+  ladder.challenges = ladder.challenges.filter(c => c.id !== id);
+  saveLadder();
+  toast(tr("ladder.withdrawn"));
+  renderLadderInbox(); renderLadderBanner();
+}
+
+function toggleAway() {
+  const me = meMember(); if (!me) return;
+  if (me.awayUntil && me.awayUntil > Date.now()) me.awayUntil = null;
+  else me.awayUntil = Date.now() + 14 * 86400000;
+  saveLadder();
+  renderLadderProfile();
+}
+
+/* ----- Chat ----- */
+function openLadderChat(id) {
+  activeChallengeId = id;
+  go("ladderChat");
+}
+
+function renderLadderChat() {
+  const host = document.getElementById("ladder-chat-host");
+  if (!host) return;
+  const c = ladder.challenges.find(x => x.id === activeChallengeId);
+  if (!c) { host.innerHTML = `<p class="muted">—</p>`; return; }
+  const otherId = c.fromId === ME_ID ? c.toId : c.fromId;
+  const other = findMember(otherId);
+  const otherName = other ? other.name : "?";
+  if (c.status !== "accepted" && c.status !== "awaitConfirm" && c.status !== "completed") {
+    host.innerHTML = `<div class="card"><p class="muted">${tr("ladder.chatStarted")}</p></div>`;
+    return;
+  }
+
+  const msgsHtml = c.messages.map(m => {
+    if (m.from === "system") {
+      return `<div style="text-align:center;font-size:11px;color:var(--muted);margin:4px 0">${m.text}</div>`;
+    }
+    const cls = m.from === ME_ID ? "me" : "them";
+    const t = new Date(m.ts).toLocaleTimeString(lang === "nb" ? "nb-NO" : "en-GB", { hour: "2-digit", minute: "2-digit" });
+    return `<div class="chat-msg ${cls}">${escapeHtml(m.text)}<span class="ts">${t}</span></div>`;
+  }).join("");
+
+  host.innerHTML = `
+    <div class="card" style="padding:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div>
+          <div style="font-weight:800">${otherName}</div>
+          <div class="muted" style="font-size:12px">${c.chosenTime ? fmtDateTimeShort(c.chosenTime) : tr("ladder.proposedTimes")}</div>
+        </div>
+        <button class="btn secondary" style="margin:0;padding:7px 11px;font-size:12px" onclick="openReportResult('${c.id}')">${tr("ladder.reportResult")}</button>
+      </div>
+
+      <div class="chat-thread" id="chat-thread">${msgsHtml || `<p class="muted" style="text-align:center">—</p>`}</div>
+
+      <div class="quick-replies">
+        <button class="chip" onclick="quickReply('${c.id}', '${escapeHtml(tr("ladder.qrYes"))}')">${tr("ladder.qrYes")}</button>
+        <button class="chip" onclick="quickReply('${c.id}', '${escapeHtml(tr("ladder.qrBook"))}')">${tr("ladder.qrBook")}</button>
+        <button class="chip" onclick="quickReply('${c.id}', '${escapeHtml(tr("ladder.qrMove"))}')">${tr("ladder.qrMove")}</button>
+      </div>
+
+      <div class="chat-input">
+        <input id="chat-input-field" type="text" placeholder="${tr("ladder.chatPlaceholder")}" />
+        <button onclick="sendChatMessage('${c.id}')">${tr("ladder.send2")}</button>
+      </div>
+
+      <div style="margin-top:10px">
+        <button class="btn" onclick="bookCourtForChallenge('${c.id}')">📅 ${tr("ladder.bookCourt")}</button>
+      </div>
+      <div style="margin-top:8px">
+        <button class="btn secondary" style="background:#fde0e0;color:#882020;border-color:#f3a3a3" onclick="confirmNoShow('${c.id}')">⚠ ${tr("ladder.noShowBtn")}</button>
+      </div>
+    </div>
+  `;
+
+  // Scroll til bunn av thread
+  const t = document.getElementById("chat-thread");
+  if (t) t.scrollTop = t.scrollHeight;
+  // Enter sender
+  const input = document.getElementById("chat-input-field");
+  if (input) input.addEventListener("keydown", (e) => { if (e.key === "Enter") sendChatMessage(c.id); });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+}
+
+function sendChatMessage(id) {
+  const input = document.getElementById("chat-input-field");
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  const c = ladder.challenges.find(x => x.id === id); if (!c) return;
+  c.messages.push({ from: ME_ID, text, ts: Date.now() });
+  saveLadder();
+  input.value = "";
+  renderLadderChat();
+}
+
+function quickReply(id, text) {
+  const c = ladder.challenges.find(x => x.id === id); if (!c) return;
+  c.messages.push({ from: ME_ID, text, ts: Date.now() });
+  saveLadder();
+  renderLadderChat();
+}
+
+function bookCourtForChallenge(id) {
+  const c = ladder.challenges.find(x => x.id === id); if (!c) return;
+  // Marker at neste booking knyttes til denne kampen
+  localStorage.setItem("ktk.pendingChallengeBooking", id);
+  toast(tr("ladder.timeChosen"));
+  go("booking");
+}
+
+/* ----- Result reporting ----- */
+function openReportResult(id) {
+  const c = ladder.challenges.find(x => x.id === id); if (!c) return;
+  const otherId = c.fromId === ME_ID ? c.toId : c.fromId;
+  const otherName = nameForId(otherId);
+
+  // Bygg en custom modal i body siden vår openModal er enkel tekst
+  const wrap = document.createElement("div");
+  wrap.id = "report-modal";
+  wrap.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px";
+  wrap.innerHTML = `
+    <div style="background:var(--card);border-radius:14px;padding:18px;max-width:340px;width:100%">
+      <h3 style="margin:0 0 6px">${tr("ladder.reportTitle")}</h3>
+      <p class="muted" style="font-size:13px;margin:0 0 14px">${tr("ladder.reportIntro").replace("{name}", otherName)}</p>
+
+      <div class="caption" style="margin-bottom:6px">${tr("ladder.reportWinner")}</div>
+      <div style="display:flex;gap:6px;margin-bottom:12px">
+        <button class="chip active" id="rw-me" onclick="setReportWinner('me')">${tr("ladder.reportWinnerMe")}</button>
+        <button class="chip" id="rw-opp" onclick="setReportWinner('opp')">${tr("ladder.reportWinnerOpp").replace("{name}", otherName)}</button>
+      </div>
+
+      <div class="set-input-row">
+        <label>${tr("ladder.reportSet1")}</label>
+        <input id="rs-1a" type="number" min="0" max="7" value="6"><span class="vs">–</span>
+        <input id="rs-1b" type="number" min="0" max="7" value="4">
+      </div>
+      <div class="set-input-row">
+        <label>${tr("ladder.reportSet2")}</label>
+        <input id="rs-2a" type="number" min="0" max="7" value="6"><span class="vs">–</span>
+        <input id="rs-2b" type="number" min="0" max="7" value="3">
+      </div>
+      <div class="set-input-row">
+        <label>${tr("ladder.reportSet3")}</label>
+        <input id="rs-3a" type="number" min="0" max="7" placeholder=""><span class="vs">–</span>
+        <input id="rs-3b" type="number" min="0" max="7" placeholder="">
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:14px">
+        <button class="btn secondary" style="flex:1;margin:0" onclick="closeReportModal()">${tr("common.cancel")}</button>
+        <button class="btn" style="flex:1;margin:0" onclick="submitReport('${id}')">${tr("ladder.reportSubmit")}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(wrap);
+  window._reportWinner = "me";
+}
+function closeReportModal() {
+  const r = document.getElementById("report-modal");
+  if (r) r.remove();
+}
+function setReportWinner(w) {
+  window._reportWinner = w;
+  const me = document.getElementById("rw-me");
+  const opp = document.getElementById("rw-opp");
+  if (me && opp) {
+    me.classList.toggle("active", w === "me");
+    opp.classList.toggle("active", w === "opp");
+  }
+}
+function submitReport(id) {
+  const c = ladder.challenges.find(x => x.id === id); if (!c) return;
+  const otherId = c.fromId === ME_ID ? c.toId : c.fromId;
+  const winnerId = window._reportWinner === "me" ? ME_ID : otherId;
+  const sets = [];
+  for (let i = 1; i <= 3; i++) {
+    const a = parseInt(document.getElementById("rs-" + i + "a")?.value, 10);
+    const b = parseInt(document.getElementById("rs-" + i + "b")?.value, 10);
+    if (Number.isFinite(a) && Number.isFinite(b)) sets.push([a, b]);
+  }
+  if (sets.length < 2) { toast(lang === "nb" ? "Fyll inn minst 2 sett" : "Enter at least 2 sets"); return; }
+  c.status = "awaitConfirm";
+  c.pendingResult = { winnerId, sets, reportedBy: ME_ID, confirmedBy: [ME_ID] };
+  c.messages.push({ from: "system", text: (lang === "nb" ? "Resultat rapportert: " : "Result reported: ") + sets.map(s => s[0]+"–"+s[1]).join(", "), ts: Date.now() });
+  saveLadder();
+  closeReportModal();
+  toast(tr("ladder.reportSent").replace("{name}", nameForId(otherId)));
+  renderLadderInbox(); renderLadderBanner();
+}
+
+function openConfirmResult(id) {
+  const c = ladder.challenges.find(x => x.id === id); if (!c || !c.pendingResult) return;
+  const otherId = c.fromId === ME_ID ? c.toId : c.fromId;
+  const sets = c.pendingResult.sets.map(s => s[0]+"–"+s[1]).join(", ");
+  const body = tr("ladder.confirmResultBody")
+    .replace("{name}", nameForId(otherId))
+    .replace("{sets}", sets);
+  openModal(tr("ladder.confirmResult"), body, () => confirmResult(id));
+}
+
+function confirmResult(id) {
+  const c = ladder.challenges.find(x => x.id === id); if (!c || !c.pendingResult) return;
+  c.pendingResult.confirmedBy = [...new Set([...(c.pendingResult.confirmedBy || []), ME_ID])];
+  // Lag match-record
+  const winnerId = c.pendingResult.winnerId;
+  const loserId = winnerId === c.fromId ? c.toId : c.fromId;
+  ladder.matches.unshift({
+    id: "m" + (ladder.matches.length + 1) + "_" + Date.now(),
+    challengeId: c.id,
+    winnerId, loserId, sets: c.pendingResult.sets,
+    date: Date.now(),
+    confirmedBy: c.pendingResult.confirmedBy,
+  });
+  // Oppdater stige: hvis utfordrer (lavere posisjon-tall = høyere) vant, bytt plass
+  const winner = findMember(winnerId);
+  const loser = findMember(loserId);
+  if (winner && loser && winner.position > loser.position) {
+    const wp = winner.position, lp = loser.position;
+    winner.position = lp;
+    loser.position = wp;
+    ladder.members.sort((a, b) => a.position - b.position);
+  }
+  if (winner) { winner.wins++; winner.lastMatchAt = Date.now(); winner.bestPosition = Math.min(winner.bestPosition, winner.position); }
+  if (loser)  { loser.losses++; loser.lastMatchAt = Date.now(); }
+  c.status = "completed";
+  delete c.pendingResult;
+  saveLadder();
+  toast(tr("ladder.resultConfirmed"));
+  renderLadderInbox(); renderLadderList(); renderLadderBanner();
+}
+
+/* ================== NO-SHOW (motstander møtte ikke opp) ================== */
+function confirmNoShow(id) {
+  const c = ladder.challenges.find(x => x.id === id); if (!c) return;
+  const otherId = c.fromId === ME_ID ? c.toId : c.fromId;
+  const body = tr("ladder.noShowConfirm").replace(/\{name\}/g, nameForId(otherId));
+  openModal(tr("ladder.noShow"), body, () => markNoShow(id));
+}
+
+function markNoShow(id) {
+  const c = ladder.challenges.find(x => x.id === id); if (!c) return;
+  const otherId = c.fromId === ME_ID ? c.toId : c.fromId;
+  const opp = findMember(otherId);
+  if (!opp) return;
+
+  // Walkover: meg som vinner — registrer en match
+  const me = meMember();
+  ladder.matches.unshift({
+    id: "m" + (ladder.matches.length + 1) + "_" + Date.now(),
+    challengeId: c.id,
+    winnerId: ME_ID, loserId: otherId,
+    sets: [], walkover: true, noShow: true,
+    date: Date.now(),
+    confirmedBy: [ME_ID],
+  });
+
+  // Hvis utfordrer (lavere posisjon-tall = høyere) vant, bytt plass
+  if (me && opp && me.position > opp.position) {
+    const wp = me.position, lp = opp.position;
+    me.position = lp;
+    opp.position = wp;
+    ladder.members.sort((a, b) => a.position - b.position);
+  }
+  if (me) { me.wins++; me.lastMatchAt = Date.now(); me.bestPosition = Math.min(me.bestPosition, me.position); }
+  // Tap teller som tap for motstander
+  opp.losses++;
+  opp.lastMatchAt = Date.now();
+
+  // Strike på motstander
+  opp.noShows = (opp.noShows || 0) + 1;
+  c.status = "noShow";
+  saveLadder();
+  toast(tr("ladder.noShowDone").replace("{name}", opp.name).replace("{count}", opp.noShows));
+
+  // Hvis 2+ no-shows: automatisk straff
+  if (opp.noShows >= 2) {
+    applyNoShowPenalty(opp.id);
+  }
+  renderLadderInbox(); renderLadderList(); renderLadderBanner();
+}
+
+function applyNoShowPenalty(playerId) {
+  const p = findMember(playerId); if (!p) return;
+  // Flytt 5 plasser ned
+  const totalMembers = ladder.members.length;
+  const newPos = Math.min(totalMembers, p.position + 5);
+  // Skift alle mellom gammel og ny plass én opp
+  ladder.members.forEach(m => {
+    if (m.id === playerId) return;
+    if (m.position > p.position && m.position <= newPos) m.position--;
+  });
+  p.position = newPos;
+  ladder.members.sort((a, b) => a.position - b.position);
+  // Sett 14 dagers karantene (bortemodus)
+  p.awayUntil = Date.now() + 14 * 86400000;
+  // Nullstill teller etter straff
+  p.noShows = 0;
+  saveLadder();
+  setTimeout(() => {
+    toast(tr("ladder.noShowPenalty").replace("{name}", p.name));
+  }, 800);
+}
+
+/* ================== ADMIN / MODERATOR-PANEL ================== */
+function isAdmin() { return !!(user && user.isMod); }
+
+function toggleModRole() {
+  if (!user) { go("login"); return; }
+  user.isMod = !user.isMod;
+  localStorage.setItem("ktk.user", JSON.stringify(user));
+  toast(user.isMod ? tr("admin.modeOn") : tr("admin.modeOff"));
+  if (currentScreen === "profile") renderProfile();
+  // Vis/skjul admin-link
+  updateUserUI();
+}
+
+function renderAdmin() {
+  const host = document.getElementById("admin-host");
+  if (!host) return;
+  if (!isAdmin()) {
+    host.innerHTML = `
+      <div class="card">
+        <p class="muted" style="margin:0">${tr("admin.heroSub")}</p>
+        <button class="btn" style="margin-top:12px" onclick="toggleModRole()">${tr("admin.becomeMod")}</button>
+      </div>`;
+    return;
+  }
+
+  const s = ladder.season || { name: "", startDate: "", endDate: "" };
+  const memberRows = ladder.members.map(m => {
+    const isMe = m.id === ME_ID;
+    const awayBadge = m.awayUntil && m.awayUntil > Date.now()
+      ? `<span class="noshow-badge" style="background:#fff3cd;color:#7a5b00;border-color:#f0d97a">⏸</span>` : "";
+    return `
+      <div class="card admin-section" style="padding:10px;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <div style="font-weight:800;color:var(--primary);min-width:34px">#${m.position}</div>
+          <div style="flex:1;min-width:120px">
+            <div style="font-weight:700">${m.name}${isMe ? " (deg)" : ""} ${awayBadge}</div>
+            <div class="muted" style="font-size:12px">${m.wins}–${m.losses} · NS: ${m.noShows||0}</div>
+          </div>
+          <button class="btn secondary" style="padding:6px 10px;font-size:12px" onclick="editMemberFields('${m.id}')">${tr("admin.editMember")}</button>
+        </div>
+        <div id="admin-edit-${m.id}" style="display:none;margin-top:10px"></div>
+      </div>`;
+  }).join("");
+
+  const activeChallenges = ladder.challenges.filter(c => c.status === "pending" || c.status === "accepted" || c.status === "awaitConfirm");
+  const challengesHtml = activeChallenges.length === 0
+    ? `<p class="muted" style="margin:0">${tr("admin.noChallenges")}</p>`
+    : activeChallenges.map(c => {
+        const fromN = nameForId(c.fromId), toN = nameForId(c.toId);
+        const statusLabel = c.status === "pending" ? "Venter" : c.status === "accepted" ? "Akseptert" : "Resultat venter";
+        const forceBtn = c.status === "awaitConfirm" && c.pendingResult
+          ? `<button class="btn secondary" style="padding:6px 10px;font-size:12px" onclick="adminForceConfirm('${c.id}')">${tr("admin.forceConfirm")}</button>` : "";
+        return `
+          <div class="card" style="padding:10px;margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center">
+              <div style="flex:1;min-width:120px">
+                <div style="font-weight:700;font-size:13px">${fromN} → ${toN}</div>
+                <div class="muted" style="font-size:12px">${statusLabel} · ${new Date(c.sentAt).toLocaleDateString()}</div>
+              </div>
+              <div style="display:flex;gap:6px">
+                ${forceBtn}
+                <button class="btn secondary" style="padding:6px 10px;font-size:12px;background:#fde0e0;color:#882020;border-color:#f3a3a3" onclick="adminCancelChallenge('${c.id}')">${tr("admin.cancelChallenge")}</button>
+              </div>
+            </div>
+          </div>`;
+      }).join("");
+
+  // Nyhets-liste
+  const newsItems = (T[lang].news.items || []).map((it, idx) => {
+    const hidden = (ladder.hiddenNews || []).includes(idx);
+    return `
+      <div class="card" style="padding:10px;margin-bottom:8px;${hidden ? "opacity:.5" : ""}">
+        <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:13px">${it.icon} ${it.title}</div>
+            <div class="muted" style="font-size:12px">${it.date}</div>
+          </div>
+          <button class="btn secondary" style="padding:6px 10px;font-size:12px" onclick="adminToggleHideNews(${idx})">${hidden ? tr("admin.newsShow") : tr("admin.newsHide")}</button>
+        </div>
+      </div>`;
+  }).join("");
+
+  host.innerHTML = `
+    <div class="admin-hero card" style="background:linear-gradient(135deg,var(--primary),#1a4f96);color:#fff;border:none">
+      <h3 style="margin:0 0 6px 0;color:#fff">⚙ ${tr("admin.heroTitle")}</h3>
+      <p style="margin:0;opacity:.9;font-size:13px">${tr("admin.heroSub")}</p>
+      <button class="btn secondary" style="margin-top:12px;background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.3)" onclick="toggleModRole()">${tr("admin.leaveMod")}</button>
+    </div>
+
+    <div class="caption" style="margin-top:18px">${tr("admin.seasonSection")}</div>
+    <div class="card admin-form">
+      <label style="display:block;margin-bottom:8px;font-size:12px;font-weight:600">${tr("admin.seasonName")}
+        <input id="adm-season-name" class="input" type="text" value="${s.name||""}" style="margin-top:4px"/>
+      </label>
+      <label style="display:block;margin-bottom:8px;font-size:12px;font-weight:600">${tr("admin.seasonStart")}
+        <input id="adm-season-start" class="input" type="date" value="${s.startDate||""}" style="margin-top:4px"/>
+      </label>
+      <label style="display:block;margin-bottom:12px;font-size:12px;font-weight:600">${tr("admin.seasonEnd")}
+        <input id="adm-season-end" class="input" type="date" value="${s.endDate||""}" style="margin-top:4px"/>
+      </label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" onclick="adminSaveSeason()">${tr("admin.saveSeason")}</button>
+        <button class="btn secondary" onclick="adminResetSeason()">${tr("admin.resetSeason")}</button>
+      </div>
+    </div>
+
+    <div class="caption" style="margin-top:18px">${tr("admin.ladderSection")}
+      <span class="muted" style="font-weight:400;font-size:11px;margin-left:6px">${tr("admin.ofMembers").replace("{n}", ladder.members.length)}</span>
+    </div>
+    <div>${memberRows}</div>
+
+    <div class="caption" style="margin-top:18px">${tr("admin.challengesSection")}</div>
+    <div>${challengesHtml}</div>
+
+    <div class="caption" style="margin-top:18px">${tr("admin.facilitiesSection")}</div>
+    <p class="muted" style="font-size:12px;margin:0 0 8px">${tr("admin.facilitiesHelp")}</p>
+    <div class="card" style="padding:10px;margin-bottom:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <div style="flex:1;min-width:120px;font-weight:700;font-size:13px">💡 ${facilities.lightsMaster ? "Lys: PÅ globalt" : "Lys: AV globalt"}</div>
+      <button class="btn secondary" style="padding:6px 10px;font-size:12px" onclick="adminToggleAllLights(true)">${tr("admin.lightsAllOn")}</button>
+      <button class="btn secondary" style="padding:6px 10px;font-size:12px;background:#fde0e0;color:#882020;border-color:#f3a3a3" onclick="adminToggleAllLights(false)">${tr("admin.lightsAllOff")}</button>
+    </div>
+    ${COURTS.map(c => {
+      const cfg = courtCfg(c.id);
+      const status = cfg.enabled
+        ? `<span style="color:#1f7a1f;font-weight:700">● ${tr("admin.courtEnabled")}</span>`
+        : `<span style="color:#9b1c1c;font-weight:700">● ${tr("admin.courtDisabled")}</span>`;
+      return `
+        <div class="card" style="padding:10px;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center">
+            <div style="flex:1;min-width:140px">
+              <div style="font-weight:700;font-size:13px">${c.nameKey[lang]}</div>
+              <div style="font-size:12px;margin-top:2px">${status}
+                <span class="muted" style="margin-left:8px">${String(cfg.openHour).padStart(2,"0")}:00 – ${String(cfg.closeHour).padStart(2,"0")}:00</span>
+              </div>
+            </div>
+            <button class="btn secondary" style="padding:6px 10px;font-size:12px" onclick="editCourtFields('${c.id}')">${tr("admin.editMember")}</button>
+          </div>
+          <div id="admin-court-${c.id}" style="display:none;margin-top:10px"></div>
+        </div>`;
+    }).join("")}
+
+    <div class="caption" style="margin-top:18px">${tr("admin.newsSection")}</div>
+    <p class="muted" style="font-size:12px;margin:0 0 8px">${tr("admin.newsHelp")}</p>
+    <div>${newsItems}</div>
+
+    <div class="caption" style="margin-top:18px;color:#9b1c1c">${tr("admin.dangerSection")}</div>
+    <div class="card" style="border-color:#f3a3a3;background:#fff5f5">
+      <button class="btn" style="background:#9b1c1c;color:#fff" onclick="adminClearAll()">${tr("admin.clearAll")}</button>
+    </div>
+  `;
+}
+
+function editMemberFields(id) {
+  const m = findMember(id); if (!m) return;
+  const slot = document.getElementById("admin-edit-" + id);
+  if (!slot) return;
+  if (slot.style.display !== "none") { slot.style.display = "none"; slot.innerHTML = ""; return; }
+  slot.style.display = "block";
+  const isAway = m.awayUntil && m.awayUntil > Date.now();
+  slot.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px">
+      <label style="font-size:11px;font-weight:600">${tr("admin.memberPos")}
+        <input id="ed-pos-${id}" class="input" type="number" value="${m.position}" style="margin-top:2px;padding:6px"/>
+      </label>
+      <label style="font-size:11px;font-weight:600">${tr("admin.memberWins")}
+        <input id="ed-w-${id}" class="input" type="number" value="${m.wins}" style="margin-top:2px;padding:6px"/>
+      </label>
+      <label style="font-size:11px;font-weight:600">${tr("admin.memberLosses")}
+        <input id="ed-l-${id}" class="input" type="number" value="${m.losses}" style="margin-top:2px;padding:6px"/>
+      </label>
+      <label style="font-size:11px;font-weight:600">${tr("admin.memberNoShows")}
+        <input id="ed-ns-${id}" class="input" type="number" value="${m.noShows||0}" style="margin-top:2px;padding:6px"/>
+      </label>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn" style="padding:6px 10px;font-size:12px" onclick="adminSaveMember('${id}')">${tr("admin.saveMember")}</button>
+      ${isAway ? `<button class="btn secondary" style="padding:6px 10px;font-size:12px" onclick="adminRemoveAway('${id}')">${tr("admin.removeAway")}</button>` : ""}
+    </div>
+  `;
+}
+
+function adminSaveMember(id) {
+  const m = findMember(id); if (!m) return;
+  const newPos = parseInt(document.getElementById("ed-pos-" + id).value, 10);
+  const newW = parseInt(document.getElementById("ed-w-" + id).value, 10);
+  const newL = parseInt(document.getElementById("ed-l-" + id).value, 10);
+  const newNs = parseInt(document.getElementById("ed-ns-" + id).value, 10);
+  if (!isNaN(newW)) m.wins = newW;
+  if (!isNaN(newL)) m.losses = newL;
+  if (!isNaN(newNs)) m.noShows = newNs;
+  // Re-arrangér posisjon hvis endret
+  if (!isNaN(newPos) && newPos !== m.position && newPos >= 1 && newPos <= ladder.members.length) {
+    const old = m.position;
+    if (newPos < old) {
+      ladder.members.forEach(x => {
+        if (x.id === id) return;
+        if (x.position >= newPos && x.position < old) x.position++;
+      });
+    } else {
+      ladder.members.forEach(x => {
+        if (x.id === id) return;
+        if (x.position > old && x.position <= newPos) x.position--;
+      });
+    }
+    m.position = newPos;
+    ladder.members.sort((a, b) => a.position - b.position);
+  }
+  saveLadder();
+  toast(tr("admin.memberSaved"));
+  renderAdmin();
+}
+
+function adminRemoveAway(id) {
+  const m = findMember(id); if (!m) return;
+  m.awayUntil = null;
+  saveLadder();
+  renderAdmin();
+}
+
+function adminSaveSeason() {
+  const name = document.getElementById("adm-season-name").value.trim();
+  const start = document.getElementById("adm-season-start").value;
+  const end = document.getElementById("adm-season-end").value;
+  ladder.season = { name: name || "season", startDate: start, endDate: end };
+  saveLadder();
+  toast(tr("admin.seasonSaved"));
+}
+
+function adminResetSeason() {
+  openModal(tr("admin.resetSeason"), tr("admin.resetSeasonConfirm"), () => {
+    ladder.members.forEach(m => { m.wins = 0; m.losses = 0; m.noShows = 0; });
+    ladder.matches = [];
+    ladder.challenges = ladder.challenges.filter(c => c.status === "completed");
+    saveLadder();
+    toast(tr("admin.seasonReset"));
+    renderAdmin();
+  });
+}
+
+function adminForceConfirm(id) {
+  const c = ladder.challenges.find(x => x.id === id); if (!c) return;
+  const winnerName = c.pendingResult ? nameForId(c.pendingResult.winnerId) : "?";
+  openModal(tr("admin.forceConfirm"), tr("admin.forceConfirmConfirm").replace("{name}", winnerName), () => {
+    if (!c.pendingResult) return;
+    const winnerId = c.pendingResult.winnerId;
+    const loserId = winnerId === c.fromId ? c.toId : c.fromId;
+    ladder.matches.unshift({
+      id: "m" + (ladder.matches.length + 1) + "_" + Date.now(),
+      challengeId: c.id,
+      winnerId, loserId, sets: c.pendingResult.sets,
+      date: Date.now(),
+      confirmedBy: [c.fromId, c.toId],
+      adminForced: true,
+    });
+    const winner = findMember(winnerId);
+    const loser = findMember(loserId);
+    if (winner && loser && winner.position > loser.position) {
+      const wp = winner.position, lp = loser.position;
+      winner.position = lp;
+      loser.position = wp;
+      ladder.members.sort((a, b) => a.position - b.position);
+    }
+    if (winner) { winner.wins++; winner.lastMatchAt = Date.now(); winner.bestPosition = Math.min(winner.bestPosition, winner.position); }
+    if (loser)  { loser.losses++; loser.lastMatchAt = Date.now(); }
+    c.status = "completed";
+    delete c.pendingResult;
+    saveLadder();
+    toast(tr("admin.forceConfirmed"));
+    renderAdmin();
+  });
+}
+
+function adminCancelChallenge(id) {
+  const c = ladder.challenges.find(x => x.id === id); if (!c) return;
+  c.status = "cancelled";
+  saveLadder();
+  toast(tr("admin.cancelled"));
+  renderAdmin();
+}
+
+function adminToggleHideNews(idx) {
+  ladder.hiddenNews = ladder.hiddenNews || [];
+  if (ladder.hiddenNews.includes(idx)) {
+    ladder.hiddenNews = ladder.hiddenNews.filter(i => i !== idx);
+    toast(tr("admin.newsRestored"));
+  } else {
+    ladder.hiddenNews.push(idx);
+    toast(tr("admin.newsHidden"));
+  }
+  saveLadder();
+  renderAdmin();
+  // Re-render nyheter ute i appen
+  if (typeof renderHomeNews === "function") renderHomeNews();
+  if (typeof renderFullNews === "function") renderFullNews();
+}
+
+function adminClearAll() {
+  openModal(tr("admin.clearAll"), tr("admin.clearAllConfirm"), () => {
+    localStorage.removeItem("ktk.ladder");
+    localStorage.removeItem("ktk.bookings");
+    localStorage.removeItem("ktk.user");
+    localStorage.removeItem("ktk.partner");
+    localStorage.removeItem("ktk.lang");
+    localStorage.removeItem("ktk.facilities");
+    toast(tr("admin.cleared"));
+    setTimeout(() => location.reload(), 800);
+  });
+}
+
+/* ---- Banes & lys ---- */
+function editCourtFields(courtId) {
+  const cfg = courtCfg(courtId);
+  const slot = document.getElementById("admin-court-" + courtId);
+  if (!slot) return;
+  if (slot.style.display !== "none") { slot.style.display = "none"; slot.innerHTML = ""; return; }
+  slot.style.display = "block";
+  slot.innerHTML = `
+    <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;margin-bottom:8px;cursor:pointer">
+      <input id="cc-en-${courtId}" type="checkbox" ${cfg.enabled ? "checked" : ""}/>
+      <span>${tr("admin.courtEnabled")}</span>
+    </label>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+      <label style="font-size:11px;font-weight:600">${tr("admin.lightOnAt")}
+        <input id="cc-on-${courtId}" class="input" type="number" min="0" max="23" value="${cfg.openHour}" style="margin-top:2px;padding:6px"/>
+      </label>
+      <label style="font-size:11px;font-weight:600">${tr("admin.lightOffAt")}
+        <input id="cc-off-${courtId}" class="input" type="number" min="1" max="24" value="${cfg.closeHour}" style="margin-top:2px;padding:6px"/>
+      </label>
+    </div>
+    <label style="display:block;font-size:11px;font-weight:600;margin-bottom:8px">${tr("admin.courtNote")}
+      <input id="cc-note-${courtId}" class="input" type="text" value="${(cfg.note||"").replace(/"/g,'&quot;')}" placeholder="${tr("admin.courtNotePh")}" style="margin-top:2px;padding:6px"/>
+    </label>
+    <button class="btn" style="padding:6px 12px;font-size:12px" onclick="adminSaveCourt('${courtId}')">${tr("admin.saveCourt")}</button>
+  `;
+}
+
+function adminSaveCourt(courtId) {
+  const enabled = document.getElementById("cc-en-" + courtId).checked;
+  const open = parseInt(document.getElementById("cc-on-" + courtId).value, 10);
+  const close = parseInt(document.getElementById("cc-off-" + courtId).value, 10);
+  const note = document.getElementById("cc-note-" + courtId).value.trim();
+  facilities.courts[courtId] = {
+    enabled,
+    openHour: isNaN(open) ? 7 : Math.max(0, Math.min(23, open)),
+    closeHour: isNaN(close) ? 23 : Math.max(1, Math.min(24, close)),
+    note,
+  };
+  saveFacilities();
+  toast(tr("admin.courtSaved"));
+  renderAdmin();
+  // Oppdater booking i bakgrunnen
+  if (typeof renderCourts === "function") renderCourts();
+  if (typeof renderSlots === "function") renderSlots();
+}
+
+function adminToggleAllLights(on) {
+  facilities.lightsMaster = !!on;
+  // Skru også enabled på alle baner (master-toggle)
+  if (on) {
+    Object.keys(facilities.courts).forEach(id => {
+      // Behold individuelt enabled-flagg, men sørg for at master er på
+    });
+  }
+  saveFacilities();
+  toast(on ? tr("admin.lightsAllOnDone") : tr("admin.lightsAllOffDone"));
+  renderAdmin();
+}
+
 /* ================== RENDER ALL ================== */
 function render() {
   document.getElementById("lang-nb").classList.toggle("active", lang === "nb");
@@ -3626,10 +6430,12 @@ function render() {
     more: tr("common.appName"), membership: tr("membership.title"),
     tennisSchool: tr("tennisSchool.title"), sfo: tr("sfo.title"), private: tr("private.title"),
     mybookings: tr("booking.yourBookings"), settings: tr("settings.title"),
-    login: tr("auth.loginTitle"), profile: tr("auth.profile"),
+    login: tr("auth.loginTitle"), signup: tr("auth.signupTitle"), profile: tr("auth.profile"),
     about: tr("about.title"), faq: tr("faq.title"),
     news: tr("news.title"), event: tr("news.title"), trainers: tr("trainers.title"),
     partner: tr("partner.title"), partnerNew: tr("partner.newTitle"),
+    ladder: tr("ladder.title"), ladderChat: tr("ladder.title"), ladderHistory: tr("ladder.historyTitle"),
+    admin: tr("admin.title"),
   };
   document.getElementById("header-title").textContent = titles[currentScreen] || "";
 
@@ -3648,8 +6454,17 @@ function render() {
   renderHomePartnerBanner();
   renderPartnerFilters();
   renderPartnerList();
+  renderHomeCtaBanner();
+  renderHomeNextBooking();
+  renderLadderHomeBanner();
   if (currentScreen === "partnerNew") renderPartnerNew();
   if (currentScreen === "event") renderEventDetail();
+  if (currentScreen === "ladder") {
+    renderLadderScreen();
+  }
+  if (currentScreen === "ladderChat") renderLadderChat();
+  if (currentScreen === "ladderHistory") renderLadderHistory();
+  if (currentScreen === "admin") renderAdmin();
   updateUserUI();
   if (currentScreen === "profile") { renderProfile(); renderMemberCard(); }
 
@@ -3681,7 +6496,14 @@ try {
     };
   }
   const backBtn = document.getElementById("back-btn");
-  if (backBtn) backBtn.onclick = () => go("more");
+  if (backBtn) backBtn.onclick = () => {
+    if (currentScreen === "ladderChat" || currentScreen === "ladderHistory") go("ladder");
+    else if (currentScreen === "event") go("news");
+    else if (currentScreen === "partnerNew") go("partner");
+    else if (currentScreen === "admin") go("profile");
+    else if (currentScreen === "signup") go("login");
+    else go("more");
+  };
 
   const payDone = document.getElementById("pay-done");
   if (payDone) payDone.onclick = () => { closePaymentModal(); go("mybookings"); };
@@ -3691,6 +6513,19 @@ try {
   const authEm = document.getElementById("auth-email");
   if (authPw) authPw.addEventListener("keydown", (e) => { if (e.key === "Enter") doLogin(); });
   if (authEm) authEm.addEventListener("keydown", (e) => { if (e.key === "Enter") document.getElementById("auth-password").focus(); });
+
+  // Enter-tast i signup-feltene
+  const suFields = ["su-name", "su-email", "su-phone", "su-password", "su-password2"];
+  suFields.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter") return;
+      e.preventDefault();
+      const next = suFields[i + 1] ? document.getElementById(suFields[i + 1]) : null;
+      if (next) next.focus(); else doSignup();
+    });
+  });
 
   // Hvis bruker allerede er innlogget (localStorage), pre-fyll navn i booking
   if (user) {
@@ -3709,9 +6544,12 @@ try {
   applyI18n();
   go("home");
 
-  // Live-oppdater nedtelling hvert minutt når "Mine bookinger" er åpen
+  // Live-oppdater hvert minutt slik at passerte tider gråes ut automatisk
+  // og påminnelses-banneret oppdateres
   setInterval(() => {
     if (currentScreen === "mybookings") renderMyBookings();
+    if (currentScreen === "booking") renderSlots();
+    if (currentScreen === "home") renderHomeNextBooking();
   }, 60000);
 
   // Registrer service worker for offline-støtte
