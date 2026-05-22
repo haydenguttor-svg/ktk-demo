@@ -2,13 +2,14 @@
    Cache-first for app-shell slik at appen funker offline etter første besøk.
    Øk CACHE_VERSION når du deployer ny index.html. */
 
-const CACHE_VERSION = "ktk-v16";
+const CACHE_VERSION = "ktk-v18";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
+  "./ktk-logo.png",
 ];
 
 self.addEventListener("install", (event) => {

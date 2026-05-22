@@ -85,10 +85,14 @@
   .tab svg { width: 22px; height: 22px; }
 
   .logo {
-    width: 140px; height: 140px; display: flex; align-items: center; justify-content: center;
-    filter: drop-shadow(0 4px 10px rgba(11,61,145,.25));
+    width: 150px; height: 150px;
+    display: flex; align-items: center; justify-content: center;
+    background: #ffffff;
+    border-radius: 50%;
+    padding: 8px;
+    box-shadow: 0 4px 14px rgba(11,61,145,.18);
   }
-  .logo svg { width: 100%; height: 100%; }
+  .logo svg, .logo img { width: 100%; height: 100%; object-fit: contain; }
   .hero { display: flex; flex-direction: column; align-items: center; margin: 8px 0 16px; }
   .hero .welcome { color: var(--muted); font-size: 13px; margin-top: 8px; }
   .hero .title   { color: var(--primary); font-size: 24px; font-weight: 800; }
@@ -1232,45 +1236,7 @@
     <div class="screen active" id="screen-home">
       <div class="hero">
         <div class="logo" aria-label="Kolbotn Tennisklubb">
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <!-- Ytre blå ringbånd med tynn hvit outline -->
-            <circle cx="100" cy="100" r="99" fill="#ffffff"/>
-            <circle cx="100" cy="100" r="97" fill="#1B5AA6"/>
-            <circle cx="100" cy="100" r="78" fill="#ffffff"/>
-            <circle cx="100" cy="100" r="77" fill="none" stroke="#1B5AA6" stroke-width="1"/>
-
-            <!-- Kurvet tekst på ringbåndet.
-                 Top-bue mindre (radius 80) så tekst vender UTOVER men holder seg inne i båndet.
-                 Bunn-bue større (radius 94) så tekst vender INNOVER og holder seg inne i båndet. -->
-            <defs>
-              <path id="topArc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none"/>
-              <path id="botArc" d="M 6 100 A 94 94 0 0 0 194 100" fill="none"/>
-            </defs>
-            <text font-family="Helvetica, Arial, sans-serif"
-                  font-weight="700" font-size="18" fill="#ffffff" letter-spacing="6">
-              <textPath href="#topArc" startOffset="50%" text-anchor="middle">KOLBOTN</textPath>
-            </text>
-            <text font-family="Helvetica, Arial, sans-serif"
-                  font-weight="700" font-size="18" fill="#ffffff" letter-spacing="6">
-              <textPath href="#botArc" startOffset="50%" text-anchor="middle">TENNIS · KLUBB</textPath>
-            </text>
-
-            <!-- Prikker på siden av ringbåndet (kl. 9 og kl. 3) -->
-            <circle cx="14"  cy="100" r="2.6" fill="#ffffff"/>
-            <circle cx="186" cy="100" r="2.6" fill="#ffffff"/>
-
-            <!-- Tennisball-søm (S-form, topp-høyre til bunn-venstre) -->
-            <path d="M 130 30 C 95 65, 105 135, 70 170"
-                  fill="none" stroke="#1B5AA6" stroke-width="3.5" stroke-linecap="round"/>
-
-            <!-- KTK monogram i outline-serif -->
-            <text x="100" y="128"
-                  font-family="'Times New Roman', Times, serif"
-                  font-weight="700" font-size="78"
-                  fill="#ffffff" stroke="#1B5AA6" stroke-width="2.2"
-                  paint-order="stroke fill"
-                  text-anchor="middle" letter-spacing="-6">KTK</text>
-          </svg>
+          <img src="ktk-logo.png" alt="Kolbotn Tennisklubb"/>
         </div>
         <div class="welcome" data-i18n="home.welcome">Velkommen til</div>
         <div class="title"   data-i18n="common.appName">Kolbotn Tennisklubb</div>
@@ -2371,6 +2337,13 @@ const T = {
       resetSeason: "Nullstill sesongen",
       resetSeasonConfirm: "Sikker på at du vil nullstille? Alle vinn/tap og no-shows slettes, men plasseringer beholdes.",
       seasonReset: "Sesongen er nullstilt.",
+      matchFrequency: "Kamp-frekvens",
+      matchFrequencyHelp: "Hvor ofte spilles stige-kamper i sesongen.",
+      freqWeekly: "Hver uke",
+      freqWeeklySub: "7 dagers spillefrist",
+      freqBiweekly: "Hver 14. dag",
+      freqBiweeklySub: "14 dagers spillefrist",
+      freqSaved: "Kamp-frekvens lagret.",
       ladderSection: "Stige-administrasjon",
       editMember: "Rediger",
       memberPos: "Plass",
@@ -3010,6 +2983,13 @@ const T = {
       resetSeason: "Reset season",
       resetSeasonConfirm: "Sure you want to reset? All wins/losses and no-shows clear, but positions remain.",
       seasonReset: "Season has been reset.",
+      matchFrequency: "Match frequency",
+      matchFrequencyHelp: "How often ladder matches are played during the season.",
+      freqWeekly: "Every week",
+      freqWeeklySub: "7-day play deadline",
+      freqBiweekly: "Every 14 days",
+      freqBiweeklySub: "14-day play deadline",
+      freqSaved: "Match frequency saved.",
       ladderSection: "Ladder administration",
       editMember: "Edit",
       memberPos: "Pos",
@@ -4934,6 +4914,19 @@ const LADDER_CHALLENGE_RANGE = 3; // hvor mange plasser opp man kan utfordre
 const LADDER_ACCEPT_DAYS = 7;
 const LADDER_PLAY_DAYS = 14;
 
+/* Kamp-frekvens — styres av admin når ute-sesongen starter.
+   "weekly"   = 7 dager spillefrist  (kamper hver uke)
+   "biweekly" = 14 dager spillefrist (kamper annenhver uke / hver 14. dag) */
+function getMatchFrequency() {
+  return (ladder && ladder.matchFrequency) || "biweekly";
+}
+function playDeadlineDays() {
+  return getMatchFrequency() === "weekly" ? 7 : 14;
+}
+function acceptDeadlineDays() {
+  return getMatchFrequency() === "weekly" ? 3 : 7;
+}
+
 const LADDER_BASE_PLAYERS = [
   { id: "p01", name: "Trond Moldvær",   level: "competition" },
   { id: "p02", name: "Marcus Berg",     level: "competition" },
@@ -4967,6 +4960,7 @@ function seedLadder() {
     if (!cached.season) {
       cached.season = { name: "spring2026", startDate: "2026-04-01", endDate: "2026-09-30" };
     }
+    if (!cached.matchFrequency) cached.matchFrequency = "biweekly";
     cached.hiddenNews = cached.hiddenNews || [];
     localStorage.setItem("ktk.ladder", JSON.stringify(cached));
     return cached;
@@ -5059,6 +5053,7 @@ function seedLadder() {
   const data = {
     members, challenges, matches,
     season: { name: "spring2026", startDate: "2026-04-01", endDate: "2026-09-30" },
+    matchFrequency: "biweekly",
     hiddenNews: [],
   };
   localStorage.setItem("ktk.ladder", JSON.stringify(data));
@@ -5718,7 +5713,7 @@ function openChallengeModal(targetId) {
     ladder.challenges.push({
       id: "c" + (ladder.challenges.length + 1) + "_" + Date.now(),
       fromId: ME_ID, toId: targetId, status: "pending",
-      sentAt: now, acceptDeadline: now + LADDER_ACCEPT_DAYS * 86400000,
+      sentAt: now, acceptDeadline: now + acceptDeadlineDays() * 86400000,
       playDeadline: null, proposedTimes: proposed, chosenTime: null, bookingId: null,
       messages: [],
     });
@@ -5731,7 +5726,7 @@ function openChallengeModal(targetId) {
 function acceptChallenge(id) {
   const c = ladder.challenges.find(x => x.id === id); if (!c) return;
   c.status = "accepted";
-  c.playDeadline = Date.now() + LADDER_PLAY_DAYS * 86400000;
+  c.playDeadline = Date.now() + playDeadlineDays() * 86400000;
   // Velg første foreslåtte tid som default
   if (c.proposedTimes && c.proposedTimes.length) c.chosenTime = c.proposedTimes[0];
   c.messages.push({ from: "system", text: lang === "nb" ? "Utfordring akseptert. Avtal tid og book bane." : "Challenge accepted. Arrange time and book a court.", ts: Date.now() });
@@ -6159,6 +6154,25 @@ function renderAdmin() {
       </div>
     </div>
 
+    <div class="caption" style="margin-top:18px">${tr("admin.matchFrequency")}</div>
+    <p class="muted" style="font-size:12px;margin:0 0 8px">${tr("admin.matchFrequencyHelp")}</p>
+    <div class="card admin-form">
+      <label style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;cursor:pointer;background:${getMatchFrequency()==='weekly'?'#eef4ff':'transparent'};border:1px solid ${getMatchFrequency()==='weekly'?'var(--primary)':'var(--border)'};margin-bottom:8px">
+        <input type="radio" name="adm-freq" value="weekly" ${getMatchFrequency()==='weekly'?'checked':''} onchange="adminSetFrequency('weekly')"/>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:14px">${tr("admin.freqWeekly")}</div>
+          <div class="muted" style="font-size:12px">${tr("admin.freqWeeklySub")}</div>
+        </div>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;cursor:pointer;background:${getMatchFrequency()==='biweekly'?'#eef4ff':'transparent'};border:1px solid ${getMatchFrequency()==='biweekly'?'var(--primary)':'var(--border)'}">
+        <input type="radio" name="adm-freq" value="biweekly" ${getMatchFrequency()==='biweekly'?'checked':''} onchange="adminSetFrequency('biweekly')"/>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:14px">${tr("admin.freqBiweekly")}</div>
+          <div class="muted" style="font-size:12px">${tr("admin.freqBiweeklySub")}</div>
+        </div>
+      </label>
+    </div>
+
     <div class="caption" style="margin-top:18px">${tr("admin.ladderSection")}
       <span class="muted" style="font-weight:400;font-size:11px;margin-left:6px">${tr("admin.ofMembers").replace("{n}", ladder.members.length)}</span>
     </div>
@@ -6290,6 +6304,14 @@ function adminResetSeason() {
     toast(tr("admin.seasonReset"));
     renderAdmin();
   });
+}
+
+function adminSetFrequency(freq) {
+  if (freq !== "weekly" && freq !== "biweekly") return;
+  ladder.matchFrequency = freq;
+  saveLadder();
+  toast(tr("admin.freqSaved"));
+  renderAdmin();
 }
 
 function adminForceConfirm(id) {
