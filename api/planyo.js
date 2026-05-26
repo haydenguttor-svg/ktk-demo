@@ -1,63 +1,77 @@
 /* Vercel Serverless Function — Proxy mellom KTK-appen og Planyo API.
-   Filen ligger i /api/planyo.js og blir automatisk en endpoint på:
-   https://ktk-demo.vercel.app/api/planyo
+   Korrekt Planyo REST-endpoint: https://www.planyo.com/rest/
 
-   API-nøkkelen leses fra Vercels miljøvariabler (ALDRI hardkodet).
-   Frontend kaller denne i stedet for Planyo direkte, så nøkkelen aldri eksponeres. */
+   Hvis Hash-key er aktivert i Planyo-kontoen, krever hvert kall:
+   - hash_timestamp (UTC Unix timestamp)
+   - hash_key (MD5 av: secret_hash_key + timestamp + method_name)
+*/
+
+import crypto from "crypto";
+
+const PLANYO_URL = "https://www.planyo.com/rest/";
 
 export default async function handler(req, res) {
-  // CORS: tillat appen å kalle proxyen
+  // CORS — tillat at appen kaller proxyen fra samme domene
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   if (req.method === "OPTIONS") return res.status(200).end();
 
-  // Plukk ut Planyo-metode og parametre — kan komme via GET (?method=) eller POST (body)
+  // Hent ut method + params fra GET (query) eller POST (body)
   const isPost = req.method === "POST";
   const body = isPost ? (req.body || {}) : req.query;
   const planyoMethod = body.method;
-  const params = body.params || {};
+  let params = body.params || {};
+
+  // Hvis GET med flat query (?method=X&resource_id=Y), bruk hele query som params
+  if (!Object.keys(params).length && !isPost) {
+    params = {};
+    for (const [k, v] of Object.entries(body)) {
+      if (k === "method") continue;
+      params[k] = v;
+    }
+  }
 
   if (!planyoMethod) {
     return res.status(400).json({
       response_code: 1,
-      response_message: "Missing 'method' parameter. Example: /api/planyo?method=list_resources",
+      response_message: "Missing 'method' parameter. Example: /api/planyo?method=api_test",
     });
   }
 
-  // Les hemmeligheter fra miljøvariabler
   const apiKey = process.env.PLANYO_API_KEY;
   const siteId = process.env.PLANYO_SITE_ID;
   const hashKey = process.env.PLANYO_HASH_KEY;
 
-  if (!apiKey || !siteId) {
+  // api_test krever ingen API-nøkkel — alle andre metoder gjør det
+  const isApiTest = planyoMethod === "api_test";
+
+  if (!isApiTest && (!apiKey || !siteId)) {
     return res.status(500).json({
       response_code: 1,
-      response_message: "Server not configured. Set PLANYO_API_KEY and PLANYO_SITE_ID in Vercel environment variables.",
+      response_message: "Server not configured. Set PLANYO_API_KEY and PLANYO_SITE_ID in Vercel.",
     });
   }
 
-  // Bygg URL-en til Planyo
-  const planyoBase = process.env.PLANYO_API_URL || "https://api.planyo.com/rest/";
-  const url = new URL(planyoBase);
+  // Bygg URL
+  const url = new URL(PLANYO_URL);
   url.searchParams.set("method", planyoMethod);
-  url.searchParams.set("api_key", apiKey);
-  url.searchParams.set("site_id", siteId);
-  if (hashKey) url.searchParams.set("hash_key", hashKey);
+  if (apiKey) url.searchParams.set("api_key", apiKey);
+  if (siteId) url.searchParams.set("site_id", siteId);
 
-  // Bruker-leverte parametre (f.eks. resource_id, start_time, end_time)
-  if (params && typeof params === "object") {
-    for (const [k, v] of Object.entries(params)) {
-      if (v === undefined || v === null) continue;
-      url.searchParams.set(k, String(v));
-    }
+  // Brukerleverte parametre (resource_id, start_time osv.)
+  for (const [k, v] of Object.entries(params)) {
+    if (v === undefined || v === null) continue;
+    url.searchParams.set(k, String(v));
   }
-  // Eller — hvis params kom rett som query-string (ikke nestet under "params")
-  if (!Object.keys(params).length && !isPost) {
-    for (const [k, v] of Object.entries(body)) {
-      if (k === "method") continue;
-      url.searchParams.set(k, String(v));
-    }
+
+  // Hash-key-autentisering: MD5(hashKey + timestamp + method)
+  if (hashKey) {
+    const timestamp = Math.floor(Date.now() / 1000);
+    const md5Input = hashKey + timestamp + planyoMethod;
+    const computedHash = crypto.createHash("md5").update(md5Input).digest("hex");
+    url.searchParams.set("hash_timestamp", String(timestamp));
+    url.searchParams.set("hash_key", computedHash);
   }
 
   // Kall Planyo
